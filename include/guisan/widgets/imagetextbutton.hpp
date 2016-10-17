@@ -54,93 +54,101 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_LABEL_HPP
-#define GCN_LABEL_HPP
-
-#include <string>
+#ifndef GCN_IMAGEBUTTON_HPP
+#define GCN_IMAGEBUTTON_HPP
 
 #include "guisan/platform.hpp"
-#include "guisan/widget.hpp"
+#include "guisan/widgets/imagebutton.hpp"
 
 namespace gcn
 {
+    class Image;
+
     /**
-     * Implementation of a label capable of displaying a caption.
+     * A simple button that displays an image and a caption.
      */
-    class GCN_CORE_DECLSPEC Label: public Widget
+    class GCN_CORE_DECLSPEC ImageTextButton : public gcn::ImageButton
     {
     public:
         /**
          * Constructor.
+         *
+         * @param filename The filename of the image to display.
+         * @param caption The text to display. 
          */
-        Label();
+        ImageTextButton(const std::string& filename, std::string& caption);
 
         /**
          * Constructor.
          *
-         * @param caption The caption of the label.
+         * @param image The image to display.
+         * @param caption The text to display.
          */
-        Label(const std::string& caption);
+        ImageTextButton(Image* image, std::string& caption);
 
         /**
-         * Gets the caption of the label.
-         *
-         * @return The caption of the label.
-         * @see setCaption
+         * Destructor.
          */
-        const std::string &getCaption() const;
+        virtual ~ImageTextButton();
 
         /**
-         * Sets the caption of the label. It's advisable to call
-         * adjustSize after setting of the caption to adjust the
-         * label's size to fit the caption.
-         *
-         * @param caption The caption of the label.
-         * @see getCaption, adjustSize
+         * Adjusts the size of the image button to fit the image.
          */
-        void setCaption(const std::string& caption);
+        void adjustSize();
 
+        /**
+         * Sets the image to display.
+         *
+         * @param image The image to display.
+         */
+        void setImage(Image* image);
+
+        /**
+         * Gets the image of the image button.
+         *
+         * @return The image of the image button.
+         */
+        Image* getImage();
+
+
+        // Inherited from Widget
+
+        void draw(gcn::Graphics* graphics);
+        
         /**
          * Sets the alignment for the caption. The alignment is relative
-         * to the center of the label.
+         * to the center of the button.
          *
-         * @param alignemnt Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
-         * @see getAlignment, Graphics
+         * @param alignment ImageTextButton::TOP, ImageTextButton::RIGHT, ImageTextButton::BOTTOM or ImageTextButton::LEFT.
          */
         void setAlignment(unsigned int alignment);
 
         /**
          * Gets the alignment for the caption. The alignment is relative to
-         * the center of the label.
+         * the center of the button.
          *
-         * @return alignment of caption. Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
-         * @see setAlignment, Graphics
+         * @return alignment of caption. ImageTextButton::TOP, ImageTextButton::RIGHT, ImageTextButton::BOTTOM or ImageTextButton::LEFT.
          */
         unsigned int getAlignment() const;
-
-        /**
-         * Adjusts the label's size to fit the caption size.
-         */
-        void adjustSize();
-
-
-        // Inherited from Widget
-
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
+        
+        enum
+        {
+            TOP,
+            RIGHT,
+            BOTTOM,
+            LEFT
+        };
 
     protected:
-        /**
-         * Holds the caption of the label.
-         */
-        std::string mCaption;
+        gcn::Image* mImage;
 
         /**
-         * Holds the alignment of the caption.
+         * True if the image has been loaded internally, false otherwise.
+         * An image not loaded internally should not be deleted in the
+         * destructor.
          */
+        bool mInternalImage;
         unsigned int mAlignment;
     };
 }
-
-#endif // end GCN_LABEL_HPP
+#endif
