@@ -188,8 +188,8 @@ namespace gcn
         SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &dst);
 		if(mRenderTarget != NULL)
 		{
-			SDL_UpdateTexture(mTexture, &destination, mTarget->pixels, mTarget->pitch);
-			SDL_RenderCopy(mRenderTarget, mTexture, &destination, &destination);
+			SDL_UpdateTexture(mTexture, &dst, mTarget->pixels, mTarget->pitch);
+			SDL_RenderCopy(mRenderTarget, mTexture, &dst, &dst);
 		}
     }
 
