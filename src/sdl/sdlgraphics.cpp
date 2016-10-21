@@ -79,6 +79,14 @@ namespace gcn
     {
         mAlpha = false;
     }
+	
+	SDLGraphics::~SDLGraphics()
+	{
+		if(mRenderTarget != NULL)
+		{
+			SDL_DestroyTexture(mTexture);
+		}
+	}
 
     void SDLGraphics::_beginDraw()
     {
@@ -103,6 +111,7 @@ namespace gcn
 	void SDLGraphics::setRenderTarget(SDL_Renderer* renderer)
     {
         mRenderTarget = renderer;
+		mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
     }
 
     bool SDLGraphics::pushClipArea(Rectangle area)
@@ -177,6 +186,11 @@ namespace gcn
         }
 
         SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &dst);
+		if(mRenderTarget != NULL)
+		{
+			SDL_UpdateTexture(mTexture, &destination, mTarget->pixels, mTarget->pitch);
+			SDL_RenderCopy(mRenderTarget, mTexture, &destination, &destination);
+		}
     }
 
     void SDLGraphics::fillRectangle(const Rectangle& rectangle)
@@ -689,5 +703,10 @@ namespace gcn
         destination.y += top.yOffset;
 
         SDL_BlitSurface(surface, &source, mTarget, &destination);
+		if (mRenderTarget != NULL)
+		{
+			SDL_UpdateTexture(mTexture, &destination, mTarget->pixels, mTarget->pitch);
+			SDL_RenderCopy(mRenderTarget, mTexture, &destination, &destination);
+		}
     }
 }

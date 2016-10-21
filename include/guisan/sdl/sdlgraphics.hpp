@@ -82,7 +82,12 @@ namespace gcn
          * Constructor.
          */
         SDLGraphics();
-
+		
+		/**
+		 * Destructor.
+		 */
+		~SDLGraphics();
+		
         /**
          * Sets the target SDL_Surface to draw to. The target can be any
          * SDL_Surface. This funtion also pushes a clip areas corresponding to
@@ -100,7 +105,7 @@ namespace gcn
         virtual SDL_Surface* getTarget() const;
 		
 		/**
-		 *  Sets the target SDL_Renderer to use for drawing. 
+		 *  Sets the target SDL_Renderer to use for drawing. Preferably don only once. 
 		 *  
 		 *  @param renderer the SDL_Renderer to use for drawing.
 		 */
@@ -171,6 +176,7 @@ namespace gcn
 
         SDL_Surface* mTarget;
 		SDL_Renderer* mRenderTarget;
+		SDL_Texture* mTexture;
         Color mColor;
         bool mAlpha;
     };
