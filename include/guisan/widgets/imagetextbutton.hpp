@@ -54,8 +54,10 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_IMAGEBUTTON_HPP
-#define GCN_IMAGEBUTTON_HPP
+#ifndef GCN_IMAGETEXTBUTTON_HPP
+#define GCN_IMAGETEXTBUTTON_HPP
+
+#include <string>
 
 #include "guisan/platform.hpp"
 #include "guisan/widgets/imagebutton.hpp"
