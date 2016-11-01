@@ -48,6 +48,7 @@ widget_sources = [
 	'widgets/tabbedarea.cpp',
 	'widgets/textbox.cpp',
 	'widgets/textfield.cpp',
+	'widgets/passwordfield.cpp',
 	'widgets/window.cpp',
 ]
 

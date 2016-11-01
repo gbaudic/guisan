@@ -54,73 +54,122 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_GUISAN_HPP
-#define GCN_GUISAN_HPP
+#ifndef GCN_PASSWORDFIELD_HPP
+#define GCN_PASSWORDFIELD_HPP
 
-#include <guisan/actionevent.hpp>
-#include <guisan/actionlistener.hpp>
-#include <guisan/cliprectangle.hpp>
-#include <guisan/color.hpp>
-#include <guisan/deathlistener.hpp>
-#include <guisan/event.hpp>
-#include <guisan/exception.hpp>
-#include <guisan/focushandler.hpp>
-#include <guisan/focuslistener.hpp>
-#include <guisan/font.hpp>
-#include <guisan/genericinput.hpp>
-#include <guisan/graphics.hpp>
-#include <guisan/gui.hpp>
-#include <guisan/image.hpp>
-#include <guisan/imagefont.hpp>
-#include <guisan/imageloader.hpp>
-#include <guisan/input.hpp>
-#include <guisan/inputevent.hpp>
-#include <guisan/key.hpp>
-#include <guisan/keyevent.hpp>
-#include <guisan/keyinput.hpp>
-#include <guisan/keylistener.hpp>
-#include <guisan/listmodel.hpp>
-#include <guisan/mouseevent.hpp>
-#include <guisan/mouseinput.hpp>
-#include <guisan/mouselistener.hpp>
-#include <guisan/rectangle.hpp>
-#include <guisan/selectionevent.hpp>
-#include <guisan/selectionlistener.hpp>
-#include <guisan/widget.hpp>
-#include <guisan/widgetlistener.hpp>
-
-#include <guisan/widgets/button.hpp>
-#include <guisan/widgets/checkbox.hpp>
-#include <guisan/widgets/container.hpp>
-#include <guisan/widgets/dropdown.hpp>
-#include <guisan/widgets/icon.hpp>
-#include <guisan/widgets/imagebutton.hpp>
-#include <guisan/widgets/imagetextbutton.hpp>
-#include <guisan/widgets/label.hpp>
-#include <guisan/widgets/listbox.hpp>
-#include <guisan/widgets/scrollarea.hpp>
-#include <guisan/widgets/slider.hpp>
-#include <guisan/widgets/radiobutton.hpp>
-#include <guisan/widgets/tab.hpp>
-#include <guisan/widgets/tabbedarea.hpp>
-#include <guisan/widgets/textbox.hpp>
-#include <guisan/widgets/textfield.hpp>
-#include <guisan/widgets/passwordfield.hpp>
-#include <guisan/widgets/window.hpp>
-
+#include "guisan/keylistener.hpp"
+#include "guisan/mouselistener.hpp"
 #include "guisan/platform.hpp"
+#include "guisan/widget.hpp"
+#include "guisan/widgets/textfield.hpp"
 
-class Widget;
+#include <string>
 
-extern "C"
+namespace gcn
 {
     /**
-     * Gets the the version of Guisan. As it is a C function
-     * it can be used to check for Guichan with autotools.
-     *
-     * @return the version of Guisan.
+     * A text field in which you can write or display a line of text. 
+	 * Unlike a TextField the text will appear as '*' instead of the real content. 
      */
-    GCN_CORE_DECLSPEC extern const char* gcnGuisanVersion();
+    class GCN_CORE_DECLSPEC PasswordField:
+        public TextField
+    {
+    public:
+        /**
+         * Default constructor.
+         */
+        PasswordField();
+
+        /**
+         * Constructor. Initializes the passwordfield with a given string.
+         *
+         * @param text the initial text.
+         */
+        PasswordField(const std::string& text);
+
+        /**
+         * Sets the text.
+         *
+         * @param text the new clear text in the PasswordField.
+         */
+        void setText(const std::string& text);
+
+        /**
+         * Gets the text.
+         *
+         * @return the clear text of the PasswordField.
+         */
+        const std::string& getText() const;
+
+        /**
+         * Draws the caret (the little marker in the text that shows where the
+         * letters you type will appear). Easily overloaded if you want to
+         * change the style of the caret.
+         *
+         * @param graphics the Graphics object to draw with.
+         * @param x the caret's x-position.
+         */
+        virtual void drawCaret(Graphics* graphics, int x);
+
+        /**
+         * Adjusts the size of the PasswordField to fit the font size. The
+         * constructor taking a string uses this function to initialize the
+         * size of the PasswordField.
+         */
+        void adjustSize();
+
+        /**
+         * Adjusts the height of the text field to fit the font size. The
+         * height of the PasswordField is initialized with this function by the
+         * constructors.
+         */
+        void adjustHeight();
+
+        /**
+         * Sets the caret position.
+         *
+         * @param position the caret position.
+         */
+        void setCaretPosition(unsigned int position);
+
+        /**
+         * Gets the caret position.
+         *
+         * @return the caret position.
+         */
+        unsigned int getCaretPosition() const;
+
+
+        // Inherited from Widget
+
+        virtual void fontChanged();
+
+        virtual void draw(Graphics* graphics);
+
+        virtual void drawBorder(Graphics* graphics);
+
+
+        // Inherited from MouseListener
+
+        virtual void mousePressed(MouseEvent& mouseEvent);
+
+        virtual void mouseDragged(MouseEvent& mouseEvent);
+        
+
+        // Inherited from KeyListener
+
+        virtual void keyPressed(KeyEvent& keyEvent);
+
+    protected:
+        /**
+         * Scrolls the text horizontally so that the caret shows if needed.
+         */
+        void fixScroll();
+
+        std::string mText;
+        unsigned int mCaretPosition;
+        int mXScroll;
+    };
 }
 
-#endif // end GCN_GUISAN_HPP
+#endif // end GCN_PASSWORDFIELD_HPP
