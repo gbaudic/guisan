@@ -125,7 +125,7 @@ namespace gcn
         rect.w = carea.width;
         rect.h = carea.height;
 
-        SDL_SetClipRect(mTarget, &rect);
+        SDL_RenderSetClipRect(mRenderTarget, &rect);
 
         return result;
     }
@@ -146,7 +146,7 @@ namespace gcn
         rect.w = carea.width;
         rect.h = carea.height;
 
-        SDL_SetClipRect(mTarget, &rect);
+        SDL_RenderSetClipRect(mRenderTarget, &rect);
     }
 
     SDL_Surface* SDL2Graphics::getTarget() const
@@ -218,16 +218,16 @@ namespace gcn
             int x2 = area.x + area.width < top.x + top.width ? area.x + area.width : top.x + top.width;
             int y2 = area.y + area.height < top.y + top.height ? area.y + area.height : top.y + top.height;
             int x, y;
-
-            SDL_LockSurface(mTarget);
-            for (y = y1; y < y2; y++)
-            {
-                for (x = x1; x < x2; x++)
-                {
-                    SDLputPixelAlpha(mTarget, x, y, mColor);
-                }
-            }
-            SDL_UnlockSurface(mTarget);
+            SDL_Rect rect;
+            rect.x = x1;
+            rect.y = y1;
+            rect.w = x2 - x1;
+            rect.h = y2 - y1;
+            
+            saveRenderColor();
+            SDL_SetRenderDrawColor(mRenderTarget, mColor.r, mColor.g, mColor.b, mColor.a);
+            SDL_RenderFillRect(mRenderTarget, &rect);
+            restoreRenderColor();
 
         }
         else
@@ -249,10 +249,10 @@ namespace gcn
 
     void SDL2Graphics::drawPoint(int x, int y)
     {
-	if (mClipStack.empty()) {
-		throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
-			"called a draw function outside of _beginDraw() and _endDraw()?");
-	}
+		if (mClipStack.empty()) {
+			throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+				"called a draw function outside of _beginDraw() and _endDraw()?");
+		}
 
         const ClipRectangle& top = mClipStack.top();
 
@@ -262,22 +262,27 @@ namespace gcn
         if(!top.isPointInRect(x,y))
             return;
 
-        if (mAlpha)
+		saveRenderColor();
+		SDL_SetRenderDrawColor(mRenderTarget, mColor.r, mColor.g, mColor.b, mColor.a);
+        /*if (mAlpha)
         {
             SDLputPixelAlpha(mTarget, x, y, mColor);
+            
         }
         else
         {
             SDLputPixel(mTarget, x, y, mColor);
-        }
+        }*/
+        SDL_RenderDrawPoint(mRenderTarget, x, y);
+        restoreRenderColor();
     }
 
     void SDL2Graphics::drawHLine(int x1, int y, int x2)
     {
-	if (mClipStack.empty()) {
-		throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
-			"called a draw function outside of _beginDraw() and _endDraw()?");
-	}
+		if (mClipStack.empty()) {
+			throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+				"called a draw function outside of _beginDraw() and _endDraw()?");
+		}
         const ClipRectangle& top = mClipStack.top();
 
         x1 += top.xOffset;
@@ -320,10 +325,10 @@ namespace gcn
 
     void SDL2Graphics::drawVLine(int x, int y1, int y2)
     {
-	if (mClipStack.empty()) {
-		throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
-			"called a draw function outside of _beginDraw() and _endDraw()?");
-	}
+		if (mClipStack.empty()) {
+			throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+				"called a draw function outside of _beginDraw() and _endDraw()?");
+		}
         const ClipRectangle& top = mClipStack.top();
 
         x += top.xOffset;
@@ -386,10 +391,10 @@ namespace gcn
     void SDL2Graphics::drawLine(int x1, int y1, int x2, int y2)
     {
         
-	if (mClipStack.empty()) {
-		throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
-			"called a draw function outside of _beginDraw() and _endDraw()?");
-	}
+		if (mClipStack.empty()) {
+			throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+				"called a draw function outside of _beginDraw() and _endDraw()?");
+		}
         const ClipRectangle& top = mClipStack.top();
 
         x1 += top.xOffset;
@@ -414,8 +419,6 @@ namespace gcn
     {
         return mColor;
     }
-	
-	//setrendercolor / get
 
     void SDL2Graphics::drawSDLSurface(SDL_Surface* surface, SDL_Rect source,
                                      SDL_Rect destination)
