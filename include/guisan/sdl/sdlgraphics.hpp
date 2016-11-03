@@ -103,20 +103,6 @@ namespace gcn
          * @return the target SDL_Surface.
          */
         virtual SDL_Surface* getTarget() const;
-		
-		/**
-		 *  Sets the target SDL_Renderer to use for drawing. Preferably don only once. 
-		 *  
-		 *  @param renderer the SDL_Renderer to use for drawing.
-		 */
-		virtual void setRenderTarget(SDL_Renderer* renderer);
-		
-		/**
-         * Gets the target SDL_Renderer.
-         *
-         * @return the target SDL_Renderer.
-         */
-		virtual SDL_Renderer* getRenderTarget() const;
 
         /**
          * Draws an SDL_Surface on the target surface. Normaly you'll
@@ -175,8 +161,6 @@ namespace gcn
         virtual void drawVLine(int x, int y1, int y2);
 
         SDL_Surface* mTarget;
-		SDL_Renderer* mRenderTarget;
-		SDL_Texture* mTexture;
         Color mColor;
         bool mAlpha;
     };
