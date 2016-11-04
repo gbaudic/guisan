@@ -87,88 +87,10 @@ namespace gcn
          */
         PasswordField(const std::string& text);
 
-        /**
-         * Sets the text.
-         *
-         * @param text the new clear text in the PasswordField.
-         */
-        void setText(const std::string& text);
-
-        /**
-         * Gets the text.
-         *
-         * @return the clear text of the PasswordField.
-         */
-        const std::string& getText() const;
-
-        /**
-         * Draws the caret (the little marker in the text that shows where the
-         * letters you type will appear). Easily overloaded if you want to
-         * change the style of the caret.
-         *
-         * @param graphics the Graphics object to draw with.
-         * @param x the caret's x-position.
-         */
-        virtual void drawCaret(Graphics* graphics, int x);
-
-        /**
-         * Adjusts the size of the PasswordField to fit the font size. The
-         * constructor taking a string uses this function to initialize the
-         * size of the PasswordField.
-         */
-        void adjustSize();
-
-        /**
-         * Adjusts the height of the text field to fit the font size. The
-         * height of the PasswordField is initialized with this function by the
-         * constructors.
-         */
-        void adjustHeight();
-
-        /**
-         * Sets the caret position.
-         *
-         * @param position the caret position.
-         */
-        void setCaretPosition(unsigned int position);
-
-        /**
-         * Gets the caret position.
-         *
-         * @return the caret position.
-         */
-        unsigned int getCaretPosition() const;
-
-
         // Inherited from Widget
-
-        virtual void fontChanged();
 
         virtual void draw(Graphics* graphics);
 
-        virtual void drawBorder(Graphics* graphics);
-
-
-        // Inherited from MouseListener
-
-        virtual void mousePressed(MouseEvent& mouseEvent);
-
-        virtual void mouseDragged(MouseEvent& mouseEvent);
-        
-
-        // Inherited from KeyListener
-
-        virtual void keyPressed(KeyEvent& keyEvent);
-
-    protected:
-        /**
-         * Scrolls the text horizontally so that the caret shows if needed.
-         */
-        void fixScroll();
-
-        std::string mText;
-        unsigned int mCaretPosition;
-        int mXScroll;
     };
 }
 

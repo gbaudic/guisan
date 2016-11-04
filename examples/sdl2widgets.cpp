@@ -25,7 +25,7 @@ SDL_Event event;
  * Guichan SDL stuff we need
  */
 gcn::SDLInput* input;             // Input driver
-gcn::SDLGraphics* graphics;       // Graphics driver
+gcn::SDL2Graphics* graphics;       // Graphics driver
 gcn::SDLImageLoader* imageLoader; // For loading images
 
 /*
