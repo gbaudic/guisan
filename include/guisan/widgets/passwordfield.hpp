@@ -70,6 +70,8 @@ namespace gcn
     /**
      * A text field in which you can write or display a line of text. 
 	 * Unlike a TextField the text will appear as '*' instead of the real content. 
+	 * If for some reason the Font you are using does not contain this character, the 
+	 * PasswordField will be filled by spaces. 
      */
     class GCN_CORE_DECLSPEC PasswordField:
         public TextField
