@@ -112,7 +112,8 @@ namespace gcn
     {
         mRenderTarget = renderer;
 		mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
-		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
+		//SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawBlendMode(mRenderTarget, SDL_BLENDMODE_BLEND);
     }
 
     bool SDL2Graphics::pushClipArea(Rectangle area)

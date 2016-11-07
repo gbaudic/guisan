@@ -167,7 +167,7 @@ initWidgets()
 	top->add(icon, 10, 10);
 	top->add(button, 325, 10);
 	top->add(textField, 375, 10);
-	top->add(passwordField, 425, 10); //todo: adjust coordinates
+	top->add(passwordField, 425, 10);
 	top->add(textBoxScrollArea, 290, 50);
 	top->add(listBox, 290, 200);
 	top->add(dropDown, 580, 10);
