@@ -130,6 +130,8 @@ namespace gcn
 		src.h = textSurface->h;
 		src.x = 0;
 		src.y = 0;
+		dst.w = src.w;
+		dst.h = src.h;
 	
 		sdlGraphics->drawSDLSurface(textSurface, src, dst);
 		SDL_FreeSurface(textSurface);        

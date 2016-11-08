@@ -104,6 +104,7 @@ initWidgets()
 	label = new gcn::Label("Label");
 
 	image = gcn::Image::load("guisan.png");
+	//image->setTexture(SDL_CreateTextureFromSurface(sdlRenderer, image->getSurface()));
 	icon = new gcn::Icon(image);
 
 	button = new gcn::Button("Button");
@@ -145,6 +146,7 @@ initWidgets()
 	window->setBaseColor(gcn::Color(212, 255, 150, 190));
 	
 	guisanLogoImage = gcn::Image::load("guisan-logo.png");
+	//guisanLogoImage->setTexture(SDL_CreateTextureFromSurface(sdlRenderer, guisanLogoImage->getSurface()));
 	guisanLogoIcon = new gcn::Icon(guisanLogoImage);
 	window->add(guisanLogoIcon);
 	window->resizeToContent();

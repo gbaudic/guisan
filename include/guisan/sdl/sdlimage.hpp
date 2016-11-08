@@ -95,7 +95,19 @@ namespace gcn
          * @return the SDL surface for the image.
          */
         virtual SDL_Surface* getSurface() const;
-
+		
+		/**
+		 * Gets the SDL texture for the image.
+         *
+         * @return the SDL texture for the image.
+		 */
+		virtual SDL_Texture* getTexture() const;
+		
+		/**
+		 * Sets the SDL texture for the image.
+		 * This method is here so we do not have to declare a renderer to be used. 
+		 */
+		virtual void setTexture(SDL_Texture* texture);
 
         // Inherited from Image
 
@@ -113,6 +125,7 @@ namespace gcn
 
     protected:
         SDL_Surface* mSurface;
+        SDL_Texture* mTexture;
         bool mAutoFree;
     };
 }

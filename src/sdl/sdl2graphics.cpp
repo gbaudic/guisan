@@ -106,6 +106,7 @@ namespace gcn
     void SDL2Graphics::setTarget(SDL_Surface* target)
     {
         mTarget = target;
+        //SDL_SetSurfaceBlendMode(mTarget, SDL_BLENDMODE_BLEND);
     }
 	
 	void SDL2Graphics::setRenderTarget(SDL_Renderer* renderer)
@@ -165,20 +166,22 @@ namespace gcn
                                 int srcY, int dstX, int dstY,
                                 int width, int height)
     {
-	if (mClipStack.empty()) {
-		throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
-			"called a draw function outside of _beginDraw() and _endDraw()?");
-	}
-
-	const ClipRectangle& top = mClipStack.top();
-        SDL_Rect src;
-        SDL_Rect dst;
-        src.x = srcX;
-        src.y = srcY;
+		if (mClipStack.empty()) {
+			throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+				"called a draw function outside of _beginDraw() and _endDraw()?");
+		}
+	
+		const ClipRectangle& top = mClipStack.top();
+	    SDL_Rect src;
+	    SDL_Rect dst;
+	    src.x = srcX;
+	    src.y = srcY;
         src.w = width;
         src.h = height;
         dst.x = dstX + top.xOffset;
         dst.y = dstY + top.yOffset;
+        dst.w = width;
+        dst.h = height;
 
         const SDLImage* srcImage = dynamic_cast<const SDLImage*>(image);
 
@@ -186,13 +189,18 @@ namespace gcn
         {
             throw GCN_EXCEPTION("Trying to draw an image of unknown format, must be an SDLImage.");
         }
-
-        SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &dst);
-		if(mRenderTarget != NULL)
+		
+		if(srcImage->getTexture() == NULL)
 		{
-			SDL_UpdateTexture(mTexture, &dst, mTarget->pixels, mTarget->pitch);
-			SDL_RenderCopy(mRenderTarget, mTexture, &dst, &dst);
+			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &src);
+			SDL_UpdateTexture(mTexture, &src, mTarget->pixels, mTarget->pitch);
+			SDL_RenderCopy(mRenderTarget, mTexture, &src, &dst);
+		} 
+		else 
+		{
+			SDL_RenderCopy(mRenderTarget, srcImage->getTexture(), &src, &dst);
 		}
+		
     }
 
     void SDL2Graphics::fillRectangle(const Rectangle& rectangle)
@@ -433,13 +441,12 @@ namespace gcn
 
         destination.x += top.xOffset;
         destination.y += top.yOffset;
+        destination.w = source.w;
+        destination.h = source.h;
 
-        SDL_BlitSurface(surface, &source, mTarget, &destination);
-		if (mRenderTarget != NULL)
-		{
-			SDL_UpdateTexture(mTexture, &destination, mTarget->pixels, mTarget->pitch);
-			SDL_RenderCopy(mRenderTarget, mTexture, &destination, &destination);
-		}
+        SDL_BlitSurface(surface, &source, mTarget, &source);
+		SDL_UpdateTexture(mTexture, &source, mTarget->pixels, mTarget->pitch);
+		SDL_RenderCopy(mRenderTarget, mTexture, &source, &destination);
     }
 	
 	void SDL2Graphics::saveRenderColor()

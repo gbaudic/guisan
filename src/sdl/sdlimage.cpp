@@ -69,6 +69,7 @@ namespace gcn
     {
         mAutoFree = autoFree;
         mSurface = surface;
+        mTexture = NULL;
     }
 
     SDLImage::~SDLImage()
@@ -83,6 +84,16 @@ namespace gcn
     {
         return mSurface;
     }
+    
+    SDL_Texture* SDLImage::getTexture() const
+    {
+		return mTexture;
+	}
+	
+	void SDLImage::setTexture(SDL_Texture* texture)
+	{
+		mTexture = texture;
+	}
 
     int SDLImage::getWidth() const
     {
@@ -179,5 +190,6 @@ namespace gcn
     void SDLImage::free()
     {
         SDL_FreeSurface(mSurface);
+        SDL_DestroyTexture(mTexture);
     }
 }
