@@ -126,6 +126,7 @@ namespace gcn
     protected:
         SDL_Surface* mSurface;
         SDL_Texture* mTexture;
+        //SDL_Renderer* mRenderer;
         bool mAutoFree;
     };
 }

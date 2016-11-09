@@ -201,6 +201,7 @@ init()
 	SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
 
 	sdlScreen = SDL_GetWindowSurface(sdlWindow);
+	//SDL_SetColorKey(sdlScreen, SDL_TRUE, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
 
 	// We want to enable key repeat
 	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
