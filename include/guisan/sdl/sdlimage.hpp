@@ -81,8 +81,9 @@ namespace gcn
          *
          * @param surface the surface from which to load.
          * @param autoFree true if the surface should automatically be deleted.
+         * @param texture the texture from which to load (last parameter to avoid breaking stuff)
          */
-        SDLImage(SDL_Surface* surface, bool autoFree);
+        SDLImage(SDL_Surface* surface, bool autoFree, SDL_Texture* texture = NULL);
 
         /**
          * Destructor.
@@ -102,12 +103,6 @@ namespace gcn
          * @return the SDL texture for the image.
 		 */
 		virtual SDL_Texture* getTexture() const;
-		
-		/**
-		 * Sets the SDL texture for the image.
-		 * This method is here so we do not have to declare a renderer to be used. 
-		 */
-		virtual void setTexture(SDL_Texture* texture);
 
         // Inherited from Image
 

@@ -444,6 +444,7 @@ namespace gcn
         destination.w = source.w;
         destination.h = source.h;
 
+		//TODO: set blendmode to none for surface
         SDL_BlitSurface(surface, &source, mTarget, &source);
 		SDL_UpdateTexture(mTexture, &source, mTarget->pixels, mTarget->pitch);
 		SDL_RenderCopy(mRenderTarget, mTexture, &source, &destination);

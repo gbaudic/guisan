@@ -65,11 +65,11 @@
 
 namespace gcn
 {
-    SDLImage::SDLImage(SDL_Surface* surface, bool autoFree)
+    SDLImage::SDLImage(SDL_Surface* surface, bool autoFree, SDL_Texture* texture)
     {
         mAutoFree = autoFree;
         mSurface = surface;
-        mTexture = NULL;
+        mTexture = texture;
     }
 
     SDLImage::~SDLImage()
@@ -88,11 +88,6 @@ namespace gcn
     SDL_Texture* SDLImage::getTexture() const
     {
 		return mTexture;
-	}
-	
-	void SDLImage::setTexture(SDL_Texture* texture)
-	{
-		mTexture = texture;
 	}
 
     int SDLImage::getWidth() const

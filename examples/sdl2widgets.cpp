@@ -104,7 +104,6 @@ initWidgets()
 	label = new gcn::Label("Label");
 
 	image = gcn::Image::load("guisan.png");
-	//image->setTexture(SDL_CreateTextureFromSurface(sdlRenderer, image->getSurface()));
 	icon = new gcn::Icon(image);
 
 	button = new gcn::Button("Button");
@@ -146,7 +145,6 @@ initWidgets()
 	window->setBaseColor(gcn::Color(212, 255, 150, 190));
 	
 	guisanLogoImage = gcn::Image::load("guisan-logo.png");
-	//guisanLogoImage->setTexture(SDL_CreateTextureFromSurface(sdlRenderer, guisanLogoImage->getSurface()));
 	guisanLogoIcon = new gcn::Icon(guisanLogoImage);
 	window->add(guisanLogoIcon);
 	window->resizeToContent();
@@ -200,8 +198,14 @@ init()
 	SDL_SetWindowTitle(sdlWindow, "guisan SDL2 widget example");
 	SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
 
-	sdlScreen = SDL_GetWindowSurface(sdlWindow);
+	//sdlScreen = SDL_GetWindowSurface(sdlWindow);
+	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0, 0, 0, 0xff);
+	std::cout << SDL_GetPixelFormatName(sdlScreen->format->format) << std::endl;
+	//SDL_SetSurfaceAlphaMod(sdlScreen, 0);
+	SDL_FillRect(sdlScreen, NULL, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
 	//SDL_SetColorKey(sdlScreen, SDL_TRUE, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
+	//no support of transparency???
+	SDL_SetSurfaceBlendMode(sdlScreen, SDL_BLENDMODE_NONE);
 
 	// We want to enable key repeat
 	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
