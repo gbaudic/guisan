@@ -89,6 +89,7 @@
 #include <guisan/widget.hpp>
 #include <guisan/widgetlistener.hpp>
 
+#include <guisan/widgets/adjustingcontainer.hpp>
 #include <guisan/widgets/button.hpp>
 #include <guisan/widgets/checkbox.hpp>
 #include <guisan/widgets/container.hpp>

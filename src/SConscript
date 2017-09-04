@@ -32,6 +32,7 @@ main_sources = [
 ]
 
 widget_sources = [
+	'widgets/adjustingcontainer.cpp',
 	'widgets/button.cpp',
 	'widgets/checkbox.cpp',
 	'widgets/container.cpp',

@@ -98,6 +98,7 @@ common_headers = [
     'include/guisan/x.hpp'
 ]
 widget_headers = [
+    'include/guisan/widgets/adjustingcontainer.hpp',
     'include/guisan/widgets/button.hpp',
     'include/guisan/widgets/checkbox.hpp',
     'include/guisan/widgets/container.hpp',
@@ -114,12 +115,12 @@ widget_headers = [
     'include/guisan/widgets/tab.hpp',
     'include/guisan/widgets/textbox.hpp',
     'include/guisan/widgets/textfield.hpp',
-	'include/guisan/widgets/passwordfield.hpp',
+    'include/guisan/widgets/passwordfield.hpp',
     'include/guisan/widgets/window.hpp'
 ]
 sdl2_headers = [
     'include/guisan/sdl/sdlgraphics.hpp',
-	'include/guisan/sdl/sdl2graphics.hpp',
+    'include/guisan/sdl/sdl2graphics.hpp',
     'include/guisan/sdl/sdlimage.hpp',
     'include/guisan/sdl/sdlimageloader.hpp',
     'include/guisan/sdl/sdlinput.hpp',
