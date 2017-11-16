@@ -6,6 +6,8 @@
 
 [![Build Status](https://travis-ci.org/gbaudic/guisan.svg?branch=master)](https://travis-ci.org/gbaudic/guisan)
 
+Check out the online [Doxygen documentation](https://codedocs.xyz/gbaudic/guisan).
+
 Guisan was forked from Guichan to create a simple GUI construction toolkit that is compatible with SDL 2.0.0+
 
 ## Features:
@@ -16,14 +18,15 @@ Guisan was forked from Guichan to create a simple GUI construction toolkit that 
 ## Build requirements:
 
 * scons
+* pkg-config
 
 ## Runtime requirements:
 
 * SDL 2.0+
 * SDL2_image
 * SDL2_ttf
-* SDL2_mixer
+* SDL2_mixer (for the demo)
 
 ## License:
 
-Released under the BSD license. See COPYING for more details
+Released under the BSD license. See COPYING for more details. 
