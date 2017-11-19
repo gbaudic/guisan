@@ -81,7 +81,7 @@ namespace gcn
          * @param isAltPressed true if alt is pressed, false otherwise.
          * @param isMetaPressed true if meta is pressed, false otherwise.
          * @param type the type of the event.
-         * @param isNumericPad true if the event occured on the numeric pad,
+         * @param isNumericPad true if the event occurred on the numeric pad,
          *                     false otherwise.
          * @param key represents the key of the event.
          */
@@ -107,9 +107,9 @@ namespace gcn
         unsigned int getType() const;
 
         /**
-         * Checks whether the key event occured on the numeric pad.
+         * Checks whether the key event occurred on the numeric pad.
          *
-         * @return true if key event occured on the numeric pad.
+         * @return true if key event occurred on the numeric pad.
          */
         bool isNumericPad() const;
 

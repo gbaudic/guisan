@@ -66,7 +66,7 @@ namespace gcn
     /**
      * Represents a list. It is used in certain Widgets, like the ListBox, to
      * handle a list with string elements. If you want to use Widgets like
-     * ListBox, you should inherit from this class and implement it's
+     * ListBox, you should inherit from this class and implement its
      * functions.
      */
     class GCN_CORE_DECLSPEC ListModel

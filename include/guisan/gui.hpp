@@ -77,7 +77,7 @@ namespace gcn
     /**
      * @mainpage
      * @section Introduction
-     * This documentation is mostly intended as a reference to the API. If you want to get started with Guichan, we suggest you check out the programs in the examples directory of the Guichan release.
+     * This documentation is mostly intended as a reference to the API. If you want to get started with Guisan, we suggest you check out the programs in the examples directory of the Guisan release.
      * @n
      * @n
      * This documentation is, and will always be, work in progress. If you find any errors, typos or inconsistencies, or if you feel something needs to be explained in more detail - don't hesitate to tell us.
@@ -153,7 +153,7 @@ namespace gcn
 
         /**
          * Performs the Gui logic. By calling this function all logic
-         * functions down in the Gui heirarchy will be called.
+         * functions down in the Gui hierarchy will be called.
          * What performs in Logic can be just about anything like
          * adjusting a Widgets size or doing some calculations.
          *
@@ -163,7 +163,7 @@ namespace gcn
         virtual void logic();
 
         /**
-         * Draws the Gui. By calling this funcion all draw functions
+         * Draws the Gui. By calling this function all draw functions
          * down in the Gui hierarchy will be called.
          */
         virtual void draw();
@@ -278,7 +278,7 @@ namespace gcn
         virtual void handleModalMouseInputFocus();
 
         /**
-         * Handles modal focus gained. If modal focus has been gaind it might 
+         * Handles modal focus gained. If modal focus has been gained it might 
          * be necessary to distribute mouse entered or mouse exited events.
          *
          * @since 0.8.0
@@ -286,7 +286,7 @@ namespace gcn
         virtual void handleModalFocusGained();
 
         /**
-         * Handles modal mouse input focus gained. If modal focus has been gaind 
+         * Handles modal mouse input focus gained. If modal focus has been gained 
          * it might be necessary to distribute mouse entered or mouse exited events.
          *
          * @since 0.8.0

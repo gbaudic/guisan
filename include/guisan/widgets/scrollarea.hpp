@@ -326,7 +326,7 @@ namespace gcn
          * The policies are:
          *
          * SHOW_ALWAYS - Always show the scrollbars no matter what.
-         * SHOW_NEVER  - Never show the scrollbars no matter waht.
+         * SHOW_NEVER  - Never show the scrollbars no matter what.
          * SHOW_AUTO   - Show the scrollbars only when needed. That is if the
          *               content grows larger then the ScrollArea.
          */

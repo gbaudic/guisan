@@ -83,9 +83,9 @@ namespace gcn
         virtual ~ActionListener() { }
 
         /**
-         * Called when an action is recieved from a Widget. It is used
-         * to be able to recieve a notification that an action has
-         * occured.
+         * Called when an action is received from a Widget. It is used
+         * to be able to receive a notification that an action has
+         * occurred.
          *
          * @param actionEvent the event of the action.
          * @since 0.6.0

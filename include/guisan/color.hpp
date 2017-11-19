@@ -78,10 +78,10 @@ namespace gcn
          * a hexadecimal constant for HTML-style color representation.
          * The alpha component will be set to 255.
          *
-         * EXAMPLE: Color(0xff50a0) constructs Gui-chan's favourite color.
+         * EXAMPLE: Color(0xff50a0) constructs Guisan's favourite color.
          *
          * NOTE: Because of this constructor, integers will be automatically
-         *       casted to a color by your compiler.
+         *       cast to a color by your compiler.
          *
          * @param color the color.
          */
@@ -94,7 +94,7 @@ namespace gcn
          * @param g Green color component  (range 0-255).
          * @param b Blue color component (range 0-255).
          * @param a Color alpha, used for transparency. A value of 0 means
-         *          totaly transparent, 255 is totaly opaque (the default).
+         *          totally transparent, 255 is totally opaque (the default).
          */
         Color(int r, int g, int b, int a = 255);
 
@@ -155,8 +155,8 @@ namespace gcn
         int b;
 
         /**
-         * Color alpha, used for transparency. A value of 0 means totaly
-         * transparent, 255 is totaly opaque (the default)
+         * Color alpha, used for transparency. A value of 0 means totally
+         * transparent, 255 is totally opaque (the default)
          */
         int a;
     };

@@ -117,7 +117,7 @@ namespace gcn
 		/**
 		 * Sets the use of anti aliasing..
 		 *
-		 * @param antaAlias true for use of antia aliasing.
+		 * @param antaAlias true for use of antialiasing.
 		 */
 		virtual void setAntiAlias(bool antiAlias);
   

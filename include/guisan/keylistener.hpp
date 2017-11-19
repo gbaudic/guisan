@@ -66,9 +66,9 @@ namespace gcn
 
     /**
      * Key listeners base class. Inorder to use this class you must inherit
-     * from it and implements it's functions. KeyListeners listen for key
-     * events on a Widgets. When a Widget recives a key event, the
-     * corresponding function in all it's key listeners will be called.
+     * from it and implements its functions. KeyListeners listen for key
+     * events on a Widget. When a Widget receives a key event, the
+     * corresponding function in all its key listeners will be called.
      * Only focused Widgets will generate key events.
      *
      * @see Widget::addKeyListener
@@ -104,7 +104,7 @@ namespace gcn
          *
          * You should not be able to make an instance of KeyListener,
          * therefore its constructor is protected. To use KeyListener
-         * you must inherit from this class and implement it's
+         * you must inherit from this class and implement its
          * functions.
          */
         KeyListener() { }

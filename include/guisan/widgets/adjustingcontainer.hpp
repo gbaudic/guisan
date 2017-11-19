@@ -87,18 +87,18 @@ namespace gcn
      *   else if(r == 1)
      *     l = new gcn::Label("A longer phrase");
      *   else
-     *     l = new gcn::Label("Extravagent and wordy text");
+     *     l = new gcn::Label("Extravagant and wordy text");
      *   adjust->add(l);
      * @endcode
      *
      * Output:
-     * @verbitam
+     * @verbatim
      * <pre>
      *+---------------------------------------------------------------------------+
      *|                                                                           |
-     *| A longer phrase              Short             Extravagent and wordy text |
+     *| A longer phrase              Short             Extravagant and wordy text |
      *|                                                                           |
-     *| Short             Extravagent and wordy text                        Short |
+     *| Short             Extravagant and wordy text                        Short |
      *|                                                                           |
      *| Short                   A longer phrase                   A longer phrase |
      *|                                                                           |
@@ -112,7 +112,7 @@ namespace gcn
      * allowing you to show a fixed, maximum size while not limiting the actual
      * container.
      *
-     * For more help with using AdjustingContainers, try the Guichan forums
+     * For more help with using AdjustingContainers, try the Guisan forums
      * (http://guichan.sourceforge.net/forum/) or email mrlachatte@gmail.com.
      *
      * @author Josh Matthews

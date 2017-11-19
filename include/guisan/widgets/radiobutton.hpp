@@ -108,7 +108,7 @@ namespace gcn
         /**
          * Checks if the radio button is selected.
          *
-         * @return True if the radio button is selecte, false otherwise.
+         * @return True if the radio button is selected, false otherwise.
          * @see setSelected
          */
         bool isSelected() const;

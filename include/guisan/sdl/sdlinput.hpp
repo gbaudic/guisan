@@ -110,11 +110,11 @@ namespace gcn
 
     protected:
         /**
-         * Converts a mouse button from SDL to a Guichan mouse button
+         * Converts a mouse button from SDL to a Guisan mouse button
          * representation.
          *
          * @param button an SDL mouse button.
-         * @return a Guichan mouse button.
+         * @return a Guisan mouse button.
          */
         int convertMouseButton(int button);
 

@@ -66,7 +66,7 @@ namespace gcn
 
     /**
      * Holder of a font. Fonts should inherit from this class and
-     * implements it's functions.
+     * implements its functions.
      *
      * @see ImageFont
      */
@@ -80,8 +80,8 @@ namespace gcn
         virtual ~Font(){ }
 
         /**
-         * Gets the width of a string. The width of a string is not necesserily
-         * the sum of all the widths of it's glyphs.
+         * Gets the width of a string. The width of a string is not necessarily
+         * the sum of all the widths of its glyphs.
          *
          * @param text the string to return the width of.
          * @return the width of a string.
@@ -97,7 +97,7 @@ namespace gcn
 
         /**
          * Gets a string index in a string providing an x coordinate.
-         * Used to retrive a string index (for a character in a
+         * Used to retrieve a string index (for a character in a
          * string) at a certain x position. It is especially useful
          * when a mouse clicks in a TextField and you want to know which
          * character was clicked.
