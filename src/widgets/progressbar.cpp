@@ -75,6 +75,17 @@ namespace gcn
         
         setHeight(getFont()->getHeight());
     }
+    
+    ProgressBar::ProgressBar(const unsigned int start, 
+    const unsigned int end, const unsigned int value) : Label()
+    {
+        mAlignment = Graphics::CENTER;
+        mStart = start;
+        mValue = value;
+        mEnd = end;
+        
+        setHeight(getFont()->getHeight());
+    }
 
     ProgressBar::ProgressBar(const std::string& caption) : Label(caption)
     {

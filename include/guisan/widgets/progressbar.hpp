@@ -7,7 +7,7 @@
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
  * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
- *
+ * Copyright (c) 2017 Gwilherm Baudic
  *                                                         Js_./
  * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
  * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
@@ -54,8 +54,8 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_LABEL_HPP
-#define GCN_LABEL_HPP
+#ifndef GCN_PROGRESSBAR_HPP
+#define GCN_PROGRESSBAR_HPP
 
 #include <string>
 
@@ -67,6 +67,10 @@ namespace gcn
 {
     /**
      * Implementation of a label capable of displaying a caption and a progress bar.
+     * 
+     * Setting both start and end to 0 creates an "infinite" progressbar with a small rectangle
+     * moving forward and disappearing. In this mode, it is up to the caller to set the progressbar
+     * value (start of the rectangle) regularly to achieve animation. 
      */
     class GCN_CORE_DECLSPEC ProgressBar: public Label
     {
@@ -75,6 +79,15 @@ namespace gcn
          * Constructor.
          */
         ProgressBar();
+        
+        /**
+         * Constructor.
+         *
+         * @param start minimum value
+         * @param end maximum value
+         * @param value current value
+         */
+        ProgressBar(const unsigned int start, const unsigned int end, const unsigned int value);
 
         /**
          * Constructor.
@@ -117,19 +130,57 @@ namespace gcn
          */
         unsigned int getAlignment() const;
         
-        
+        /**
+         * Sets the minimum value.
+         *
+         * @param start the minimum value
+         * @see getStart
+         */
         void setStart(const unsigned int start);
         
+        /**
+         * Gets the minimum value.
+         *
+         * @return the minimum value
+         * @see setStart
+         */
         unsigned int getStart() const;
         
+        /**
+         * Sets the maximum value.
+         *
+         * @param end the maximum value
+         * @see getEnd
+         */
         void setEnd(const unsigned int end);
         
+        /**
+         * Gets the maximum value.
+         *
+         * @return the maximum value
+         * @see setEnd
+         */
         unsigned int getEnd() const;
         
+        /**
+         * Sets the current progress value.
+         *
+         * @param value the current value
+         * @see getStart
+         */
         void setValue(const unsigned int value);
         
+        /**
+         * Gets the current progress value.
+         * 
+         * @return progress value
+         * @see setValue
+         */
         unsigned int getValue() const;
         
+        /**
+         *
+         */
         void adjustSize();
 
 
@@ -156,4 +207,4 @@ namespace gcn
     };
 }
 
-#endif // end GCN_LABEL_HPP
+#endif // end GCN_PROGRESSBAR_HPP
