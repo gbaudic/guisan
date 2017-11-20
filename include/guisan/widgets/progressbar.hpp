@@ -54,75 +54,106 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_GUISAN_HPP
-#define GCN_GUISAN_HPP
+#ifndef GCN_LABEL_HPP
+#define GCN_LABEL_HPP
 
-#include <guisan/actionevent.hpp>
-#include <guisan/actionlistener.hpp>
-#include <guisan/cliprectangle.hpp>
-#include <guisan/color.hpp>
-#include <guisan/deathlistener.hpp>
-#include <guisan/event.hpp>
-#include <guisan/exception.hpp>
-#include <guisan/focushandler.hpp>
-#include <guisan/focuslistener.hpp>
-#include <guisan/font.hpp>
-#include <guisan/genericinput.hpp>
-#include <guisan/graphics.hpp>
-#include <guisan/gui.hpp>
-#include <guisan/image.hpp>
-#include <guisan/imagefont.hpp>
-#include <guisan/imageloader.hpp>
-#include <guisan/input.hpp>
-#include <guisan/inputevent.hpp>
-#include <guisan/key.hpp>
-#include <guisan/keyevent.hpp>
-#include <guisan/keyinput.hpp>
-#include <guisan/keylistener.hpp>
-#include <guisan/listmodel.hpp>
-#include <guisan/mouseevent.hpp>
-#include <guisan/mouseinput.hpp>
-#include <guisan/mouselistener.hpp>
-#include <guisan/rectangle.hpp>
-#include <guisan/selectionevent.hpp>
-#include <guisan/selectionlistener.hpp>
-#include <guisan/widget.hpp>
-#include <guisan/widgetlistener.hpp>
-
-#include <guisan/widgets/adjustingcontainer.hpp>
-#include <guisan/widgets/button.hpp>
-#include <guisan/widgets/checkbox.hpp>
-#include <guisan/widgets/container.hpp>
-#include <guisan/widgets/dropdown.hpp>
-#include <guisan/widgets/icon.hpp>
-#include <guisan/widgets/imagebutton.hpp>
-#include <guisan/widgets/imagetextbutton.hpp>
-#include <guisan/widgets/label.hpp>
-#include <guisan/widgets/listbox.hpp>
-#include <guisan/widgets/progressbar.hpp>
-#include <guisan/widgets/scrollarea.hpp>
-#include <guisan/widgets/slider.hpp>
-#include <guisan/widgets/radiobutton.hpp>
-#include <guisan/widgets/tab.hpp>
-#include <guisan/widgets/tabbedarea.hpp>
-#include <guisan/widgets/textbox.hpp>
-#include <guisan/widgets/textfield.hpp>
-#include <guisan/widgets/passwordfield.hpp>
-#include <guisan/widgets/window.hpp>
+#include <string>
 
 #include "guisan/platform.hpp"
+#include "guisan/widget.hpp"
+#include "guisan/label.hpp"
 
-class Widget;
-
-extern "C"
+namespace gcn
 {
     /**
-     * Gets the the version of Guisan. As it is a C function
-     * it can be used to check for Guichan with autotools.
-     *
-     * @return the version of Guisan.
+     * Implementation of a label capable of displaying a caption and a progress bar.
      */
-    GCN_CORE_DECLSPEC extern const char* gcnGuisanVersion();
+    class GCN_CORE_DECLSPEC ProgressBar: public Widget
+    {
+    public:
+        /**
+         * Constructor.
+         */
+        ProgressBar();
+
+        /**
+         * Constructor.
+         *
+         * @param caption The caption of the label.
+         */
+        ProgressBar(const std::string& caption);
+
+        /**
+         * Gets the caption of the label.
+         *
+         * @return The caption of the label.
+         * @see setCaption
+         */
+        const std::string &getCaption() const;
+
+        /**
+         * Sets the caption of the label. 
+         *
+         * @param caption The caption of the label.
+         * @see getCaption, adjustSize
+         */
+        void setCaption(const std::string& caption);
+
+        /**
+         * Sets the alignment for the caption. The alignment is relative
+         * to the center of the label.
+         *
+         * @param alignemnt Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
+         * @see getAlignment, Graphics
+         */
+        void setAlignment(unsigned int alignment);
+
+        /**
+         * Gets the alignment for the caption. The alignment is relative to
+         * the center of the label.
+         *
+         * @return alignment of caption. Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
+         * @see setAlignment, Graphics
+         */
+        unsigned int getAlignment() const;
+        
+        
+        void setStart(const unsigned int start);
+        
+        unsigned int getStart() const;
+        
+        void setEnd(const unsigned int end);
+        
+        unsigned int getEnd() const;
+        
+        void setValue(const unsigned int value);
+        
+        unsigned int getValue() const;
+        
+        void adjustSize();
+
+
+        // Inherited from Widget
+
+        virtual void draw(Graphics* graphics);
+
+        virtual void drawBorder(Graphics* graphics);
+
+    protected:
+        /**
+         * Holds the caption of the label.
+         */
+        std::string mCaption;
+
+        /**
+         * Holds the alignment of the caption.
+         */
+        unsigned int mAlignment;
+        
+        unsigned int mStart; //! minimum value of the progressbar
+        unsigned int mEnd;   //! maximum value of the progressbar
+        unsigned int mValue; //! current value of the progressbar
+    };
 }
 
-#endif // end GCN_GUISAN_HPP
+#endif // end GCN_LABEL_HPP
