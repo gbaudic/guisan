@@ -61,7 +61,7 @@
 
 #include "guisan/platform.hpp"
 #include "guisan/widget.hpp"
-#include "guisan/label.hpp"
+#include "guisan/widgets/label.hpp"
 
 namespace gcn
 {
