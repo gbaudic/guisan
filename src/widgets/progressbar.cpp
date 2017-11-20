@@ -142,7 +142,7 @@ namespace gcn
         {
             // Standard scrollbar
             progressWidth = getWidth() * mValue / (mEnd - mStart);
-            graphics->fillRectangle(Rectangle(0,0,progressWidth,getHeight());
+            graphics->fillRectangle(Rectangle(0,0,progressWidth,getHeight()));
         }
 
         switch (getAlignment())
