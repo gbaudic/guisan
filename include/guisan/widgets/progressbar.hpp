@@ -68,7 +68,7 @@ namespace gcn
     /**
      * Implementation of a label capable of displaying a caption and a progress bar.
      */
-    class GCN_CORE_DECLSPEC ProgressBar: public Widget
+    class GCN_CORE_DECLSPEC ProgressBar: public Label
     {
     public:
         /**

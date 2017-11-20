@@ -119,12 +119,12 @@ namespace gcn
             
             if(barX + progressWidth > getWidth())
             {
-                graphics->fillRectangle(barX,0,getWidth() - barX,getHeight());
-                graphics->fillRectangle(0,0,barX + progressWidth - getWidth(),getHeight());
+                graphics->fillRectangle(Rectangle(barX,0,getWidth() - barX,getHeight()));
+                graphics->fillRectangle(Rectangle(0,0,barX + progressWidth - getWidth(),getHeight()));
             }
             else
             {
-                graphics->fillRectangle(barX,0,progressWidth,getHeight());
+                graphics->fillRectangle(Rectangle(barX,0,progressWidth,getHeight()));
             }
         }
         else
@@ -211,7 +211,7 @@ namespace gcn
         
     void ProgressBar::setValue(const unsigned int value)
     {
-        if(value >= mStart && value <= mEnd°
+        if(value >= mStart && value <= mEnd)
         {
             mValue = value;
         }
