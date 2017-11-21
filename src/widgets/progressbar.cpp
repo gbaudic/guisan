@@ -71,18 +71,35 @@ namespace gcn
         mAlignment = Graphics::CENTER;
         mStart = 0;
         mValue = 0;
-        mEnd = 0;
+        mEnd = 100;
         
         setHeight(getFont()->getHeight());
     }
     
     ProgressBar::ProgressBar(const unsigned int start, 
-    const unsigned int end, const unsigned int value) : Label()
+            const unsigned int end, const unsigned int value) : Label()
     {
         mAlignment = Graphics::CENTER;
-        mStart = start;
-        mValue = value;
-        mEnd = end;
+        
+        if(start > end)
+        {
+            mStart = end;
+            mEnd = start;
+        }
+        else
+        {
+            mStart = start;
+            mEnd = end;
+        }
+        
+        if((value >= start && value <= end) || (start == 0 && end == 0))
+        {
+            mValue = value;
+        }
+        else
+        {
+            mValue = start;
+        }
         
         setHeight(getFont()->getHeight());
     }
@@ -126,12 +143,12 @@ namespace gcn
         {
             // Infinite scrollbar
             progressWidth = getWidth() / 5;
-            int barX = getWidth() * mValue / (mEnd-mStart);
+            int barX = getWidth() * mValue / 100;
             
             if(barX + progressWidth > getWidth())
             {
-                graphics->fillRectangle(Rectangle(barX,0,getWidth() - barX,getHeight()));
-                graphics->fillRectangle(Rectangle(0,0,barX + progressWidth - getWidth(),getHeight()));
+                graphics->fillRectangle(Rectangle(barX, 0, getWidth() - barX, getHeight()));
+                graphics->fillRectangle(Rectangle(0, 0, progressWidth - (getWidth() - barX), getHeight()));
             }
             else
             {
@@ -225,6 +242,13 @@ namespace gcn
         if(value >= mStart && value <= mEnd)
         {
             mValue = value;
+        }
+        else
+        {
+            if(mStart == 0 && mEnd == 0)
+            {
+                mValue = value % 100;
+            }
         }
     }
     

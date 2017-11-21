@@ -70,7 +70,8 @@ namespace gcn
      * 
      * Setting both start and end to 0 creates an "infinite" progressbar with a small rectangle
      * moving forward and disappearing. In this mode, it is up to the caller to set the progressbar
-     * value (start of the rectangle) regularly to achieve animation. 
+     * value in the range 0-100 (which indicates the start of the rectangle) 
+     * regularly to achieve animation. 
      */
     class GCN_CORE_DECLSPEC ProgressBar: public Label
     {
@@ -179,7 +180,7 @@ namespace gcn
         unsigned int getValue() const;
         
         /**
-         *
+         * Adjusts the size of the widget. 
          */
         void adjustSize();
 
