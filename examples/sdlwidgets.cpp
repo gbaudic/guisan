@@ -142,7 +142,7 @@ initWidgets()
     window->setBaseColor(gcn::Color(212, 255, 150, 190));
     
     progress = new gcn::ProgressBar(0, 100, 30);
-    progress->setCaption("30 %");
+    progress->setCaption("Loading");
     progress->setWidth(100);
     
     guisanLogoImage = gcn::Image::load("guisan-logo.png");
@@ -180,7 +180,7 @@ initWidgets()
     top->add(window, 100, 350);
     top->add(nestedScrollArea, 440, 350);
     
-    window->add(progress, 10, 20);
+    top->add(progress, 580, 220);
 }
 
 /**

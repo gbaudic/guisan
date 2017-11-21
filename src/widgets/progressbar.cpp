@@ -74,6 +74,7 @@ namespace gcn
         mEnd = 100;
         
         setHeight(getFont()->getHeight());
+        setBorderSize(1);
     }
     
     ProgressBar::ProgressBar(const unsigned int start, 
@@ -102,6 +103,7 @@ namespace gcn
         }
         
         setHeight(getFont()->getHeight());
+        setBorderSize(1);
     }
 
     ProgressBar::ProgressBar(const std::string& caption) : Label(caption)
@@ -110,6 +112,7 @@ namespace gcn
         mAlignment = Graphics::CENTER;
 
         setHeight(getFont()->getHeight());
+        setBorderSize(1);
     }
 
     const std::string &ProgressBar::getCaption() const
@@ -134,6 +137,9 @@ namespace gcn
 
     void ProgressBar::draw(Graphics* graphics)
     {
+        graphics->setColor(getBackgroundColor());
+        graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
+        
         int textX;
         int textY = getHeight() / 2 - getFont()->getHeight() / 2;
         
