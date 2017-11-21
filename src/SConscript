@@ -42,6 +42,7 @@ widget_sources = [
 	'widgets/imagetextbutton.cpp',
 	'widgets/label.cpp',
 	'widgets/listbox.cpp',
+	'widgets/progressbar.cpp',
 	'widgets/radiobutton.cpp',
 	'widgets/scrollarea.cpp',
 	'widgets/slider.cpp',
