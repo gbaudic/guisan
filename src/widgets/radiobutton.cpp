@@ -110,9 +110,17 @@ namespace gcn
 
         
         graphics->setFont(getFont());
-        graphics->setColor(getForegroundColor());
+        
+        if(mEnabled)
+        {
+            graphics->setColor(getForegroundColor());
+        }
+        else
+        {
+            graphics->setColor(getForegroundColor() + 0x303030);
+        }
 
-        if (isFocused())
+        if (isFocused() && mEnabled)
         {
             int fh;
             
@@ -183,7 +191,14 @@ namespace gcn
         Color shadowColor = faceColor - 0x303030;
         shadowColor.a = alpha;
 
-        graphics->setColor(getBackgroundColor());
+        if(mEnabled)
+        {
+            graphics->setColor(getBackgroundColor());
+        }
+        else
+        {
+            graphics->setColor(getBaseColor());
+        }
 
         int i;
         int hh = (h + 1) / 2;
@@ -212,7 +227,7 @@ namespace gcn
         graphics->drawLine(1, hh + 1, hh, h);
         graphics->drawLine(hh + 1, h - 1, h, hh);
 
-        graphics->setColor(getForegroundColor());
+        graphics->setColor(getForegroundColor() + (mEnabled ? 0 : 0x303030));
 
         int hhh = hh - 3;
         if (mSelected)
@@ -269,8 +284,8 @@ namespace gcn
     {
         Key key = keyEvent.getKey();
 
-        if (key.getValue() == Key::ENTER ||
-            key.getValue() == Key::SPACE)
+        if ((key.getValue() == Key::ENTER ||
+            key.getValue() == Key::SPACE) && mEnabled)
         {
             setSelected(true);
             generateAction();
@@ -280,7 +295,7 @@ namespace gcn
 
     void RadioButton::mouseClicked(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             setSelected(true);
             generateAction();

@@ -166,7 +166,14 @@ namespace gcn
         graphics->drawLine(getWidth() - 1, 1, getWidth() - 1, getHeight() - 1);
         graphics->drawLine(1, getHeight() - 1, getWidth() - 1, getHeight() - 1);
 
-        graphics->setColor(getForegroundColor());
+        if(isEnabled())
+        {
+            graphics->setColor(getForegroundColor());
+        }
+        else
+        {
+            graphics->setColor(getForegroundColor() + 0x303030);
+        }
 
         int textX;
         int textY = getHeight() / 2 - getFont()->getHeight() / 2;
@@ -248,7 +255,7 @@ namespace gcn
 
     void Button::mousePressed(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             mMousePressed = true;
             mouseEvent.consume();
@@ -262,20 +269,22 @@ namespace gcn
 
     void Button::mouseEntered(MouseEvent& mouseEvent)
     {
-        mHasMouse = true;
+        if(mEnabled)
+            mHasMouse = true;
     }
 
     void Button::mouseReleased(MouseEvent& mouseEvent)
     {
         if (mouseEvent.getButton() == MouseEvent::LEFT
             && mMousePressed
-            && mHasMouse)
+            && mHasMouse
+            && mEnabled)
         {
             mMousePressed = false;
             generateAction();
             mouseEvent.consume();
         }
-        else if (mouseEvent.getButton() == MouseEvent::LEFT)
+        else if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             mMousePressed = false;
             mouseEvent.consume();
@@ -291,8 +300,8 @@ namespace gcn
     {
         Key key = keyEvent.getKey();
 
-        if (key.getValue() == Key::ENTER
-            || key.getValue() == Key::SPACE)
+        if ((key.getValue() == Key::ENTER
+            || key.getValue() == Key::SPACE) && mEnabled)
         {
             mKeyPressed = true;
             keyEvent.consume();
@@ -305,7 +314,7 @@ namespace gcn
 
         if ((key.getValue() == Key::ENTER
              || key.getValue() == Key::SPACE)
-            && mKeyPressed)
+            && mKeyPressed && mEnabled)
         {
             mKeyPressed = false;
             generateAction();

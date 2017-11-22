@@ -94,7 +94,15 @@ namespace gcn
         drawBox(graphics);
 
         graphics->setFont(getFont());
-        graphics->setColor(getForegroundColor());
+        
+        if(mEnabled)
+        {
+            graphics->setColor(getForegroundColor());
+        }
+        else
+        {
+            graphics->setColor(getForegroundColor() + 0x303030);
+        }
 
         int h = getHeight() + getHeight() / 2;
 
@@ -145,12 +153,27 @@ namespace gcn
         graphics->drawLine(h, 1, h, h);
         graphics->drawLine(1, h, h - 1, h);
 
-        graphics->setColor(getBackgroundColor());
+        if(mEnabled)
+        {
+            graphics->setColor(getBackgroundColor());
+        }
+        else
+        {
+            graphics->setColor(getBaseColor());
+        }
+        
         graphics->fillRectangle(Rectangle(2, 2, h - 2, h - 2));
 
-        graphics->setColor(getForegroundColor());
+        if(mEnabled)
+        {
+            graphics->setColor(getForegroundColor());
+        }
+        else
+        {
+            graphics->setColor(getForegroundColor() + 0x303030);
+        }
 
-        if (isFocused())
+        if (isFocused() && mEnabled)
         {
             graphics->drawRectangle(Rectangle(0, 0, h + 2, h + 2));
         }        
@@ -189,8 +212,8 @@ namespace gcn
     {
         Key key = keyEvent.getKey();
 
-        if (key.getValue() == Key::ENTER ||
-            key.getValue() == Key::SPACE)
+        if ((key.getValue() == Key::ENTER ||
+            key.getValue() == Key::SPACE) && mEnabled)
         {
             toggleSelected();
             keyEvent.consume();
@@ -199,7 +222,7 @@ namespace gcn
 
     void CheckBox::mouseClicked(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             toggleSelected();
         }
