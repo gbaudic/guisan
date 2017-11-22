@@ -99,6 +99,7 @@
 #include <guisan/widgets/imagetextbutton.hpp>
 #include <guisan/widgets/label.hpp>
 #include <guisan/widgets/listbox.hpp>
+#include <guisan/widgets/progressbar.hpp>
 #include <guisan/widgets/scrollarea.hpp>
 #include <guisan/widgets/slider.hpp>
 #include <guisan/widgets/radiobutton.hpp>
