@@ -141,7 +141,7 @@ initWidgets()
 	window = new gcn::Window("I am a window  Drag me");
 	window->setBaseColor(gcn::Color(212, 255, 150, 190));
 	
-	progress = new gcn::ProgressBar(0,100,30);
+	progress = new gcn::ProgressBar(0, 100, 30);
 	progress->setCaption("Loading");
 	progress->setWidth(100);
 	
@@ -180,7 +180,7 @@ initWidgets()
 	top->add(window, 100, 350);
 	top->add(nestedScrollArea, 440, 350);
 	
-	top->add(progress, 580, 200);
+	top->add(progress, 580, 220);
 }
 
 /**
