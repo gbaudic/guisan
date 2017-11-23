@@ -102,6 +102,20 @@ namespace gcn
         const std::string& getText() const;
 
         /**
+         * Sets the placeholder text.
+         *
+         * @param text the new placeholder text in the TextField.
+         */
+        void setPlaceholderText(const std::string& text);
+
+        /**
+         * Gets the placeholder text.
+         *
+         * @return the placeholder text of the TextField.
+         */
+        const std::string& getPlaceholderText() const;
+
+        /**
          * Draws the caret (the little marker in the text that shows where the
          * letters you type will appear). Easily overloaded if you want to
          * change the style of the caret.
@@ -167,6 +181,7 @@ namespace gcn
         void fixScroll();
 
         std::string mText;
+        std::string mPlaceholderText;
         unsigned int mCaretPosition;
         int mXScroll;
     };

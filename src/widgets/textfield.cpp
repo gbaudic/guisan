@@ -119,6 +119,12 @@ namespace gcn
         graphics->setColor(getForegroundColor() + (mEnabled ? 0 : 0x303030));
         graphics->setFont(getFont());
         graphics->drawText(mText, 1 - mXScroll, 1);
+        
+        if(!mPlaceholderText.empty() && mText.empty())
+        {
+            graphics->setColor(getForegroundColor() + 0x303030);
+            graphics->drawText(mPlaceholderTextText, 1, 1);
+        }
     }
 
     void TextField::drawBorder(Graphics* graphics)
@@ -290,6 +296,16 @@ namespace gcn
     const std::string& TextField::getText() const
     {
         return mText;
+    }
+    
+    void TextField::setPlaceholderText(const std::string& text)
+    {
+        mPlaceholderText = text;
+    }
+  
+    const std::string& TextField::getPlaceholderText() const
+    {
+        return mPlaceholderText;
     }
 
     void TextField::fontChanged()
