@@ -137,7 +137,7 @@ namespace gcn
 
         if (mOpaque)
         {
-            graphics->setColor(getBackgroundColor());
+            graphics->setColor(mEnabled ? getBackgroundColor() : getBaseColor());
             graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
         }
 
@@ -146,7 +146,7 @@ namespace gcn
             drawCaret(graphics, getFont()->getWidth(mTextRows[mCaretRow].substr(0, mCaretColumn)), mCaretRow * getFont()->getHeight());
         }
 
-        graphics->setColor(getForegroundColor());
+        graphics->setColor(getForegroundColor() + (mEnabled ? 0 : 0x303030));
         graphics->setFont(getFont());
 
         for (i = 0; i < mTextRows.size(); i++)
@@ -181,7 +181,7 @@ namespace gcn
 
     void TextBox::mousePressed(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             mCaretRow = mouseEvent.getY() / getFont()->getHeight();
 
@@ -202,6 +202,9 @@ namespace gcn
     void TextBox::keyPressed(KeyEvent& keyEvent)
     {
         Key key = keyEvent.getKey();
+        
+        if(!mEnabled)
+            return;
 
         if (key.getValue() == Key::LEFT)
         {

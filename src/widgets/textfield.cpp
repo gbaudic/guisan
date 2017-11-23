@@ -107,7 +107,7 @@ namespace gcn
 
     void TextField::draw(Graphics* graphics)
     {
-        Color faceColor = getBackgroundColor();
+        Color faceColor = mEnabled ? getBackgroundColor() : getBaseColor();
         graphics->setColor(faceColor);
         graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
 
@@ -116,7 +116,7 @@ namespace gcn
             drawCaret(graphics, getFont()->getWidth(mText.substr(0, mCaretPosition)) - mXScroll);
         }
 
-        graphics->setColor(getForegroundColor());
+        graphics->setColor(getForegroundColor() + (mEnabled ? 0 : 0x303030));
         graphics->setFont(getFont());
         graphics->drawText(mText, 1 - mXScroll, 1);
     }
@@ -147,13 +147,16 @@ namespace gcn
 
     void TextField::drawCaret(Graphics* graphics, int x)
     {
-        graphics->setColor(getForegroundColor());
-        graphics->drawLine(x, getHeight() - 2, x, 1);
+        if(mEnabled)
+        {
+            graphics->setColor(getForegroundColor());
+            graphics->drawLine(x, getHeight() - 2, x, 1);
+        }
     }
 
     void TextField::mousePressed(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::LEFT && mEnabled)
         {
             mCaretPosition = getFont()->getStringIndexAt(mText, mouseEvent.getX() + mXScroll);
             fixScroll();
@@ -168,6 +171,9 @@ namespace gcn
     void TextField::keyPressed(KeyEvent& keyEvent)
     {
         Key key = keyEvent.getKey();
+        
+        if(!mEnabled)
+            return;
 
         if (key.getValue() == Key::LEFT && mCaretPosition > 0)
         {
