@@ -128,8 +128,15 @@ namespace gcn
             shadowColor = faceColor - 0x303030;
             shadowColor.a = alpha;
         }
-
-        graphics->setColor(faceColor);
+        
+        if(mEnabled)
+        {
+            graphics->setColor(faceColor);
+        }
+        else
+        {
+            graphics->setColor(getBaseColor() + 0x303030);
+        }
         graphics->fillRectangle(Rectangle(1, 1, getDimension().width-1, getHeight() - 1));
 
         graphics->setColor(highlightColor);

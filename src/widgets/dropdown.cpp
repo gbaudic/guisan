@@ -123,16 +123,16 @@ namespace gcn
 
     DropDown::~DropDown()
     {
-	if (widgetExists(mListBox))
-		mListBox->removeSelectionListener(this);
+    if (widgetExists(mListBox))
+        mListBox->removeSelectionListener(this);
 
-	if (mInternalScrollArea)
-		delete mScrollArea;
+    if (mInternalScrollArea)
+        delete mScrollArea;
 
-	if (mInternalListBox)
-		delete mListBox;
+    if (mInternalListBox)
+        delete mListBox;
 
-	setInternalFocusHandler(NULL);
+    setInternalFocusHandler(NULL);
     }
 
     void DropDown::draw(Graphics* graphics)
@@ -309,6 +309,11 @@ namespace gcn
     void DropDown::keyPressed(KeyEvent& keyEvent)
     {
         Key key = keyEvent.getKey();
+        
+        if(!mEnabled)
+        {
+            return;
+        }
 
         if ((key.getValue() == Key::ENTER || key.getValue() == Key::SPACE)
             && !mDroppedDown)
@@ -330,6 +335,11 @@ namespace gcn
 
     void DropDown::mousePressed(MouseEvent& mouseEvent)
     {        
+        if(!mEnabled)
+        {
+            return;
+        }
+        
         // If we have a mouse press on the widget.
         if (0 <= mouseEvent.getY()
             && mouseEvent.getY() < getHeight()
@@ -369,6 +379,11 @@ namespace gcn
 
     void DropDown::mouseReleased(MouseEvent& mouseEvent)
     {
+        if (!mEnabled)
+        {
+            return;
+        }
+        
         if (mIsDragged)
         {
             mPushed = false;
@@ -426,8 +441,8 @@ namespace gcn
         if (mScrollArea == NULL)
             throw GCN_EXCEPTION("Scroll Area has been deleted.");
 
-	if (mListBox == NULL)
-		throw GCN_EXCEPTION("List box has been deleted.");
+    if (mListBox == NULL)
+        throw GCN_EXCEPTION("List box has been deleted.");
 
         int listBoxHeight = mListBox->getHeight();
         int h2 = getFont()->getHeight();
@@ -567,9 +582,9 @@ namespace gcn
         Widget::setForegroundColor(color);
     }
 
-	void DropDown::setFont(Font *font)
-	{
-		if (mInternalScrollArea)
+    void DropDown::setFont(Font *font)
+    {
+        if (mInternalScrollArea)
         {
             mScrollArea->setFont(font);
         }
@@ -580,11 +595,11 @@ namespace gcn
         }
 
         Widget::setFont(font);
-	}
+    }
 
-	void DropDown::mouseWheelMovedUp(MouseEvent& mouseEvent)
-	{
-        if (isFocused() && mouseEvent.getSource() == this)
+    void DropDown::mouseWheelMovedUp(MouseEvent& mouseEvent)
+    {
+        if (isFocused() && mouseEvent.getSource() == this && mEnabled)
         {                   
             mouseEvent.consume();
 
@@ -597,7 +612,7 @@ namespace gcn
 
     void DropDown::mouseWheelMovedDown(MouseEvent& mouseEvent)
     {
-        if (isFocused() && mouseEvent.getSource() == this)
+        if (isFocused() && mouseEvent.getSource() == this && mEnabled)
         {            
             mouseEvent.consume();
 
