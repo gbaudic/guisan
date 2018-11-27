@@ -6,11 +6,11 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004 - 2008 Olof Naessén and Per Larsson
+ * Copyright (c) 2004 - 2008 Olof NaessÃ©n and Per Larsson
  *
  *
  * Per Larsson a.k.a finalman
- * Olof Naessén a.k.a jansem/yakslem
+ * Olof NaessÃ©n a.k.a jansem/yakslem
  *
  * Visit: http://guichan.sourceforge.net
  *
@@ -47,7 +47,7 @@
 #include <map>
 #include <string>
 
-#include <SDL2/SDL_ttf.h>
+#include "SDL_ttf.h"
 
 #include "guisan/font.hpp"
 #include "guisan/platform.hpp"
@@ -65,7 +65,7 @@ namespace gcn
 	 *       function.
 	 *
 	 * @author Walluce Pinkham
-	 * @author Olof Naessén
+	 * @author Olof NaessÃ©n
 	 */
 	class GCN_EXTENSION_DECLSPEC SDLTrueTypeFont: public Font
 	{
