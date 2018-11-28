@@ -3,11 +3,12 @@ image: Visual Studio 2017
 install:
   - set PATH=C:\msys64\MINGW64\bin;C:\msys64\usr\bin;%PATH%
   - bash -lc "pacman -S --needed --noconfirm make cmake scons"
-  - bash -lc "pacman --noconfirm -Sy mingw-w64-x86_64-libc++ mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-SDL2_ttf"
+  - bash -lc "pacman -Syu --noconfirm"
+  - bash -lc "pacman --noconfirm -Sy mingw-w64-x86_64-toolchain mingw-w64-x86_64-libc++ mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-SDL2_ttf"
   - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"  
   
 build_script:
-  - bash -lc "scons prefix=/mingw64" 
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER; scons prefix=/mingw64" 
 
 #platform:
 #  - x64
