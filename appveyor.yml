@@ -13,6 +13,7 @@ install:
   
 build_script:
   - bash -lc "which ld" 
+  - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; pkg-config --cflags --libs sdl2"
   - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; cd $APPVEYOR_BUILD_FOLDER; export CC=gcc; export CXX=g++; scons prefix=/mingw64" 
  
 matrix:
