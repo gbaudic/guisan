@@ -1,4 +1,5 @@
 image: Visual Studio 2017
+platform: x64
 
 install:
   - set PATH=C:\msys64\MINGW64\bin;C:\msys64\usr\bin;%PATH%
@@ -9,14 +10,6 @@ install:
 build_script:
   - bash -lc "which ld" 
   - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; cd $APPVEYOR_BUILD_FOLDER; export CC=gcc; export CXX=g++; scons prefix=/mingw64" 
-
-#platform:
-#  - x64
-#  - Any CPU
-
-#configuration:
-#  - Debug
-#  - Release
-  
+ 
 matrix:
   fast_finish: true
