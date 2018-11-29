@@ -5,6 +5,7 @@
 ## An SDL2 GUI construction toolkit
 
 [![Build Status](https://travis-ci.org/gbaudic/guisan.svg?branch=master)](https://travis-ci.org/gbaudic/guisan)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/2qv4w2pxgc4lqtw5?svg=true)](https://ci.appveyor.com/project/gbaudic/guisan)
 
 Check out the online [Doxygen documentation](https://codedocs.xyz/gbaudic/guisan).
 
