@@ -2,7 +2,7 @@ image: Visual Studio 2017
 platform: x64
 
 install:
-  - set MSYSTEM=MINGW64
+#  - set MSYSTEM=MINGW64
   - set COMPILER=msys2
   - set MSYS2_ARCH=x86_64
   - set MSYS2_DIR=msys64
@@ -16,7 +16,7 @@ build_script:
   - bash -lc "which pkg-config"
   - bash -lc "which -a pkg-config"
   - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; pkg-config --cflags --libs sdl2"
-  - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; cd $APPVEYOR_BUILD_FOLDER; export CC=gcc; export CXX=g++; scons prefix=/mingw64" 
+  - bash -lc "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig; cd $APPVEYOR_BUILD_FOLDER; export CC=/mingw64/bin/gcc; export CXX=/mingw64/bin/g++; scons prefix=/mingw64" 
  
 matrix:
   fast_finish: true
