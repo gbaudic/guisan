@@ -169,6 +169,7 @@
     <ClCompile Include="src\sdl\sdltruetypefont.cpp" />
     <ClCompile Include="src\selectionevent.cpp" />
     <ClCompile Include="src\widget.cpp" />
+    <ClCompile Include="src\widgets\adjustingcontainer.cpp" />
     <ClCompile Include="src\widgets\button.cpp" />
     <ClCompile Include="src\widgets\checkbox.cpp" />
     <ClCompile Include="src\widgets\container.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\widgets\imagetextbutton.cpp" />
     <ClCompile Include="src\widgets\label.cpp" />
     <ClCompile Include="src\widgets\listbox.cpp" />
+    <ClCompile Include="src\widgets\passwordfield.cpp" />
     <ClCompile Include="src\widgets\radiobutton.cpp" />
     <ClCompile Include="src\widgets\scrollarea.cpp" />
     <ClCompile Include="src\widgets\slider.cpp" />
