@@ -78,84 +78,29 @@ namespace gcn
         mLabel = new Label(message);
         mLabel->setAlignment(Graphics::LEFT);
         mLabel->adjustSize();
+
+		mText = new TextField();
         
-        mNbButtons = 1;
-        mButtons = new Button*[1];
-        mButtons[0] = new Button("OK");
-        mButtons[0]->setAlignment(Graphics::CENTER);
-        mButtons[0]->addMouseListener(this);
+        mButtonOK = new Button(ok);
+        mButtonOK->setAlignment(Graphics::CENTER);
+        mButtonOK->addMouseListener(this);
+		mButtonOK->adjustSize();
+
+		mButtonCancel = new Button(cancel);
+		mButtonCancel->setAlignment(Graphics::CENTER);
+		mButtonCancel->addMouseListener(this);
+		mButtonCancel->adjustSize();
         
-        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtons[0]->getHeight());
+        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtonOK->getHeight());
         setWidth(mLabel->getWidth() + 4*mPadding);
-        if(mButtons[0]->getWidth() + 4*mPadding > getWidth()) 
+        if(mButtonOK->getWidth() + 4*mPadding > getWidth()) 
         {
-            setWidth(mButtons[0]->getWidth() + 4*mPadding);
+            setWidth(mButtonOK->getWidth() + 4*mPadding);
         }
         
+		// TODO add textfield, buttoncancel
         this->add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-        this->add(mButtons[0], (getWidth() - mButtons[0]->getWidth())/2, getHeight() - (int)getTitleBarHeight() - mPadding - mButtons[0]->getHeight());
-        
-        try
-        {
-            requestModalFocus();
-        } 
-        catch (Exception e) 
-        {
-            // Not having modal focus is not critical
-        }
-    }
-    
-    InputBox::InputBox(const std::string& caption, const std::string& message,
-            const std::string *buttons, int size)
-            :Window(caption),mMessage(message),mClickedButton(-1)
-    {
-        setCaption(caption);
-        addMouseListener(this);
-        setMovable(false);
-        
-        mLabel = new Label(message);
-        mLabel->setAlignment(Graphics::LEFT);
-        mLabel->adjustSize();
-        setWidth(mLabel->getWidth() + 4*mPadding);
-        
-        //Create buttons and label
-        if(size > 0) 
-        {
-            mNbButtons = size;
-            mButtons = new Button*[size];
-            int maxBtnWidth = 0;
-            
-            for(int i = 0 ; i < size ; i++)
-            {
-                mButtons[i] = new Button(*(buttons+i));
-                mButtons[i]->setAlignment(Graphics::CENTER);
-                mButtons[i]->addMouseListener(this);
-                maxBtnWidth = maxBtnWidth > mButtons[i]->getWidth() ? maxBtnWidth : mButtons[i]->getWidth();
-            }
-            //Find the widest button, apply same width to all
-            for(int i = 0 ; i < size ; i++)
-            {
-                mButtons[i]->setWidth(maxBtnWidth);
-            }
-            
-            //Make sure everything fits into the window
-            int padding = mPadding;
-            if(mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1) > getWidth()) 
-            {
-                setWidth(mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1));
-            } 
-            else 
-            {
-                padding += (getWidth() - (mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1)))/2;
-            }
-            add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-            
-            setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtons[0]->getHeight());
-            for(int i = 0 ; i < size ; i++)
-            {
-                add(mButtons[i], padding + (maxBtnWidth + mPadding)*i, getHeight() - (int)getTitleBarHeight() - mPadding - mButtons[0]->getHeight());
-            }           
-        }
+        this->add(mButtonOK, (getWidth() - mButtonOK->getWidth())/2, getHeight() - (int)getTitleBarHeight() - mPadding - mButtonOK->getHeight());
         
         try
         {
@@ -319,16 +264,19 @@ namespace gcn
     void InputBox::mouseReleased(MouseEvent& mouseEvent)
     {
         if (mouseEvent.getSource() != this)
-        {
-            for(int i = 0 ; i < mNbButtons ; i++)
+        {           
+            if(mouseEvent.getSource() == mButtonOK)
             {
-                if(mouseEvent.getSource() == mButtons[i])
-                {
-                    mClickedButton = i;
-                    generateAction();
-                    break;
-                }
+				mClickedButton = 0;
+                generateAction();
             }
+			if(mouseEvent.getSource() == mButtonCancel)
+			{
+				mClickedButton = 1;
+				setVisible(false);
+				generateAction();
+			}
+         
         }
         else
         {
@@ -359,7 +307,7 @@ namespace gcn
     
     std::string InputBox::getText() const
     {
-        return mInput;
+        return mText->getText();
     }
     
     void InputBox::addToContainer(Container* container)

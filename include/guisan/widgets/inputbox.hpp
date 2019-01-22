@@ -121,7 +121,6 @@ namespace gcn
 
     protected:
         std::string mMessage;
-        std::string mInput;
         int mClickedButton;
         
         Button *mButtonOK;
