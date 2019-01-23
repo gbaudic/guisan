@@ -84,23 +84,36 @@ namespace gcn
         mButtonOK = new Button(ok);
         mButtonOK->setAlignment(Graphics::CENTER);
         mButtonOK->addMouseListener(this);
-		mButtonOK->adjustSize();
+        mButtonOK->adjustSize();
 
-		mButtonCancel = new Button(cancel);
-		mButtonCancel->setAlignment(Graphics::CENTER);
-		mButtonCancel->addMouseListener(this);
-		mButtonCancel->adjustSize();
+        mButtonCancel = new Button(cancel);
+        mButtonCancel->setAlignment(Graphics::CENTER);
+        mButtonCancel->addMouseListener(this);
+        mButtonCancel->adjustSize();
         
-        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtonOK->getHeight());
-        setWidth(mLabel->getWidth() + 4*mPadding);
-        if(mButtonOK->getWidth() + 4*mPadding > getWidth()) 
+        // Look-and-feel: make both buttons the same width
+        if(mButtonCancel->getWidth() > mButtonOK->getWidth())
         {
-            setWidth(mButtonOK->getWidth() + 4*mPadding);
+            mButtonOK->setWidth(mButtonCancel->getWidth());
+        }
+        else
+        {
+            mButtonCancel->setWidth(mButtonOK->getWidth());
         }
         
-		// TODO add textfield, buttoncancel
+        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + mText->getHeight() + 4 * mPadding + mButtonOK->getHeight());
+        setWidth(mLabel->getWidth() + 4 * mPadding);
+        if(2 * mButtonOK->getWidth() + 4 * mPadding > getWidth()) 
+        {
+            setWidth(2 * mButtonOK->getWidth() + 4*mPadding);
+        }
+        mText->setWidth(getWidth() - 4 * mPadding);
+        
         this->add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-        this->add(mButtonOK, (getWidth() - mButtonOK->getWidth())/2, getHeight() - (int)getTitleBarHeight() - mPadding - mButtonOK->getHeight());
+        this->add(mText, mPadding, 2 * mPadding + mLabel->getHeight());
+        int yButtons = getHeight() - (int)getTitleBarHeight() - mPadding - mButtonOK->getHeight();
+        this->add(mButtonOK, (getWidth() - 2 * mButtonOK->getWidth())/4, yButtons);
+        this->add(mButtonCancel, 3 * getWidth()/4 - mButtonOK->getWidth()/2, yButtons);
         
         try
         {
@@ -267,15 +280,15 @@ namespace gcn
         {           
             if(mouseEvent.getSource() == mButtonOK)
             {
-				mClickedButton = 0;
+                mClickedButton = 0;
                 generateAction();
             }
-			if(mouseEvent.getSource() == mButtonCancel)
-			{
-				mClickedButton = 1;
-				setVisible(false);
-				generateAction();
-			}
+            if(mouseEvent.getSource() == mButtonCancel)
+            {
+                mClickedButton = 1;
+                setVisible(false);
+                generateAction();
+            }
          
         }
         else
