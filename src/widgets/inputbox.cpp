@@ -79,7 +79,7 @@ namespace gcn
         mLabel->setAlignment(Graphics::LEFT);
         mLabel->adjustSize();
 
-		mText = new TextField();
+        mText = new TextField();
         
         mButtonOK = new Button(ok);
         mButtonOK->setAlignment(Graphics::CENTER);
@@ -101,19 +101,19 @@ namespace gcn
             mButtonCancel->setWidth(mButtonOK->getWidth());
         }
         
-        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + mText->getHeight() + 4 * mPadding + mButtonOK->getHeight());
-        setWidth(mLabel->getWidth() + 4 * mPadding);
-        if(2 * mButtonOK->getWidth() + 4 * mPadding > getWidth()) 
+        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + mText->getHeight() + 6 * mPadding + mButtonOK->getHeight() + 2 * getBorderSize());
+        setWidth(mLabel->getWidth() + 2 * mPadding + 2 * getBorderSize());
+        if(2 * mButtonOK->getWidth() + 4 * mPadding + 2 * getBorderSize() > getWidth()) 
         {
-            setWidth(2 * mButtonOK->getWidth() + 4*mPadding);
+            setWidth(2 * mButtonOK->getWidth() + 4*mPadding + 2 * getBorderSize());
         }
-        mText->setWidth(getWidth() - 4 * mPadding);
+        mText->setWidth(getWidth() - 2 * getBorderSize() - 5 * mPadding);
         
         this->add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-        this->add(mText, mPadding, 2 * mPadding + mLabel->getHeight());
-        int yButtons = getHeight() - (int)getTitleBarHeight() - mPadding - mButtonOK->getHeight();
+        this->add(mText, 2*mPadding, 2 * mPadding + mLabel->getHeight());
+        int yButtons = getHeight() - (int)getTitleBarHeight() - getBorderSize() - 2*mPadding - mButtonOK->getHeight();
         this->add(mButtonOK, (getWidth() - 2 * mButtonOK->getWidth())/4, yButtons);
-        this->add(mButtonCancel, 3 * getWidth()/4 - mButtonOK->getWidth()/2, yButtons);
+        this->add(mButtonCancel, getWidth() - 2*getBorderSize() - mButtonOK->getWidth() - mPadding, yButtons);
         
         try
         {
