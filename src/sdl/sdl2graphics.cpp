@@ -106,14 +106,14 @@ namespace gcn
     void SDL2Graphics::setTarget(SDL_Surface* target)
     {
         mTarget = target;
-        //SDL_SetSurfaceBlendMode(mTarget, SDL_BLENDMODE_BLEND);
+        SDL_SetSurfaceBlendMode(mTarget, SDL_BLENDMODE_NONE);
     }
 	
 	void SDL2Graphics::setRenderTarget(SDL_Renderer* renderer)
     {
         mRenderTarget = renderer;
 		mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
-		//SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawBlendMode(mRenderTarget, SDL_BLENDMODE_BLEND);
     }
 
@@ -192,6 +192,8 @@ namespace gcn
 		
 		if(srcImage->getTexture() == NULL)
 		{
+			//TODO clear target surface
+			SDL_FillRect(mTarget, &src, SDL_MapRGBA(guiSurface->format, 0xff, 0, 0xff, 0));
 			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &src);
 			SDL_UpdateTexture(mTexture, &src, mTarget->pixels, mTarget->pitch);
 			SDL_RenderCopy(mRenderTarget, mTexture, &src, &dst);
@@ -445,6 +447,7 @@ namespace gcn
         destination.h = source.h;
 
 		//TODO: set blendmode to none for surface
+		SDL_FillRect(mTarget, &source, SDL_MapRGBA(guiSurface->format, 0xff, 0, 0xff, 0));
         SDL_BlitSurface(surface, &source, mTarget, &source);
 		SDL_UpdateTexture(mTexture, &source, mTarget->pixels, mTarget->pitch);
 		SDL_RenderCopy(mRenderTarget, mTexture, &source, &destination);

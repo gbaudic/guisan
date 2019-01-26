@@ -199,11 +199,11 @@ init()
 	SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
 
 	//sdlScreen = SDL_GetWindowSurface(sdlWindow);
-	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0, 0, 0, 0xff);
+	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0xff);
 	std::cout << SDL_GetPixelFormatName(sdlScreen->format->format) << std::endl;
 	//SDL_SetSurfaceAlphaMod(sdlScreen, 0);
 	SDL_FillRect(sdlScreen, NULL, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
-	//SDL_SetColorKey(sdlScreen, SDL_TRUE, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
+	SDL_SetColorKey(sdlScreen, SDL_TRUE, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
 	//no support of transparency???
 	SDL_SetSurfaceBlendMode(sdlScreen, SDL_BLENDMODE_NONE);
 
@@ -296,6 +296,7 @@ halt()
 	/*
 	 * Destroy SDL stuff
 	 */
+	SDL_FreeSurface(sdlScreen);
 	SDL_DestroyRenderer(sdlRenderer);
 	SDL_DestroyWindow(sdlWindow);
 	SDL_Quit();
