@@ -193,7 +193,7 @@ namespace gcn
 		if(srcImage->getTexture() == NULL)
 		{
 			//TODO clear target surface
-			SDL_FillRect(mTarget, &src, SDL_MapRGBA(guiSurface->format, 0xff, 0, 0xff, 0));
+			SDL_FillRect(mTarget, &src, SDL_MapRGBA(srcImage->getSurface()->format, 0xff, 0, 0xff, 0));
 			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &src);
 			SDL_UpdateTexture(mTexture, &src, mTarget->pixels, mTarget->pitch);
 			SDL_RenderCopy(mRenderTarget, mTexture, &src, &dst);
@@ -447,7 +447,7 @@ namespace gcn
         destination.h = source.h;
 
 		//TODO: set blendmode to none for surface
-		SDL_FillRect(mTarget, &source, SDL_MapRGBA(guiSurface->format, 0xff, 0, 0xff, 0));
+		SDL_FillRect(mTarget, &source, SDL_MapRGBA(surface->format, 0xff, 0, 0xff, 0));
         SDL_BlitSurface(surface, &source, mTarget, &source);
 		SDL_UpdateTexture(mTexture, &source, mTarget->pixels, mTarget->pitch);
 		SDL_RenderCopy(mRenderTarget, mTexture, &source, &destination);
