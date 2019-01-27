@@ -113,7 +113,7 @@ namespace gcn
     {
         mRenderTarget = renderer;
 		mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
-		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_NONE);
+		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
     }
 
     bool SDL2Graphics::pushClipArea(Rectangle area)
@@ -196,7 +196,6 @@ namespace gcn
 		
 		if(srcImage->getTexture() == NULL)
 		{
-			//SDL_SetSurfaceBlendMode(srcImage->getSurface(), SDL_BLENDMODE_BLEND);
 			SDL_FillRect(mTarget, &temp, SDL_MapRGBA(mTarget->format, 0xff, 0, 0xff, 0));
 			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &temp);
 			SDL_UpdateTexture(mTexture, &temp, mTarget->pixels, mTarget->pitch);
@@ -455,8 +454,6 @@ namespace gcn
 		temp.w = source.w;
 		temp.h = source.h;
 
-		//TODO: set blendmode to none for surface
-		//SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
 		SDL_FillRect(mTarget, &temp, SDL_MapRGBA(mTarget->format, 0xff, 0, 0xff, 0));
         SDL_BlitSurface(surface, &source, mTarget, &temp);
 		SDL_UpdateTexture(mTexture, &temp, mTarget->pixels, mTarget->pitch);

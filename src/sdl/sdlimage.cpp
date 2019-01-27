@@ -73,6 +73,7 @@ namespace gcn
 		if (renderer)
 		{
 			mTexture = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
 		}       
     }
 
@@ -188,6 +189,7 @@ namespace gcn
 		if (mRenderer)
 		{
 			SDL_Texture *tmpTexture = SDL_CreateTextureFromSurface(mRenderer, tmp);
+			SDL_SetTextureBlendMode(tmpTexture, SDL_BLENDMODE_BLEND);
 			SDL_DestroyTexture(mTexture);
 			mTexture = tmpTexture;
 		}
