@@ -81,9 +81,9 @@ namespace gcn
          *
          * @param surface the surface from which to load.
          * @param autoFree true if the surface should automatically be deleted.
-         * @param texture the texture from which to load (last parameter to avoid breaking stuff)
+         * @param renderer renderer object to create the texture (last parameter to avoid breaking stuff)
          */
-        SDLImage(SDL_Surface* surface, bool autoFree, SDL_Texture* texture = NULL);
+        SDLImage(SDL_Surface* surface, bool autoFree, SDL_Renderer* renderer = NULL);
 
         /**
          * Destructor.
@@ -120,8 +120,8 @@ namespace gcn
 
     protected:
         SDL_Surface* mSurface;
-        SDL_Texture* mTexture;
-        //SDL_Renderer* mRenderer;
+        SDL_Texture* mTexture = NULL;
+        SDL_Renderer* mRenderer = NULL;
         bool mAutoFree;
     };
 }

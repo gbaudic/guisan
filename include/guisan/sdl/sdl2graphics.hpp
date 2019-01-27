@@ -105,7 +105,7 @@ namespace gcn
         virtual SDL_Surface* getTarget() const;
 		
 		/**
-		 *  Sets the target SDL_Renderer to use for drawing. Preferably don only once. 
+		 *  Sets the target SDL_Renderer to use for drawing. Preferably done only once. 
 		 *  
 		 *  @param renderer the SDL_Renderer to use for drawing.
 		 */

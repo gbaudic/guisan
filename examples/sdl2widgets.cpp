@@ -199,7 +199,7 @@ init()
 	SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
 
 	//sdlScreen = SDL_GetWindowSurface(sdlWindow);
-	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0xff);
+	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
 	std::cout << SDL_GetPixelFormatName(sdlScreen->format->format) << std::endl;
 	//SDL_SetSurfaceAlphaMod(sdlScreen, 0);
 	SDL_FillRect(sdlScreen, NULL, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));

@@ -71,7 +71,6 @@ namespace gcn
                                 bool convertToDisplayFormat)
     {
         SDL_Surface *loadedSurface = loadSDLSurface(filename);
-        SDL_Texture *loadedTexture = NULL;
 
         if (loadedSurface == NULL)
         {
@@ -87,13 +86,8 @@ namespace gcn
             throw GCN_EXCEPTION(
                     std::string("Not enough memory to load: ") + filename);
         }
-        
-        if (mRenderer != NULL)
-        {
-			loadedTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
-		}
 
-        Image *image = new SDLImage(surface, true, loadedTexture);
+        Image *image = new SDLImage(surface, true, mRenderer);
 
         if (convertToDisplayFormat)
         {

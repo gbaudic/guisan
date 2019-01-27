@@ -113,8 +113,7 @@ namespace gcn
     {
         mRenderTarget = renderer;
 		mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
-		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawBlendMode(mRenderTarget, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(mTexture, SDL_BLENDMODE_NONE);
     }
 
     bool SDL2Graphics::pushClipArea(Rectangle area)
@@ -174,6 +173,7 @@ namespace gcn
 		const ClipRectangle& top = mClipStack.top();
 	    SDL_Rect src;
 	    SDL_Rect dst;
+		SDL_Rect temp;
 	    src.x = srcX;
 	    src.y = srcY;
         src.w = width;
@@ -182,6 +182,10 @@ namespace gcn
         dst.y = dstY + top.yOffset;
         dst.w = width;
         dst.h = height;
+		temp.x = 0;
+		temp.y = 0;
+		temp.w = width;
+		temp.h = height;
 
         const SDLImage* srcImage = dynamic_cast<const SDLImage*>(image);
 
@@ -192,11 +196,11 @@ namespace gcn
 		
 		if(srcImage->getTexture() == NULL)
 		{
-			//TODO clear target surface
-			SDL_FillRect(mTarget, &src, SDL_MapRGBA(srcImage->getSurface()->format, 0xff, 0, 0xff, 0));
-			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &src);
-			SDL_UpdateTexture(mTexture, &src, mTarget->pixels, mTarget->pitch);
-			SDL_RenderCopy(mRenderTarget, mTexture, &src, &dst);
+			//SDL_SetSurfaceBlendMode(srcImage->getSurface(), SDL_BLENDMODE_BLEND);
+			SDL_FillRect(mTarget, &temp, SDL_MapRGBA(mTarget->format, 0xff, 0, 0xff, 0));
+			SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &temp);
+			SDL_UpdateTexture(mTexture, &temp, mTarget->pixels, mTarget->pitch);
+			SDL_RenderCopy(mRenderTarget, mTexture, &temp, &dst);
 		} 
 		else 
 		{
@@ -445,12 +449,18 @@ namespace gcn
         destination.y += top.yOffset;
         destination.w = source.w;
         destination.h = source.h;
+		SDL_Rect temp;
+		temp.x = 0;
+		temp.y = 0;
+		temp.w = source.w;
+		temp.h = source.h;
 
 		//TODO: set blendmode to none for surface
-		SDL_FillRect(mTarget, &source, SDL_MapRGBA(surface->format, 0xff, 0, 0xff, 0));
-        SDL_BlitSurface(surface, &source, mTarget, &source);
-		SDL_UpdateTexture(mTexture, &source, mTarget->pixels, mTarget->pitch);
-		SDL_RenderCopy(mRenderTarget, mTexture, &source, &destination);
+		//SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
+		SDL_FillRect(mTarget, &temp, SDL_MapRGBA(mTarget->format, 0xff, 0, 0xff, 0));
+        SDL_BlitSurface(surface, &source, mTarget, &temp);
+		SDL_UpdateTexture(mTexture, &temp, mTarget->pixels, mTarget->pitch);
+		SDL_RenderCopy(mRenderTarget, mTexture, &temp, &destination);
     }
 	
 	void SDL2Graphics::saveRenderColor()

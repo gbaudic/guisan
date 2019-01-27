@@ -65,11 +65,15 @@
 
 namespace gcn
 {
-    SDLImage::SDLImage(SDL_Surface* surface, bool autoFree, SDL_Texture* texture)
+    SDLImage::SDLImage(SDL_Surface* surface, bool autoFree, SDL_Renderer* renderer)
     {
         mAutoFree = autoFree;
         mSurface = surface;
-        mTexture = texture;
+		mRenderer = renderer;
+		if (renderer)
+		{
+			mTexture = SDL_CreateTextureFromSurface(renderer, surface);
+		}       
     }
 
     SDLImage::~SDLImage()
@@ -180,6 +184,14 @@ namespace gcn
             SDL_SetSurfaceAlphaMod(tmp, 255);
 
         mSurface = tmp;
+
+		if (mRenderer)
+		{
+			SDL_Texture *tmpTexture = SDL_CreateTextureFromSurface(mRenderer, tmp);
+			SDL_DestroyTexture(mTexture);
+			mTexture = tmpTexture;
+		}
+		
     }
 
     void SDLImage::free()
