@@ -7,7 +7,7 @@
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
  * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
- *
+ * Copyright (c) 2016, 2018, 2019 Gwilherm Baudic
  *                                                         Js_./
  * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
  * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
@@ -82,41 +82,27 @@ namespace gcn
          * Constructor.
          */
         SDL2Graphics();
-		
-		/**
-		 * Destructor.
-		 */
-		~SDL2Graphics();
-		
+        
         /**
-         * Sets the target SDL_Surface to draw to. The target can be any
-         * SDL_Surface. This function also pushes a clip areas corresponding to
-         * the dimension of the target.
-         *
-         * @param target the target to draw to.
+         * Destructor.
          */
-        virtual void setTarget(SDL_Surface* target);
-
+        ~SDL2Graphics();
+        
         /**
-         * Gets the target SDL_Surface.
-         *
-         * @return the target SDL_Surface.
+         *  Sets the target SDL_Renderer to use for drawing. Preferably done only once. 
+         *  
+         *  @param renderer the SDL_Renderer to use for drawing.
+         *  @param width screen width
+         *  @param height screen height
          */
-        virtual SDL_Surface* getTarget() const;
-		
-		/**
-		 *  Sets the target SDL_Renderer to use for drawing. Preferably done only once. 
-		 *  
-		 *  @param renderer the SDL_Renderer to use for drawing.
-		 */
-		virtual void setRenderTarget(SDL_Renderer* renderer);
-		
-		/**
+        virtual void setTarget(SDL_Renderer* renderer, int width, int height);
+        
+        /**
          * Gets the target SDL_Renderer.
          *
          * @return the target SDL_Renderer.
          */
-		virtual SDL_Renderer* getRenderTarget() const;
+        virtual SDL_Renderer* getTarget() const;
 
         /**
          * Draws an SDL_Surface on the target surface. Normally you'll
@@ -128,6 +114,15 @@ namespace gcn
         virtual void drawSDLSurface(SDL_Surface* surface, SDL_Rect source,
                                     SDL_Rect destination);
 
+        /**
+         * Draws an SDL_Texture on the target surface. Normally you'll
+         * use drawImage, but if you want to write SDL specific code
+         * this function might come in handy.
+         *
+         * NOTE: The clip areas will be taken into account.
+         */
+        virtual void drawSDLTexture(SDL_Texture* texture, SDL_Rect source,
+                                    SDL_Rect destination);
 
         // Inherited from Graphics
 
@@ -173,23 +168,23 @@ namespace gcn
          * @param y2 the end coordinate of the line.
          */
         virtual void drawVLine(int x, int y1, int y2);
-		
-		/**
-		 *  Save the current rendering color before drawing.
-		 *  Does not affect the mColor attribute. 
-		 */
-		virtual void saveRenderColor();
-		
-		/**
-		 *  Restore the rendering color after drawing
-		 */
-		virtual void restoreRenderColor();
+        
+        /**
+         *  Save the current rendering color before drawing.
+         *  Does not affect the mColor attribute. 
+         */
+        virtual void saveRenderColor();
+        
+        /**
+         *  Restore the rendering color after drawing
+         */
+        virtual void restoreRenderColor();
 
         SDL_Surface* mTarget;
-		SDL_Renderer* mRenderTarget;
-		SDL_Texture* mTexture;
+        SDL_Renderer* mRenderTarget;
+        SDL_Texture* mTexture;
         Color mColor;
-		Uint8 r, g, b, a; //! to store previous color from renderer
+        Uint8 r, g, b, a; //! to store previous color from renderer
         bool mAlpha;
     };
 }

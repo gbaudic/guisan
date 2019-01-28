@@ -17,7 +17,6 @@ bool running = true;
  * SDL Stuff we need
  */
 SDL_Window* sdlWindow;
-SDL_Surface* sdlScreen;
 SDL_Renderer* sdlRenderer;
 SDL_Event event;
 
@@ -198,31 +197,25 @@ init()
 	SDL_SetWindowTitle(sdlWindow, "guisan SDL2 widget example");
 	SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
 
-	//sdlScreen = SDL_GetWindowSurface(sdlWindow);
-	sdlScreen = SDL_CreateRGBSurface(0, 700, 480, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-	std::cout << SDL_GetPixelFormatName(sdlScreen->format->format) << std::endl;
-	//SDL_SetSurfaceAlphaMod(sdlScreen, 0);
-	SDL_FillRect(sdlScreen, NULL, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
-	SDL_SetColorKey(sdlScreen, SDL_TRUE, SDL_MapRGB(sdlScreen->format, 0xff, 0, 0xff));
-	//no support of transparency???
-	SDL_SetSurfaceBlendMode(sdlScreen, SDL_BLENDMODE_NONE);
-
 	// We want to enable key repeat
 	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
 	/*
-	 * Now it's time for Guichan SDL stuff
+	 * Now it's time for Guisan SDL stuff
 	 */
 	imageLoader = new gcn::SDLImageLoader();
+	imageLoader->setRenderer(sdlRenderer);
 	// The ImageLoader in use is static and must be set to be
 	// able to load images
+	// A Renderer needs to be specified too to be able to do the 
+	// conversion to textures directly on loading; otherwise, SDL2Graphics
+	// will have to do it internally each time you draw it...
 	gcn::Image::setImageLoader(imageLoader);
 	graphics = new gcn::SDL2Graphics();
-	// Set the target for the graphics object to be the screen.
-	// In other words, we will draw to the screen.
-	// Note, any surface will do, it doesn't have to be the screen.
-	graphics->setTarget(sdlScreen);
-	graphics->setRenderTarget(sdlRenderer);
+	// Set the target for the graphics object to be the renderer.
+	// We also need to pass screen dimensions because we cannot 
+	// get them back from the renderer object. 
+	graphics->setTarget(sdlRenderer, 700, 480);
 	input = new gcn::SDLInput();
 
 	/*
@@ -296,7 +289,6 @@ halt()
 	/*
 	 * Destroy SDL stuff
 	 */
-	SDL_FreeSurface(sdlScreen);
 	SDL_DestroyRenderer(sdlRenderer);
 	SDL_DestroyWindow(sdlWindow);
 	SDL_Quit();
