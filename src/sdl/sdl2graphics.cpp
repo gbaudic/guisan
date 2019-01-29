@@ -381,21 +381,16 @@ namespace gcn
         
     void SDL2Graphics::drawRectangle(const Rectangle& rectangle)
     {
-        /*int x1 = rectangle.x;
+        int x1 = rectangle.x;
         int x2 = rectangle.x + rectangle.width - 1;
         int y1 = rectangle.y;
-        int y2 = rectangle.y + rectangle.height - 1;*/
+        int y2 = rectangle.y + rectangle.height - 1;
 
-        SDL_Rect rect;
-        rect.x = rectangle.x;
-        rect.y = rectangle.y;
-        rect.w = rectangle.width;
-        rect.h = rectangle.height;
-        
-        saveRenderColor();
-        SDL_SetRenderDrawColor(mRenderTarget, mColor.r, mColor.g, mColor.b, mColor.a);
-        SDL_RenderDrawRect(mRenderTarget, &rect); 
-        restoreRenderColor();
+        drawHLine(x1, y1, x2);
+        drawHLine(x1, y2, x2);
+
+        drawVLine(x1, y1, y2);
+        drawVLine(x2, y1, y2);
     }
 
     void SDL2Graphics::drawLine(int x1, int y1, int x2, int y2)
