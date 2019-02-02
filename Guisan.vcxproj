@@ -178,6 +178,7 @@
     <ClCompile Include="src\widgets\icon.cpp" />
     <ClCompile Include="src\widgets\imagebutton.cpp" />
     <ClCompile Include="src\widgets\imagetextbutton.cpp" />
+    <ClCompile Include="src\widgets\inputbox.cpp" />
     <ClCompile Include="src\widgets\label.cpp" />
     <ClCompile Include="src\widgets\listbox.cpp" />
     <ClCompile Include="src\widgets\passwordfield.cpp" />
@@ -245,8 +246,10 @@
     <ClInclude Include="include\guisan\widgets\icon.hpp" />
     <ClInclude Include="include\guisan\widgets\imagebutton.hpp" />
     <ClInclude Include="include\guisan\widgets\imagetextbutton.hpp" />
+    <ClInclude Include="include\guisan\widgets\inputbox.hpp" />
     <ClInclude Include="include\guisan\widgets\label.hpp" />
     <ClInclude Include="include\guisan\widgets\listbox.hpp" />
+    <ClInclude Include="include\guisan\widgets\passwordfield.hpp" />
     <ClInclude Include="include\guisan\widgets\radiobutton.hpp" />
     <ClInclude Include="include\guisan\widgets\scrollarea.hpp" />
     <ClInclude Include="include\guisan\widgets\slider.hpp" />
