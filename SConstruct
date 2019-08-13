@@ -6,7 +6,7 @@ env["CC"] = os.getenv("CC") or env["CC"]
 env["CXX"] = os.getenv("CXX") or env["CXX"]
 env["ENV"].update(x for x in os.environ.items() if x[0].startswith("CCC_"))
 
-env["LIBVER"] = "0.9.0"
+env["LIBVER"] = "0.10.0"
 
 env["PREFIX_PATH"] = ARGUMENTS.get('prefix', "/usr/local")
 env["INCLUDE_PATH"] = ARGUMENTS.get('include', env['PREFIX_PATH'] + "/include")
@@ -98,6 +98,7 @@ common_headers = [
     'include/guisan/x.hpp'
 ]
 widget_headers = [
+    'include/guisan/widgets/adjustingcontainer.hpp',
     'include/guisan/widgets/button.hpp',
     'include/guisan/widgets/checkbox.hpp',
     'include/guisan/widgets/container.hpp',
@@ -105,6 +106,7 @@ widget_headers = [
     'include/guisan/widgets/icon.hpp',
     'include/guisan/widgets/imagebutton.hpp',
     'include/guisan/widgets/imagetextbutton.hpp',
+    'include/guisan/widgets/inputbox.hpp',
     'include/guisan/widgets/label.hpp',
     'include/guisan/widgets/listbox.hpp',
     'include/guisan/widgets/messagebox.hpp',
@@ -116,6 +118,7 @@ widget_headers = [
     'include/guisan/widgets/tab.hpp',
     'include/guisan/widgets/textbox.hpp',
     'include/guisan/widgets/textfield.hpp',
+    'include/guisan/widgets/passwordfield.hpp',
     'include/guisan/widgets/window.hpp'
 ]
 sdl2_headers = [

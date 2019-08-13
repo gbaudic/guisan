@@ -65,10 +65,10 @@ namespace gcn
     class MouseInput;
 
     /**
-     * Used for grabbing user input and heavily used internally by Guichan. 
+     * Used for grabbing user input and heavily used internally by Guisan. 
      * We include implemented Input classes for some common platforms like
      * the Allegro library, the OpenGL library and the SDL library. To make
-     * Guichan usable under another platform, an Input class must be
+     * Guisan usable under another platform, an Input class must be
      * implemented.
      *
      * @see SDLInput, AllegroInput
@@ -97,7 +97,7 @@ namespace gcn
         virtual KeyInput dequeueKeyInput() = 0;
 
         /**
-         * Checks whether the mouse queue is empyt or not.
+         * Checks whether the mouse queue is empty or not.
          *
          * @return true if the mouse queue is empty.
          */
@@ -111,7 +111,7 @@ namespace gcn
         virtual MouseInput dequeueMouseInput() = 0;
 
         /**
-         * Polls all exsisting input. It exists for Input implementation
+         * Polls all existing input. It exists for Input implementation
          * compatibility. It is used internally by the library.
          */
         virtual void _pollInput() = 0;

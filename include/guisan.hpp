@@ -89,6 +89,7 @@
 #include <guisan/widget.hpp>
 #include <guisan/widgetlistener.hpp>
 
+#include <guisan/widgets/adjustingcontainer.hpp>
 #include <guisan/widgets/button.hpp>
 #include <guisan/widgets/checkbox.hpp>
 #include <guisan/widgets/container.hpp>
@@ -96,6 +97,7 @@
 #include <guisan/widgets/icon.hpp>
 #include <guisan/widgets/imagebutton.hpp>
 #include <guisan/widgets/imagetextbutton.hpp>
+#include <guisan/widgets/inputbox.hpp>
 #include <guisan/widgets/label.hpp>
 #include <guisan/widgets/listbox.hpp>
 #include <guisan/widgets/messagebox.hpp>
@@ -107,6 +109,7 @@
 #include <guisan/widgets/tabbedarea.hpp>
 #include <guisan/widgets/textbox.hpp>
 #include <guisan/widgets/textfield.hpp>
+#include <guisan/widgets/passwordfield.hpp>
 #include <guisan/widgets/window.hpp>
 
 #include "guisan/platform.hpp"

@@ -54,106 +54,46 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_BASICCONTAINER_HPP
-#define GCN_BASICCONTAINER_HPP
+#ifndef GCN_PASSWORDFIELD_HPP
+#define GCN_PASSWORDFIELD_HPP
 
-#include <list>
-
-#include "guisan/deathlistener.hpp"
+#include "guisan/keylistener.hpp"
+#include "guisan/mouselistener.hpp"
 #include "guisan/platform.hpp"
 #include "guisan/widget.hpp"
+#include "guisan/widgets/textfield.hpp"
+
+#include <string>
 
 namespace gcn
 {
     /**
-     * Implements basic container behaviour. Most container will suffice by
-     * inheriting from this class.
-     *
-     * @see Container
+     * A text field in which you can write or display a line of text. 
+	 * Unlike a TextField the text will appear as '*' instead of the real content. 
+	 * If for some reason the Font you are using does not contain this character, the 
+	 * PasswordField will be filled by spaces. 
      */
-    class GCN_CORE_DECLSPEC BasicContainer : public Widget, public DeathListener
+    class GCN_CORE_DECLSPEC PasswordField:
+        public TextField
     {
     public:
         /**
-         * Destructor
+         * Default constructor.
          */
-        virtual ~BasicContainer();
+        PasswordField();
 
+        /**
+         * Constructor. Initializes the passwordfield with a given string.
+         *
+         * @param text the initial text.
+         */
+        PasswordField(const std::string& text);
 
         // Inherited from Widget
 
-        virtual void moveToTop(Widget* widget);
+        virtual void draw(Graphics* graphics);
 
-        virtual void moveToBottom(Widget* widget);
-
-        virtual Rectangle getChildrenArea();
-
-        virtual void focusNext();
-
-        virtual void focusPrevious();
-
-        virtual void logic();
-
-        virtual void _setFocusHandler(FocusHandler* focusHandler);
-
-        void setInternalFocusHandler(FocusHandler* focusHandler);
-
-        virtual void showWidgetPart(Widget* widget, Rectangle area);
-
-        virtual Widget *getWidgetAt(int x, int y);
-
-
-        // Inherited from DeathListener
-
-        virtual void death(const Event& event);
-
-    protected:
-        /**
-         * Adds a widget to the basic container.
-         *
-         * @param widget the widget to add.
-         */
-        void add(Widget* widget);
-
-        /**
-         * Removes a widget from the basic container.
-         *
-         * @param widget the widget to remove.
-         */
-        virtual void remove(Widget* widget);
-
-        /**
-         * Clears the basic container from all widgets.
-         */
-        virtual void clear();
-        
-        /**
-         * Draws children widgets.
-         *
-         * @param graphics a Graphics object to draw with.
-         */
-        virtual void drawChildren(Graphics* graphics);
-
-        /**
-         * Calls logic for children widgets.
-         */
-        virtual void logicChildren();
-
-        /**
-         * Finds a widget given an id.
-         *
-         * @param id the id to find a widget by.
-         * @return the widget with the corresponding id, 
-                   NULL of no widget is found.
-         */
-        virtual Widget* findWidgetById(const std::string& id);
-
-        typedef std::list<Widget *> WidgetList;
-        typedef WidgetList::iterator WidgetListIterator;
-        typedef WidgetList::reverse_iterator WidgetListReverseIterator;
-
-        WidgetList mWidgets;
     };
 }
 
-#endif // end GCN_BASICCONTAINER_HPP
+#endif // end GCN_PASSWORDFIELD_HPP

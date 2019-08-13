@@ -71,7 +71,7 @@ namespace gcn
     /**
      * A TextBox in which you can write and/or display a lines of text.
      *
-     * NOTE: A plain TextBox is really uggly and looks much better inside a
+     * NOTE: A plain TextBox is really ugly and looks much better inside a
      *       ScrollArea.
      */
     class GCN_CORE_DECLSPEC TextBox:
@@ -137,7 +137,7 @@ namespace gcn
         /**
          * Sets the position of the caret in the text.
          *
-         * @param position the positon of the caret.
+         * @param position the position of the caret.
          */
         void setCaretPosition(unsigned int position);
 

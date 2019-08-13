@@ -73,7 +73,7 @@ namespace gcn
      * Used for drawing graphics. It contains all vital functions for drawing.
      * We include implemented Graphics classes for some common platforms like
      * the Allegro library, the OpenGL library and the SDL library. To make
-     * Guichan usable under another platform, a Graphics class must be
+     * Guisan usable under another platform, a Graphics class must be
      * implemented.
      *
      * In Graphics you can set clip areas to limit drawing to certain
@@ -81,19 +81,19 @@ namespace gcn
      * can push smaller and smaller clip areas onto the stack. All coordinates
      * will be relative to the topmost clip area. In most cases you won't have
      * to worry about the clip areas, unless you want to implement some really
-     * complex widget. Pushing and poping of clip areas are handled
+     * complex widget. Pushing and popping of clip areas are handled
      * automatically by container widgets when their child widgets are drawn.
      *
      * IMPORTANT: Remember to pop each clip area that you pushed on the stack
      * after you are done with it.
      *
-     * If you feel that Graphics is to restrictive for your needs, there is
+     * If you feel that Graphics is too restrictive for your needs, there is
      * no one stopping you from using your own code for drawing in Widgets.
      * You could for instance use pure SDL in the drawing of Widgets bypassing
      * Graphics. This might however hurt portability of your application.
      *
-     * If you implement a Graphics class not present in Guichan we would be very
-     * happy to add it to Guichan.
+     * If you implement a Graphics class not present in Guisan we would be very
+     * happy to add it to Guisan.
      *
      * @see AllegroGraphics, OpenGLGraphics, SDLGraphics, Image
      */
@@ -137,7 +137,7 @@ namespace gcn
          * @param area the clip area to be pushed onto the stack.
          * @return false if the the new area lays totally outside the
          *         current clip area. Note that an empty clip area
-         *         will be pused in this case.
+         *         will be pushed in this case.
          */
         virtual bool pushClipArea(Rectangle area);
 
@@ -149,7 +149,7 @@ namespace gcn
         virtual void popClipArea();
 
         /**
-         * Gets the current clip area. Usefull if you want to do drawing
+         * Gets the current clip area. Useful if you want to do drawing
          * bypassing Graphics.
          *
          * @return the current clip area.

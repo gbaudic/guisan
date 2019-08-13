@@ -54,106 +54,45 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_BASICCONTAINER_HPP
-#define GCN_BASICCONTAINER_HPP
+/*
+ * For comments regarding functions please see the header file.
+ */
 
-#include <list>
+#include "guisan/widgets/passwordfield.hpp"
 
-#include "guisan/deathlistener.hpp"
-#include "guisan/platform.hpp"
-#include "guisan/widget.hpp"
+#include "guisan/font.hpp"
+#include "guisan/graphics.hpp"
+#include "guisan/key.hpp"
+#include "guisan/mouseinput.hpp"
 
 namespace gcn
 {
-    /**
-     * Implements basic container behaviour. Most container will suffice by
-     * inheriting from this class.
-     *
-     * @see Container
-     */
-    class GCN_CORE_DECLSPEC BasicContainer : public Widget, public DeathListener
+    PasswordField::PasswordField() : TextField()
     {
-    public:
-        /**
-         * Destructor
-         */
-        virtual ~BasicContainer();
+
+    }
+
+    PasswordField::PasswordField(const std::string& text) : TextField(text)
+    {
+
+    }
 
 
-        // Inherited from Widget
+    void PasswordField::draw(Graphics* graphics)
+    {
+        Color faceColor = getBackgroundColor();
+        graphics->setColor(faceColor);
+        graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
 
-        virtual void moveToTop(Widget* widget);
+        if (isFocused())
+        {
+            drawCaret(graphics, getFont()->getWidth(mText.substr(0, mCaretPosition)) - mXScroll);
+        }
 
-        virtual void moveToBottom(Widget* widget);
+        graphics->setColor(getForegroundColor());
+        graphics->setFont(getFont());
+		std::string encodedText(mText.size(), '*');
+        graphics->drawText(encodedText, 1 - mXScroll, 1);
+    }
 
-        virtual Rectangle getChildrenArea();
-
-        virtual void focusNext();
-
-        virtual void focusPrevious();
-
-        virtual void logic();
-
-        virtual void _setFocusHandler(FocusHandler* focusHandler);
-
-        void setInternalFocusHandler(FocusHandler* focusHandler);
-
-        virtual void showWidgetPart(Widget* widget, Rectangle area);
-
-        virtual Widget *getWidgetAt(int x, int y);
-
-
-        // Inherited from DeathListener
-
-        virtual void death(const Event& event);
-
-    protected:
-        /**
-         * Adds a widget to the basic container.
-         *
-         * @param widget the widget to add.
-         */
-        void add(Widget* widget);
-
-        /**
-         * Removes a widget from the basic container.
-         *
-         * @param widget the widget to remove.
-         */
-        virtual void remove(Widget* widget);
-
-        /**
-         * Clears the basic container from all widgets.
-         */
-        virtual void clear();
-        
-        /**
-         * Draws children widgets.
-         *
-         * @param graphics a Graphics object to draw with.
-         */
-        virtual void drawChildren(Graphics* graphics);
-
-        /**
-         * Calls logic for children widgets.
-         */
-        virtual void logicChildren();
-
-        /**
-         * Finds a widget given an id.
-         *
-         * @param id the id to find a widget by.
-         * @return the widget with the corresponding id, 
-                   NULL of no widget is found.
-         */
-        virtual Widget* findWidgetById(const std::string& id);
-
-        typedef std::list<Widget *> WidgetList;
-        typedef WidgetList::iterator WidgetListIterator;
-        typedef WidgetList::reverse_iterator WidgetListReverseIterator;
-
-        WidgetList mWidgets;
-    };
 }
-
-#endif // end GCN_BASICCONTAINER_HPP

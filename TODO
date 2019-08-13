@@ -4,3 +4,4 @@
 * Graphics and input objects for DirectX.
 * Graphics and input objects for OpenLayer.
 * Graphics and input objects for X11.
+* Add support to disable some widgets (buttons, radiobuttons, checkboxes, sliders, dropdown, textbox, textfield, listbox)

@@ -57,18 +57,8 @@
 #ifndef GCN_PLATFORM_HPP
 #define GCN_PLATFORM_HPP
 
-#if defined (__MINGW32__) && defined(GUICHAN_BUILD)
-#define GCN_CORE_DECLSPEC __declspec(dllexport)
 
-#elif defined (__MINGW32__) && defined(GUICHAN_EXTENSION_BUILD)
-#define GCN_EXTENSION_DECLSPEC __declspec(dllexport)
-#define GCN_CORE_DECLSPEC __declspec(dllimport)
-
-#elif defined (__MINGW32__)
-#define GCN_CORE_DECLSPEC __declspec(dllimport)
-#define GCN_EXTENSION_DECLSPEC __declspec(dllimport)
-
-#elif defined(_MSC_VER) && defined(GUICHAN_BUILD)
+#if defined(_MSC_VER) && defined(GUICHAN_BUILD)
 #define GCN_CORE_DECLSPEC _declspec(dllexport)
 
 #elif defined(_MSC_VER) && defined(GUICHAN_EXTENSION_BUILD)

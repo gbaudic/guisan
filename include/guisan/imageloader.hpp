@@ -68,7 +68,7 @@ namespace gcn
     /**
      * ImageLoaders base class. Contains basic image loading functions every
      * image loader should have. Image loaders should inherit from this
-     * class and impements it's functions.
+     * class and implement its functions.
      */
     class GCN_CORE_DECLSPEC ImageLoader
     {

@@ -84,7 +84,7 @@ namespace gcn
 		 * @param width the width of the logical drawing surface. Should be the
          *              same as the screen resolution.
 		 *
-		 * @param height the height ot the logical drawing surface. Should be
+		 * @param height the height of the logical drawing surface. Should be
 		 *               the same as the screen resolution.
 		 */
         OpenGLGraphics(int width, int height);
@@ -99,7 +99,7 @@ namespace gcn
 		 *
 		 * @param width the width of the logical drawing surface. Should be the
 		 *              same as the screen resolution.
-		 * @param height the height ot the logical drawing surface. Should be
+		 * @param height the height of the logical drawing surface. Should be
 		 *               the same as the screen resolution.
          */
         virtual void setTargetPlane(int width, int height);

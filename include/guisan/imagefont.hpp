@@ -78,17 +78,17 @@ namespace gcn
      *  \image html imagefontexample.bmp
      *  \image html imagefontexample2.bmp
      *
-     * The Image font format works like this: The first pixel, the pixal at
+     * The Image font format works like this: The first pixel, the pixel at
      * coordinate (0,0), tells which color to look for when seperating glyphs.
      * You create an image with your glyphs and simple separates them with
-     * the seperation color. When you create your ImageFont you supply the
+     * the separation color. When you create your ImageFont you supply the
      * constructor with the glyphs present in your image. When creating an
      * ImageFont for the image data in the first example above, the following
      * constructor call would be used.
      * @code gcn::ImageFont imageFont("fixedfont_big.bmp"," abcdefghijklmno\
 pqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"); @endcode
      * Noteworthy is that the first glyph actually gives the width of space.
-     * Glyphs can, as seen in the second example above, be seperated with
+     * Glyphs can, as seen in the second example above, be separated with
      * horizontal lines making it possible to draw glyphs on more then one
      * line in the image. However, these vertical lines must be of one pixel
      * size!
@@ -120,7 +120,7 @@ pqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"); @endcode
          *                   image.
          * @param glyphsTo the ASCII value of the last glyph found in the
          *                 image.
-         * @throws Exception when glyph bondaries are incorrect or the font
+         * @throws Exception when glyph boundaries are incorrect or the font
          *                   file is corrupt or if no ImageLoader exists.
          */
         ImageFont(const std::string& filename, unsigned char glyphsFrom=32,

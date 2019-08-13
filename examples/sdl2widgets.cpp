@@ -41,6 +41,7 @@ gcn::Label* label;                   // A label
 gcn::Icon* icon;                     // An icon (image)
 gcn::Button* button;                 // A button
 gcn::TextField* textField;           // One-line text field
+gcn::PasswordField* passwordField;   // One-line password field
 gcn::TextBox* textBox;               // Multi-line text box
 gcn::ScrollArea* textBoxScrollArea;  // Scroll area for the text box
 gcn::ListBox* listBox;               // A list box
@@ -107,6 +108,8 @@ initWidgets()
 	button = new gcn::Button("Button");
 
 	textField = new gcn::TextField("Text field");
+	
+	passwordField = new gcn::PasswordField("password");
 
 	textBox = new gcn::TextBox("Lorem ipsum dolor sit amet consectetur\n"
                 "adipiscing elit Integer vitae ultrices\n"
@@ -163,6 +166,7 @@ initWidgets()
 	top->add(icon, 10, 10);
 	top->add(button, 325, 10);
 	top->add(textField, 375, 10);
+	top->add(passwordField, 425, 10);
 	top->add(textBoxScrollArea, 290, 50);
 	top->add(listBox, 290, 200);
 	top->add(dropDown, 580, 10);
@@ -257,6 +261,7 @@ halt()
 	delete icon;
 	delete button;
 	delete textField;
+	delete passwordField;
 	delete textBox;
 	delete textBoxScrollArea;
 	delete listBox;

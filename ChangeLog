@@ -1,3 +1,11 @@
+Version 0.10.0
+==============
+* Added support for TrueType fonts from guichan
+* Added an install target in Scons
+* Fixed compilation issues on Windows for MSYS2 and MSVC 2017
+* New widgets: progress bar, password text box and image+text button
+* Fixed two bugs on handling of capital letters and keypad numbers
+
 Version 0.9.0
 =============
 * Guisan forked from Guisan

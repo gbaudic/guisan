@@ -81,10 +81,10 @@ namespace gcn
 
     /**
      * Widget base class. Contains basic widget functions every widget should
-     * have. Widgets should inherit from this class and implements it's
+     * have. Widgets should inherit from this class and implement its
      * functions.
      *
-     * NOTE: Functions begining with underscore "_" should not
+     * NOTE: Functions beginning with underscore "_" should not
      *       be overloaded unless you know what you are doing
      *
      * @author Olof Naessén
@@ -96,7 +96,7 @@ namespace gcn
         /**
          * Constructor. Resets member variables. Noteable, a widget is not
          * focusable as default, therefore, widgets that are supposed to be
-         * focusable should overide this default in their own constructor.
+         * focusable should override this default in their own constructor.
          */
         Widget();
 
@@ -179,35 +179,35 @@ namespace gcn
         void setSize(int width, int height);
 
         /**
-         * Set the widget x coordinate. It is relateive to it's parent.
+         * Set the widget x coordinate. It is relative to its parent.
          *
          * @param x the widget x coordinate.
          */
         void setX(int x);
 
         /**
-         * Gets the widget x coordinate. It is relative to it's parent.
+         * Gets the widget x coordinate. It is relative to its parent.
          *
          * @return the widget x coordinate.
          */
         int getX() const;
 
         /**
-         * Set the widget y coordinate. It is relative to it's parent.
+         * Set the widget y coordinate. It is relative to its parent.
          *
          * @param y the widget y coordinate.
          */
         void setY(int y);
 
         /**
-         * Gets the widget y coordinate. It is relative to it's parent.
+         * Gets the widget y coordinate. It is relative to its parent.
          *
          * @return the widget y coordinate.
          */
         int getY() const;
 
         /**
-         * Sets the widget position. It is relative to it's parent.
+         * Sets the widget position. It is relative to its parent.
          *
          * @param x the widget x coordinate.
          * @param y the widgets y coordinate.
@@ -215,7 +215,7 @@ namespace gcn
         void setPosition(int x, int y);
 
         /**
-         * Sets the dimension of the widget. It is relative to it's parent.
+         * Sets the dimension of the widget. It is relative to its parent.
          *
          * @param dimension the widget dimension.
          */
@@ -242,7 +242,7 @@ namespace gcn
         unsigned int getBorderSize() const;
 
         /**
-         * Gets the dimension of the widget. It is relative to it's parent.
+         * Gets the dimension of the widget. It is relative to its parent.
          *
          * @return the widget dimension.
          */
@@ -271,7 +271,7 @@ namespace gcn
 
         /**
          * Sets the widget to be disabled or enabled. A disabled
-         * widget will never recieve mouse or key input.
+         * widget will never receive mouse or key input.
          *
          * @param enabled true if widget is enabled.
          */
@@ -287,7 +287,7 @@ namespace gcn
         /**
          * Sets the widget to be visible.
          *
-         * @param visible true if the widget should be visiable.
+         * @param visible true if the widget should be visible.
          */
         void setVisible(bool visible);
 
@@ -300,16 +300,16 @@ namespace gcn
 
         /**
          * Sets the base color. The base color is the background
-         * color for many widgets like the Button and Contianer widgets.
+         * color for many widgets like the Button and Container widgets.
          *
-         * @param color the baseground color.
+         * @param color the base color.
          */
         void setBaseColor(const Color& color);
 
         /**
          * Gets the base color.
          *
-         * @return the foreground color.
+         * @return the base color.
          */
         const Color& getBaseColor() const;
 
@@ -356,7 +356,7 @@ namespace gcn
         const Color& getSelectionColor() const;
         
         /**
-         * Requests focus for the widget. A widget will only recieve focus
+         * Requests focus for the widget. A widget will only receive focus
          * if it is focusable.
          */
         virtual void requestFocus();
@@ -440,7 +440,7 @@ namespace gcn
         void removeMouseListener(MouseListener* mouseListener);
 
         /**
-         * Adds a KeyListener to the widget. When a key message is recieved,
+         * Adds a KeyListener to the widget. When a key message is received,
          * it will be sent to the widget's KeyListeners.
          *
          * @param keyListener the KeyListener to add.
@@ -455,7 +455,7 @@ namespace gcn
         void removeKeyListener(KeyListener* keyListener);
 
         /**
-         * Adds a FocusListener to the widget. When a focus event is recieved,
+         * Adds a FocusListener to the widget. When a focus event is received,
          * it will be sent to the widget's FocusListeners.
          *
          * @param focusListener the FocusListener to add.
@@ -493,11 +493,11 @@ namespace gcn
 
         /**
          * Sets the action event identifier of the widget. The identifier is
-         * used to be able to identify which action has occured.
+         * used to be able to identify which action has occurred.
          *
          * NOTE: An action event identifier should not be used to identify a
          *       certain widget but rather a certain event in your application.
-         *       Several widgets can have the same action event identifer.
+         *       Several widgets can have the same action event identifier.
          *
          * @param actionEventId the action event identifier.
          * @since 0.6.0
@@ -533,7 +533,7 @@ namespace gcn
         /**
          * Gets the font used. If no font has been set, the global font will
          * be returned instead. If no global font has been set, the default
-         * font will be returend.
+         * font will be returned.
          * ugly default.
          *
          * @return the used Font.
@@ -611,7 +611,7 @@ namespace gcn
 
         /**
          * Requests modal focus. When a widget has modal focus, only that
-         * widget and it's children may recieve input.
+         * widget and it's children may receive input.
          *
          * @throws Exception if another widget already has modal focus.
          */
@@ -642,12 +642,12 @@ namespace gcn
         virtual void releaseModalMouseInputFocus();
 
         /**
-         * Checks if the widget or it's parent has modal focus.
+         * Checks if the widget or its parent has modal focus.
          */
         virtual bool hasModalFocus() const;
 
         /**
-         * Checks if the widget or it's parent has modal mouse input focus.
+         * Checks if the widget or its parent has modal mouse input focus.
          *
          * @since 0.6.0
          */
@@ -656,14 +656,14 @@ namespace gcn
         /**
          * Gets a widget from a certain position in the widget.
          * This function is used to decide which gets mouse input,
-         * thus it can be overloaded to change that behaviour.
+         * thus it can be overloaded to change that behavior.
          *
          * NOTE: This always returns NULL if the widget is not
          *       a container.
          *
          * @param x the x coordinate.
          * @param y the y coordinate.
-         * @return the widget at the specified coodinate, or NULL
+         * @return the widget at the specified coordinate, or NULL
          *         if no such widget exists.
          * @since 0.6.0
          */
@@ -711,7 +711,7 @@ namespace gcn
         /**
          * Sets the internal FocusHandler. An internal focushandler is
          * needed if both a widget in the widget and the widget itself
-         * should be foucsed at the same time.
+         * should be focused at the same time.
          *
          * @param focusHandler the FocusHandler to be used.
          */

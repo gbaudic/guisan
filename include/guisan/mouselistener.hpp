@@ -64,9 +64,9 @@ namespace gcn
 {
     /**
      * Mouse listeners base class. Inorder to use this class you must inherit
-     * from it and implements it's functions. MouseListeners listen for mouse
-     * events on a Widgets. When a Widget recives a mouse event, the
-     * corresponding function in all it's mouse listeners will be called.
+     * from it and implements its functions. MouseListeners listen for mouse
+     * events on a Widget. When a Widget receives a mouse event, the
+     * corresponding function in all its mouse listeners will be called.
      *
      * @see Widget::addMouseListener
      */
@@ -188,7 +188,7 @@ namespace gcn
          *
          * You should not be able to make an instance of MouseListener,
          * therefore its constructor is protected. To use MouseListener
-         * you must inherit from this class and implement it's
+         * you must inherit from this class and implement its
          * functions.
          */
         MouseListener() { }

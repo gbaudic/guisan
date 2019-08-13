@@ -168,8 +168,8 @@ namespace gcn
         int getMarkerLength() const;
 
         /**
-         * Sets the orientation of the slider. A slider can be drawn verticaly
-         * or horizontaly. For orientation, see the enum in this class.
+         * Sets the orientation of the slider. A slider can be drawn vertically
+         * or horizontally. For orientation, see the enum in this class.
          *
          * @param orientation the orientation.
          */
@@ -221,8 +221,8 @@ namespace gcn
         virtual void keyPressed(KeyEvent& keyEvent);
 
         /**
-         * Draw orientations for the slider. It can be drawn verticaly or
-         * horizontaly.
+         * Draw orientations for the slider. It can be drawn vertically or
+         * horizontally.
          */
         enum
         {

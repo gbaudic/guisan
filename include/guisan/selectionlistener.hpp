@@ -84,7 +84,7 @@ namespace gcn
 
         /**
          * Called when a value has been changed in a Widget. It is used
-         * to be able to recieve a notification that a value has been changed.
+         * to be able to receive a notification that a value has been changed.
          *
          * @param event the event of the value change.
          * @since 0.8.0

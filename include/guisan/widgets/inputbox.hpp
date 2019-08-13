@@ -7,7 +7,7 @@
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
  * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
- *
+ * Copyright (c) 2017, 2018, 2019 Gwilherm Baudic
  *                                                         Js_./
  * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
  * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
@@ -54,106 +54,91 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GCN_BASICCONTAINER_HPP
-#define GCN_BASICCONTAINER_HPP
+#ifndef GCN_INPUTBOX_HPP
+#define GCN_INPUTBOX_HPP
 
-#include <list>
+#include <string>
 
-#include "guisan/deathlistener.hpp"
+#include "guisan/mouselistener.hpp"
+#include "guisan/actionlistener.hpp"
 #include "guisan/platform.hpp"
-#include "guisan/widget.hpp"
+#include "guisan/widgets/window.hpp"
+#include "guisan/widgets/button.hpp"
+#include "guisan/widgets/label.hpp"
+#include "guisan/widgets/textfield.hpp"
+#include "guisan/widgets/icon.hpp"
 
 namespace gcn
 {
     /**
-     * Implements basic container behaviour. Most container will suffice by
-     * inheriting from this class.
-     *
-     * @see Container
+     * A non-movable window to get a short string from the user.
      */
-    class GCN_CORE_DECLSPEC BasicContainer : public Widget, public DeathListener
+    class GCN_CORE_DECLSPEC InputBox : public Window
     {
     public:
+
         /**
-         * Destructor
+         * Constructor. 
+         *
+         * @param caption the InputBox caption.
+         * @param message the message to display in the InputBox
+         * @param ok the string corresponding to the "OK" button
+         * @param cancel the string corresponding to the "Cancel" button
          */
-        virtual ~BasicContainer();
+        InputBox(const std::string& caption, const std::string& message, const std::string &ok = "OK", const std::string &cancel = "Cancel");
+
+        /**
+         * Destructor.
+         */
+        virtual ~InputBox();
+        
+        /**
+         * Add this InputBox to a parent container, centered both horizontally and vertically
+         * If instead, you want to place it somewhere else, use Container::add(). 
+         *
+         * @param container parent container
+         */
+        void addToContainer(Container* container);
+        
+        /**
+         * Get the text that was input by the user
+         * Use in conjunction with getClickedButton() to tell an empty string from a cancel operation.
+         * 
+         * @return the text which was typed by the user
+         */
+        std::string getText() const;
+        
+        /**
+         * Get the number of the button that was clicked
+         * @return 0 for OK, 1 for Cancel
+         */
+        int getClickedButton() const;
 
 
         // Inherited from Widget
 
-        virtual void moveToTop(Widget* widget);
+        virtual void draw(Graphics* graphics);
 
-        virtual void moveToBottom(Widget* widget);
-
-        virtual Rectangle getChildrenArea();
-
-        virtual void focusNext();
-
-        virtual void focusPrevious();
-
-        virtual void logic();
-
-        virtual void _setFocusHandler(FocusHandler* focusHandler);
-
-        void setInternalFocusHandler(FocusHandler* focusHandler);
-
-        virtual void showWidgetPart(Widget* widget, Rectangle area);
-
-        virtual Widget *getWidgetAt(int x, int y);
+        virtual void drawBorder(Graphics* graphics);
 
 
-        // Inherited from DeathListener
+        // Inherited from MouseListener
 
-        virtual void death(const Event& event);
+        virtual void mousePressed(MouseEvent& mouseEvent);
+
+        virtual void mouseDragged(MouseEvent& mouseEvent);
+
+        virtual void mouseReleased(MouseEvent& mouseEvent);
 
     protected:
-        /**
-         * Adds a widget to the basic container.
-         *
-         * @param widget the widget to add.
-         */
-        void add(Widget* widget);
-
-        /**
-         * Removes a widget from the basic container.
-         *
-         * @param widget the widget to remove.
-         */
-        virtual void remove(Widget* widget);
-
-        /**
-         * Clears the basic container from all widgets.
-         */
-        virtual void clear();
+        std::string mMessage;
+        int mClickedButton;
         
-        /**
-         * Draws children widgets.
-         *
-         * @param graphics a Graphics object to draw with.
-         */
-        virtual void drawChildren(Graphics* graphics);
-
-        /**
-         * Calls logic for children widgets.
-         */
-        virtual void logicChildren();
-
-        /**
-         * Finds a widget given an id.
-         *
-         * @param id the id to find a widget by.
-         * @return the widget with the corresponding id, 
-                   NULL of no widget is found.
-         */
-        virtual Widget* findWidgetById(const std::string& id);
-
-        typedef std::list<Widget *> WidgetList;
-        typedef WidgetList::iterator WidgetListIterator;
-        typedef WidgetList::reverse_iterator WidgetListReverseIterator;
-
-        WidgetList mWidgets;
+        Button *mButtonOK;
+        Button *mButtonCancel;
+        Label *mLabel;
+        TextField *mText;
     };
 }
 
-#endif // end GCN_BASICCONTAINER_HPP
+#endif // end GCN_INPUTBOX_HPP

@@ -70,9 +70,9 @@
 
 /*
  * A macro to be used when throwing exceptions.
- * What it basicly does is that it creates a new exception
+ * What it basically does is that it creates a new exception
  * and automatically sets the filename and line number where
- * the exception occured.
+ * the exception occurred.
  */
 #define GCN_EXCEPTION(mess) gcn::Exception(mess,   \
                             __FUNCTION__,          \
@@ -86,7 +86,7 @@ namespace gcn
      * An exception containing a message, a file and a line number.
      * Guichan will only throw exceptions of this class. You can use
      * this class for your own exceptions. A nifty feature of the
-     * excpetion class is that it can tell you from which line and
+     * exception class is that it can tell you from which line and
      * file it was thrown. To make things easier when throwing
      * exceptions there exists a macro for creating exceptions
      * which automatically sets the filename and line number.
@@ -165,7 +165,7 @@ namespace gcn
 #endif // end GCN_EXCEPTION_HPP
 
 /*
- * "Final Fantasy XI is the BEST!... It's even better then water!"
+ * "Final Fantasy XI is the BEST!... It's even better than water!"
  *  - Astrolite
- * I believe it's WoW now days.
+ * I believe it's WoW nowadays.
  */
