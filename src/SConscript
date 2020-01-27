@@ -53,6 +53,7 @@ widget_sources = [
 	'widgets/textbox.cpp',
 	'widgets/textfield.cpp',
 	'widgets/passwordfield.cpp',
+	'widgets/togglebutton.cpp',
 	'widgets/window.cpp',
 ]
 
