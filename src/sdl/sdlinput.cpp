@@ -174,9 +174,17 @@ namespace gcn
 
           case SDL_MOUSEWHEEL:
               if (event.wheel.y > 0)
+              {
                   mouseInput.setType(MouseInput::WHEEL_MOVED_UP);
+              }
               else
+              {
                   mouseInput.setType(MouseInput::WHEEL_MOVED_DOWN);
+              }
+              mouseInput.setX(event.wheel.x);
+              mouseInput.setY(event.wheel.y);
+              mouseInput.setTimeStamp(SDL_GetTicks());
+              mMouseInputQueue.push(mouseInput);
               break;
 
           case SDL_WINDOWEVENT:
