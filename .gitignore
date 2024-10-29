@@ -1,4 +1,11 @@
 .sconsign.dblite
 config.log
 /Debug/
+/Release/
+/x64/
 .vs
+
+*.o
+*.obj
+*.dll
+*.exe
