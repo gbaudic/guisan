@@ -64,6 +64,7 @@
 #include "guisan/graphics.hpp"
 #include "guisan/key.hpp"
 #include "guisan/mouseinput.hpp"
+#include "guisan/text.hpp"
 
 namespace gcn
 {
@@ -80,19 +81,13 @@ namespace gcn
 
     void PasswordField::draw(Graphics* graphics)
     {
-        Color faceColor = getBackgroundColor();
-        graphics->setColor(faceColor);
-        graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
-
-        if (isFocused())
-        {
-            drawCaret(graphics, getFont()->getWidth(mText.substr(0, mCaretPosition)) - mXScroll);
-        }
-
-        graphics->setColor(getForegroundColor());
-        graphics->setFont(getFont());
-		std::string encodedText(mText.size(), '*');
-        graphics->drawText(encodedText, 1 - mXScroll, 1);
+        std::string encodedText(mText->getRow(0).size(), '*');
+        std::string realText(mText->getRow(0));
+        
+        // Switch replacement text before drawing it to hide it
+        mText->setRow(0, encodedText);
+        TextField::draw(graphics);
+        mText->setRow(0, realText);
     }
 
 }

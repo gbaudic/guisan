@@ -1,8 +1,0 @@
-prefix=/mingw64
-includedir=/mingw64/include
-libdir=/mingw64/lib
-Name: guisan
-Description: SDL2 Windowing Library
-Version: 1.1.0
-Cflags: -I${includedir}/guisan
-Libs: -L${libdir} -lguisan -lSDL2_image -lSDL2_ttf -lmingw32 -lSDL2main -lSDL2
