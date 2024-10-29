@@ -65,421 +65,146 @@
 #include "guisan/graphics.hpp"
 #include "guisan/mouseinput.hpp"
 
+#include <vector>
+
 namespace gcn
 {
 
-    MessageBox::MessageBox(const std::string& caption, const std::string& message)
-            :Window(caption),mMessage(message),mClickedButton(-1)
+    MessageBox::MessageBox(const std::string& caption, const std::string& message) :
+        MessageBox(caption, message, {"OK"})
+    {}
+
+    MessageBox::MessageBox(const std::string& caption,
+                           const std::string& message,
+                           const std::vector<std::string>& button_captions) :
+        MessageBox(caption, message, button_captions.data(), button_captions.size())
+    {}
+
+    MessageBox::MessageBox(const std::string& caption,
+                           const std::string& message,
+                           const std::string* button_captions,
+                           int size) :
+        Window(caption)
     {
-        setCaption(caption);
-        addMouseListener(this);
         setMovable(false);
-        
-        mLabel = new Label(message);
-        mLabel->setAlignment(Graphics::LEFT);
+
+        mLabel = std::make_unique<Label>(message);
+        mLabel->setAlignment(Graphics::Left);
         mLabel->adjustSize();
-        
-        mNbButtons = 1;
-        mButtons = new Button*[1];
-        mButtons[0] = new Button("OK");
-        mButtons[0]->setAlignment(Graphics::CENTER);
-        mButtons[0]->addMouseListener(this);
-        
-        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtons[0]->getHeight());
-		setWidth(mLabel->getWidth() + 4*mPadding);
-        if(mButtons[0]->getWidth() + 4*mPadding > getWidth()) 
+        setWidth(mLabel->getWidth() + 4 * mPadding);
+
+        //Create buttons
+        int maxButtonWidth = 0;
+        int maxButtonHeight = 0;
+        for (int i = 0; i < size; i++)
         {
-            setWidth(mButtons[0]->getWidth() + 4*mPadding);
+            mButtons.emplace_back(std::make_unique<Button>(button_captions[i]));
+            auto& button = mButtons.back();
+            button->setAlignment(Graphics::Center);
+            button->addActionListener(this);
+            maxButtonWidth = std::max(maxButtonWidth, button->getWidth());
+            maxButtonHeight = std::max(maxButtonHeight, button->getHeight());
         }
-        
-		this->add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-        this->add(mButtons[0], (getWidth() - mButtons[0]->getWidth())/2, getHeight() - (int)getTitleBarHeight() - mPadding - mButtons[0]->getHeight());
-        
+        // Find the widest button, apply same width to all
+        for (auto& button : mButtons)
+        {
+            button->setWidth(maxButtonWidth);
+        }
+        //Make sure everything fits into the window
+        int padding = mPadding;
+        if (maxButtonWidth * size + 4 * mPadding + mPadding * (size - 1) > getWidth())
+        {
+            setWidth(maxButtonWidth * size + 4 * mPadding + mPadding * (size - 1));
+        }
+        else
+        {
+            padding +=
+                (getWidth() - (maxButtonWidth * size + 4 * mPadding + mPadding * (size - 1))) / 2;
+        }
+        setHeight((int) getTitleBarHeight() + mLabel->getHeight() + 4 * mPadding + maxButtonHeight);
+        add(mLabel.get(), (getWidth() - mLabel->getWidth()) / 2 - mPadding, mPadding);
+
+        for (std::size_t i = 0; i < mButtons.size(); ++i)
+        {
+            add(mButtons[i].get(),
+                padding + (maxButtonWidth + mPadding) * i,
+                getHeight() - (int) getTitleBarHeight() - mPadding - mButtons[0]->getHeight());
+        }
+
         try
         {
-        	requestModalFocus();
-        } 
-        catch (Exception e) 
-        {
-        	// Not having modal focus is not critical
+            requestModalFocus();
         }
-    }
-    
-    MessageBox::MessageBox(const std::string& caption, const std::string& message,
-            const std::string *buttons, int size)
-            :Window(caption),mMessage(message),mClickedButton(-1)
-    {
-        setCaption(caption);
-        addMouseListener(this);
-        setMovable(false);
-        
-        mLabel = new Label(message);
-        mLabel->setAlignment(Graphics::LEFT);
-        mLabel->adjustSize();
-		setWidth(mLabel->getWidth() + 4*mPadding);
-        
-        //Create buttons and label
-        if(size > 0) 
+        catch (Exception e)
         {
-            mNbButtons = size;
-            mButtons = new Button*[size];
-            int maxBtnWidth = 0;
-            
-            for(int i = 0 ; i < size ; i++)
-            {
-                mButtons[i] = new Button(*(buttons+i));
-                mButtons[i]->setAlignment(Graphics::CENTER);
-                mButtons[i]->addMouseListener(this);
-                maxBtnWidth = maxBtnWidth > mButtons[i]->getWidth() ? maxBtnWidth : mButtons[i]->getWidth();
-            }
-            //Find the widest button, apply same width to all
-            for(int i = 0 ; i < size ; i++)
-            {
-                mButtons[i]->setWidth(maxBtnWidth);
-            }
-            
-            //Make sure everything fits into the window
-            int padding = mPadding;
-            if(mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1) > getWidth()) 
-            {
-                setWidth(mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1));
-            } 
-            else 
-            {
-                padding += (getWidth() - (mButtons[0]->getWidth()*size + 4*mPadding + mPadding*(size-1)))/2;
-            }
-			add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-            
-			setHeight((int)getTitleBarHeight() + mLabel->getHeight() + 4*mPadding + mButtons[0]->getHeight());
-            for(int i = 0 ; i < size ; i++)
-            {
-                add(mButtons[i], padding + (maxBtnWidth + mPadding)*i, getHeight() - (int)getTitleBarHeight() - mPadding - mButtons[0]->getHeight());
-            }			
-        }
-        
-        try
-        {
-        	requestModalFocus();
-        } 
-        catch (Exception e) 
-        {
-        	// Not having modal focus is not critical
+            // Not having modal focus is not critical
         }
     }
 
     MessageBox::~MessageBox()
     {
-    	releaseModalFocus();
-    	
-        delete mLabel;
-        for(int i = 0 ; i < mNbButtons ; i++)
-        {
-            delete mButtons[i];
-        }
-        delete mButtons;
+        releaseModalFocus();
     }
 
-    void MessageBox::setPadding(unsigned int padding)
-    {
-        mPadding = padding;
-    }
-
-    unsigned int MessageBox::getPadding() const
-    {
-        return mPadding;
-    }
-
-    void MessageBox::setTitleBarHeight(unsigned int height)
-    {
-        mTitleBarHeight = height;
-    }
-
-    unsigned int MessageBox::getTitleBarHeight()
-    {
-        return mTitleBarHeight;
-    }
-
-    void MessageBox::setCaption(const std::string& caption)
-    {
-        mCaption = caption;
-    }
-
-    const std::string& MessageBox::getCaption() const
-    {
-        return mCaption;
-    }
-
-    void MessageBox::setAlignment(unsigned int alignment)
-    {
-        mAlignment = alignment;
-    }
-
-    unsigned int MessageBox::getAlignment() const
-    {
-        return mAlignment;
-    }
-    
-    void MessageBox::setButtonAlignment(unsigned int alignment)
+    void MessageBox::setButtonAlignment(Graphics::Alignment alignment)
     {
         mButtonAlignment = alignment;
-        
+
         int leftPadding = mPadding;
-        if(mNbButtons > 0)
+        if (!mButtons.empty())
         {
             switch (alignment)
             {
-              case Graphics::LEFT:
-                  // Nothing to do
-                  break;
-              case Graphics::CENTER:
-                  leftPadding += (getWidth() - (mButtons[0]->getWidth()*mNbButtons + 2*mPadding + mPadding*(mNbButtons-1)))/2;
-                  break;
-              case Graphics::RIGHT:
-                  leftPadding += (getWidth() - (mButtons[0]->getWidth()*mNbButtons + 2*mPadding + mPadding*(mNbButtons-1)));
-                  break;
-              default:
-                  throw GCN_EXCEPTION("Unknown alignment.");
+                case Graphics::Left:
+                    // Nothing to do
+                    break;
+                case Graphics::Center:
+                    leftPadding += (getWidth()
+                                    - (mButtons[0]->getWidth() * mButtons.size() + 2 * mPadding
+                                       + mPadding * (mButtons.size() - 1)))
+                                 / 2;
+                    break;
+                case Graphics::Right:
+                    leftPadding += (getWidth()
+                                    - (mButtons[0]->getWidth() * mButtons.size() + 2 * mPadding
+                                       + mPadding * (mButtons.size() - 1)));
+                    break;
+                default: throw GCN_EXCEPTION("Unknown alignment.");
             }
-            for(int i = 0 ; i < mNbButtons ; i++)
+            for (std::size_t i = 0; i != mButtons.size(); ++i)
             {
-                mButtons[i]->setX(leftPadding + (mButtons[0]->getWidth() + mPadding)*i);
+                mButtons[i]->setX(leftPadding + (mButtons[0]->getWidth() + mPadding) * i);
             }
         }
     }
-    
-    unsigned int MessageBox::getButtonAlignment() const
+
+    Graphics::Alignment MessageBox::getButtonAlignment() const
     {
         return mButtonAlignment;
     }
 
-    void MessageBox::draw(Graphics* graphics)
+    void MessageBox::action(const ActionEvent& actionEvent)
     {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        //int width = getWidth() + getBorderSize() * 2 - 1;
-        //int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        Rectangle d = getChildrenArea();
-
-        // Fill the background around the content
-        graphics->setColor(faceColor);
-        // Fill top
-        graphics->fillRectangle(Rectangle(0,0,getWidth(),d.y - 1));
-        // Fill left
-        graphics->fillRectangle(Rectangle(0,d.y - 1, d.x - 1, getHeight() - d.y + 1));
-        // Fill right
-        graphics->fillRectangle(Rectangle(d.x + d.width + 1,
-                                          d.y - 1,
-                                          getWidth() - d.x - d.width - 1,
-                                          getHeight() - d.y + 1));
-        // Fill bottom
-        graphics->fillRectangle(Rectangle(d.x - 1,
-                                          d.y + d.height + 1,
-                                          d.width + 2,
-                                          getHeight() - d.height - d.y - 1));
-
-        if (isOpaque())
+        for (std::size_t i = 0; i != mButtons.size(); ++i)
         {
-            graphics->fillRectangle(d);
-        }
-
-        // Construct a rectangle one pixel bigger than the content
-        d.x -= 1;
-        d.y -= 1;
-        d.width += 2;
-        d.height += 2;
-
-        // Draw a border around the content
-        graphics->setColor(shadowColor);
-        // Top line
-        graphics->drawLine(d.x,
-                           d.y,
-                           d.x + d.width - 2,
-                           d.y);
-
-        // Left line
-        graphics->drawLine(d.x,
-                           d.y + 1,
-                           d.x,
-                           d.y + d.height - 1);
-
-        graphics->setColor(highlightColor);
-        // Right line
-        graphics->drawLine(d.x + d.width - 1,
-                           d.y,
-                           d.x + d.width - 1,
-                           d.y + d.height - 2);
-        // Bottom line
-        graphics->drawLine(d.x + 1,
-                           d.y + d.height - 1,
-                           d.x + d.width - 1,
-                           d.y + d.height - 1);
-
-        drawChildren(graphics);
-
-        int textX;
-        int textY;
-
-        textY = ((int)getTitleBarHeight() - getFont()->getHeight()) / 2;
-
-        switch (getAlignment())
-        {
-          case Graphics::LEFT:
-              textX = 4;
-              break;
-          case Graphics::CENTER:
-              textX = getWidth() / 2;
-              break;
-          case Graphics::RIGHT:
-              textX = getWidth() - 4;
-              break;
-          default:
-              throw GCN_EXCEPTION("Unknown alignment.");
-        }
-
-        graphics->setColor(getForegroundColor());
-        graphics->setFont(getFont());
-        graphics->pushClipArea(Rectangle(0, 0, getWidth(), getTitleBarHeight() - 1));
-        graphics->drawText(getCaption(), textX, textY, getAlignment());
-        graphics->popClipArea();
-    }
-
-    void MessageBox::drawBorder(Graphics* graphics)
-    {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
-        {
-            graphics->setColor(highlightColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
-            graphics->setColor(shadowColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
-        }
-    }
-
-    void MessageBox::mousePressed(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.getSource() != this)
-        {
-            return;
-        }
-        
-        if (getParent() != NULL)
-        {
-            getParent()->moveToTop(this);
-        }
-
-        mDragOffsetX = mouseEvent.getX();
-        mDragOffsetY = mouseEvent.getY();
-        
-        mIsMoving = mouseEvent.getY() <= (int)mTitleBarHeight;
-    }
-
-    void MessageBox::mouseReleased(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.getSource() != this)
-        {
-            for(int i = 0 ; i < mNbButtons ; i++)
+            if (actionEvent.getSource() == mButtons[i].get())
             {
-                if(mouseEvent.getSource() == mButtons[i])
-                {
-                    mClickedButton = i;
-                    generateAction();
-                    break;
-                }
+                mClickedButton = static_cast<int>(i);
+                distributeActionEvent();
+                break;
             }
         }
-        else
-        {
-            mIsMoving = false;
-        }
     }
 
-    void MessageBox::mouseDragged(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.isConsumed() || mouseEvent.getSource() != this)
-        {
-            return;
-        }
-        
-        if (isMovable() && mIsMoving)
-        {
-            setPosition(mouseEvent.getX() - mDragOffsetX + getX(),
-                        mouseEvent.getY() - mDragOffsetY + getY());
-        }
-
-        mouseEvent.consume();
-    }
-
-    Rectangle MessageBox::getChildrenArea()
-    {
-        return Rectangle(getPadding(),
-                         getTitleBarHeight(),
-                         getWidth() - getPadding() * 2,
-                         getHeight() - getPadding() - getTitleBarHeight());
-    }
-
-    bool MessageBox::isMovable() const
-    {
-        return mMovable;
-    }
-
-    void MessageBox::setOpaque(bool opaque)
-    {
-        mOpaque = opaque;
-    }
-
-    bool MessageBox::isOpaque()
-    {
-        return mOpaque;
-    }
-
-    void MessageBox::resizeToContent()
-    {
-        WidgetListIterator it;
-
-        int w = 0, h = 0;
-        for (it = mWidgets.begin(); it != mWidgets.end(); it++)
-        {
-            if ((*it)->getX() + (*it)->getWidth() > w)
-            {
-                w = (*it)->getX() + (*it)->getWidth();
-            }
-
-            if ((*it)->getY() + (*it)->getHeight() > h)
-            {
-                h = (*it)->getY() + (*it)->getHeight();
-            }
-        }
-
-        setSize(w + 2* getPadding(), h + getPadding() + getTitleBarHeight());
-    }
-    
     int MessageBox::getClickedButton() const
     {
         return mClickedButton;
     }
-	
-	void MessageBox::addToContainer(Container* container)
-	{
-		int x = container->getWidth() - getWidth();
-		int y = container->getHeight() - getHeight();
-		container->add(this, x/2, y/2);
-	}
-}
+
+    void MessageBox::addToContainer(Container* container)
+    {
+        int x = container->getWidth() - getWidth();
+        int y = container->getHeight() - getHeight();
+        container->add(this, x / 2, y / 2);
+    }
+} // namespace gcn

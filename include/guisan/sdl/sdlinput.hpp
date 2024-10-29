@@ -80,7 +80,7 @@ namespace gcn
         /**
          * Constructor.
          */
-        SDLInput();
+        SDLInput() = default;
 
         /**
          * Pushes an SDL event. It should be called at least once per frame to
@@ -100,13 +100,13 @@ namespace gcn
 
         // Inherited from Input
 
-        virtual bool isKeyQueueEmpty();
+        bool isKeyQueueEmpty() override;
 
-        virtual KeyInput dequeueKeyInput();
+        KeyInput dequeueKeyInput() override;
 
-        virtual bool isMouseQueueEmpty();
+        bool isMouseQueueEmpty() override;
 
-        virtual MouseInput dequeueMouseInput();
+        MouseInput dequeueMouseInput() override;
 
     protected:
         /**
@@ -119,19 +119,19 @@ namespace gcn
         int convertMouseButton(int button);
 
         /**
-         * Converts an SDL event key to a key value.
+         * Converts an SDL event to a Guisan key value.
          *
-         * @param event an SDL event with a key to convert.
-         * @return a key value.
+         * @param event The SDL event to convert.
+         * @return A Guisan key value.
          * @see Key
          */
-        int convertKeyCharacter(SDL_Event event);
+        Key convertSDLEventToGuichanKeyValue(SDL_Event event);
 
         std::queue<KeyInput> mKeyInputQueue;
         std::queue<MouseInput> mMouseInputQueue;
 
-        bool mMouseDown;
-        bool mMouseInWindow;
+        bool mMouseDown = false;
+        bool mMouseInWindow = true;
     };
 }
 

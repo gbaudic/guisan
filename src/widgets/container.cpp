@@ -66,11 +66,6 @@
 namespace gcn
 {
 
-    Container::Container()
-    {
-        mOpaque = true;
-    }
-
     Container::~Container()
     {
 
@@ -82,32 +77,6 @@ namespace gcn
         {
             graphics->setColor(getBaseColor());
             graphics->fillRectangle(Rectangle(0, 0, getWidth(), getHeight()));
-        }
-
-        drawChildren(graphics);
-    }
-
-    void Container::drawBorder(Graphics* graphics)
-    {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
-        {
-            graphics->setColor(shadowColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
-            graphics->setColor(highlightColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
         }
     }
 
@@ -123,27 +92,74 @@ namespace gcn
 
     void Container::add(Widget* widget)
     {
-        BasicContainer::add(widget);
+        Widget::add(widget);
+        distributeWidgetAddedEvent(widget);
     }
 
     void Container::add(Widget* widget, int x, int y)
     {
         widget->setPosition(x, y);
-        BasicContainer::add(widget);
+        Widget::add(widget);
+        distributeWidgetAddedEvent(widget);
     }
 
     void Container::remove(Widget* widget)
     {
-        BasicContainer::remove(widget);
+        Widget::remove(widget);
+        distributeWidgetRemovedEvent(widget);
     }
 
     void Container::clear()
     {
-        BasicContainer::clear();
+        Widget::clear();
     }
 
     Widget* Container::findWidgetById(const std::string &id)
     {
-        return BasicContainer::findWidgetById(id);
+        return Widget::findWidgetById(id);
     }
-}
+    void Container::addContainerListener(ContainerListener* containerListener)
+    {
+        mContainerListeners.push_back(containerListener);
+    }
+
+    void Container::removeContainerListener(ContainerListener* containerListener)
+    {
+        mContainerListeners.remove(containerListener);
+    }
+
+    void Container::distributeWidgetAddedEvent(Widget* source)
+    {
+        const ContainerEvent event(source, this);
+
+        for (ContainerListener* containerListener : mContainerListeners)
+        {
+            containerListener->widgetAdded(event);
+        }
+    }
+
+    void Container::distributeWidgetRemovedEvent(Widget* source)
+    {
+        ContainerEvent event(source, this);
+
+        for (ContainerListener* containerListener : mContainerListeners)
+        {
+            containerListener->widgetRemoved(event);
+        }
+    }
+
+    const std::list<Widget*>& Container::getChildren() const
+    {
+        return Widget::getChildren();
+    }
+
+    void Container::resizeToContent()
+    {
+        Widget::resizeToChildren();
+    }
+
+    Rectangle Container::getChildrenArea()
+    {
+        return Rectangle(0, 0, getWidth(), getHeight());
+    }
+} // namespace gcn

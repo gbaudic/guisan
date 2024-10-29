@@ -65,12 +65,11 @@
 namespace gcn
 {
     /**
-     * Listener on events from a Widget. Whenever a widget changes its
-     * size or position the listener of a widget will get notified. To be able to
-     * listen for events from a widget you must make a class which inherits
-     * from this class and implements its functions.
+     * Interface for listening for events from widgets. When a widget's size,
+     * location or visibility changes, the relevant method of the listener is
+     * invoked.
      *
-     * @see Widget::addWidgetListener
+     * @see Widget::addWidgetListener, Widget::removeWidgetListener
      * @author Olof Naessén
      * @since 0.8.0
      */
@@ -117,6 +116,14 @@ namespace gcn
          */
         virtual void widgetShown(const Event& event) { }
 
+    protected:
+        /**
+         * Constructor.
+         *
+         * You should not be able to make an instance of WidgetListener,
+         * therefore its constructor is protected.
+         */
+        WidgetListener() {}
     };
 }
 

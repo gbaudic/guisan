@@ -50,13 +50,10 @@ class FFListBox : public gcn::ListBox
 {
 public:
     FFListBox();
-    ~FFListBox();
-    void draw(gcn::Graphics* graphics);
-    void setSelected(int i);
+    ~FFListBox() override;
+    void draw(gcn::Graphics* graphics) override;
 
-private:
-    static gcn::Image *mHand;
-    static int mInstances;
+    void setSelected(int i);
 };
 
 #endif

@@ -6,9 +6,9 @@ Import("env")
 
 main_sources = [
 	'actionevent.cpp',
-	'basiccontainer.cpp',
 	'cliprectangle.cpp',
 	'color.cpp',
+	'containerevent.cpp',
 	'defaultfont.cpp',
 	'event.cpp',
 	'exception.cpp',
@@ -27,6 +27,7 @@ main_sources = [
 	'mouseevent.cpp',
 	'mouseinput.cpp',
 	'rectangle.cpp',
+	'text.cpp',
 	'selectionevent.cpp',
 	'widget.cpp'
 ]
@@ -93,6 +94,7 @@ guisan = env.Clone()
 if env['HAVE_SDL2']:
 	guisan.ParseConfig('pkg-config --cflags --libs sdl2')
 	guisan.ParseConfig('pkg-config --cflags --libs SDL2_image')
+if env['HAVE_SDL2_TTF']:
 	guisan.ParseConfig('pkg-config --cflags --libs SDL2_ttf')
 
 if env['HAVE_OPENGL']:
@@ -102,6 +104,7 @@ print("=========================================")
 print(" Guisan build")
 print("")
 print(" SDL 2.0 support.............. " + str(env['HAVE_SDL2']))
+print(" SDL 2.0 TTF support..........." + str(env['HAVE_SDL2_TTF']))
 print(" OpenGL support............... " + str(env['HAVE_OPENGL']))
 print("-----------------------------------------")
 print(" Installation target")

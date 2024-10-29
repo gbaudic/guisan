@@ -80,60 +80,68 @@ namespace gcn
 
         /**
          * Constructor.
-		 *
-		 * @param width the width of the logical drawing surface. Should be the
+         *
+         * @param width the width of the logical drawing surface. Should be the
          *              same as the screen resolution.
-		 *
-		 * @param height the height of the logical drawing surface. Should be
-		 *               the same as the screen resolution.
-		 */
+         *
+         * @param height the height ot the logical drawing surface. Should be
+         *               the same as the screen resolution.
+         */
         OpenGLGraphics(int width, int height);
 
-		/**
-		 * Destructor.
-		 */
-        virtual ~OpenGLGraphics();
+        /**
+         * Destructor.
+         */
+        ~OpenGLGraphics() override;
 
         /**
          * Sets the target plane on where to draw.
-		 *
-		 * @param width the width of the logical drawing surface. Should be the
-		 *              same as the screen resolution.
-		 * @param height the height of the logical drawing surface. Should be
-		 *               the same as the screen resolution.
+         *
+         * @param width the width of the logical drawing surface. Should be the
+         *              same as the screen resolution.
+         * @param height the height ot the logical drawing surface. Should be
+         *               the same as the screen resolution.
          */
         virtual void setTargetPlane(int width, int height);
 
+        /**
+         * Gets the target plane width.
+         *
+         * @return The target plane width.
+         */
+        virtual int getTargetPlaneWidth() const;
 
-		// Inherited from Graphics
+        /**
+         * Gets the target plane height.
+         *
+         * @return The target plane height.
+         */
+        virtual int getTargetPlaneHeight() const;
 
-        virtual void _beginDraw();
+        // Inherited from Graphics
 
-        virtual void _endDraw();
+        void _beginDraw() override;
+        void _endDraw() override;
 
-        virtual bool pushClipArea(Rectangle area);
+        bool pushClipArea(Rectangle area) override;
+        void popClipArea() override;
 
-        virtual void popClipArea();
-
-        virtual void drawImage(const Image* image, int srcX, int srcY,
+        void drawImage(const Image* image, int srcX, int srcY,
                                int dstX, int dstY, int width,
-                               int height);
+                               int height) override;
 
-        virtual void drawPoint(int x, int y);
+        void drawPoint(int x, int y) override;
+        void drawLine(int x1, int y1, int x2, int y2) override;
 
-        virtual void drawLine(int x1, int y1, int x2, int y2);
+        void drawRectangle(const Rectangle& rectangle) override;
+        void fillRectangle(const Rectangle& rectangle) override;
 
-        virtual void drawRectangle(const Rectangle& rectangle);
-
-        virtual void fillRectangle(const Rectangle& rectangle);
-
-        virtual void setColor(const Color& color);
-
-		virtual const Color& getColor();
+        void setColor(const Color& color) override;
+        const Color& getColor() override;
 
     protected:
         int mWidth, mHeight;
-		bool mAlpha;
+        bool mAlpha;
         Color mColor;
     };
 }

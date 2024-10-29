@@ -60,6 +60,8 @@
 #include "guisan/platform.hpp"
 #include "guisan/widgets/button.hpp"
 
+#include <memory>
+
 namespace gcn
 {
     class Image;
@@ -71,23 +73,35 @@ namespace gcn
     {
     public:
         /**
+         * Default constructor.
+         */
+        ImageButton();
+
+        /**
          * Constructor.
          *
          * @param filename The filename of the image to display.
          */
-        ImageButton(const std::string& filename);
+        explicit ImageButton(const std::string& filename);
 
         /**
          * Constructor.
          *
          * @param image The image to display.
          */
-        ImageButton(Image* image);
+        explicit ImageButton(const Image* image);
+
+        /**
+         * Constructor.
+         *
+         * @param image The image to display.
+         */
+        explicit ImageButton(std::shared_ptr<const Image> image);
 
         /**
          * Destructor.
          */
-        virtual ~ImageButton();
+        ~ImageButton() override = default;
 
         /**
          * Adjusts the size of the image button to fit the image.
@@ -99,29 +113,28 @@ namespace gcn
          *
          * @param image The image to display.
          */
-        void setImage(Image* image);
+        void setImage(const Image* image);
 
         /**
-         * Gets the image of the image button.
+         * Sets the image to display.
          *
-         * @return The image of the image button.
+         * @param image The image to display.
          */
-        Image* getImage();
+        void setImage(std::shared_ptr<const Image> image);
 
+        /**
+         * Gets current image.
+         *
+         * @return The current image.
+         */
+        const Image* getImage() const;
 
         // Inherited from Widget
 
-        void draw(gcn::Graphics* graphics);
+        void draw(gcn::Graphics* graphics) override;
 
     protected:
-        gcn::Image* mImage;
-
-        /**
-         * True if the image has been loaded internally, false otherwise.
-         * An image not loaded internally should not be deleted in the
-         * destructor.
-         */
-        bool mInternalImage;
+        std::shared_ptr<const Image> mImage;
     };
 }
 #endif

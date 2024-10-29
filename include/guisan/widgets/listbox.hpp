@@ -72,13 +72,13 @@ namespace gcn
     /**
      * An implementation of a list box where an item can be selected.
      *
-     * To be able display a list the list box uses a user provided list model. 
+     * To be able to display a list the list box uses a user provided list model.
      * A list model can be any class that implements the ListModel interface.
-     *     
-     * If an item is selected in the list box a select event will be sent to all selection 
-     * listeners of the list box. If an item is selected by using a mouse click or by using 
-     * the enter or space key an action event will be sent to all action listeners of the 
-     * list box.
+     *
+     * If an item is selected in the list box a select event will be sent to
+     * all selection listeners of the list box. If an item is selected by using
+     * a mouse click or by using the enter or space key an action event will be
+     * sent to all action listeners of the list box.
      */
     class GCN_CORE_DECLSPEC ListBox :
         public Widget,
@@ -101,7 +101,7 @@ namespace gcn
         /**
          * Destructor.
          */
-        virtual ~ListBox() { }
+        ~ListBox() override {}
 
         /**
          * Gets the selected item as an index in the list model.
@@ -137,17 +137,18 @@ namespace gcn
         ListModel *getListModel();
 
         /**
-         * Adjusts the size of the list box to fit it's list model.
+         * Adjusts the size of the list box to fit its list model.
          */
         void adjustSize();
 
         /**
-         * Checks whether the list box wraps when selecting items with a keyboard.
+         * Checks whether the list box wraps when selecting items
+         * with a keyboard.
          *
-         * Wrapping means that the selection of items will be wrapped. That is, if 
-         * the first item is selected and up is pressed, the last item will get 
-         * selected. If the last item is selected and down is pressed, the first item 
-         * will get selected.
+         * Wrapping means that the selection of items will be wrapped.
+         * That is, if the first item is selected and up is pressed,
+         * the last item will get selected. If the last item is selected
+         * and down is pressed, the first item will get selected.
          *
          * @return true if wrapping is enabled, false otherwise.
          * @see setWrappingEnabled
@@ -155,13 +156,14 @@ namespace gcn
         bool isWrappingEnabled() const;
 
         /**
-         * Sets the list box to wrap or not when selecting items with a keyboard.
+         * Sets the list box to wrap or not when selecting items
+         * with a keyboard.
          *
-         * Wrapping means that the selection of items will be wrapped. That is, if 
-         * the first item is selected and up is pressed, the last item will get 
-         * selected. If the last item is selected and down is pressed, the first item 
-         * will get selected.
-         * 
+         * Wrapping means that the selection of items will be wrapped.
+         * That is, if the first item is selected and up is pressed,
+         * the last item will get selected. If the last item is selected
+         * and down is pressed, the first item will get selected.
+         *
          * @see isWrappingEnabled
          */
         void setWrappingEnabled(bool wrappingEnabled);
@@ -184,37 +186,36 @@ namespace gcn
          */
         void removeSelectionListener(SelectionListener* selectionListener);
 
+        /**
+         * Gets the height of a row. Should be overridden if another row
+         * height than the font height is preferred.
+         *
+         * @return The height of a row.
+         * @since 1.1.0
+         */
+        virtual unsigned int getRowHeight() const;
 
         // Inherited from Widget
 
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
-
-        virtual void logic();
-
+        void draw(Graphics* graphics) override;
+        void logic() override;
 
         // Inherited from KeyListener
 
-        virtual void keyPressed(KeyEvent& keyEvent);
-
+        void keyPressed(KeyEvent& keyEvent) override;
 
         // Inherited from MouseListener
 
-        virtual void mousePressed(MouseEvent& mouseEvent);
+        void mousePressed(MouseEvent& mouseEvent) override;
+        void mouseWheelMovedUp(MouseEvent& mouseEvent) override;
+        void mouseWheelMovedDown(MouseEvent& mouseEvent) override;
+        void mouseDragged(MouseEvent& mouseEvent) override;
 
-        virtual void mouseWheelMovedUp(MouseEvent& mouseEvent);
-
-        virtual void mouseWheelMovedDown(MouseEvent& mouseEvent);
-        
-        virtual void mouseDragged(MouseEvent& mouseEvent);
-
-        
     protected:
         /**
          * Distributes a value changed event to all selection listeners
          * of the list box.
-         * 
+         *
          * @since 0.8.0
          */
         void distributeValueChangedEvent();
@@ -222,31 +223,25 @@ namespace gcn
         /**
          * The list model to use.
          */
-        ListModel *mListModel;
+        ListModel *mListModel = nullptr;
 
         /**
          * The selected item as an index in the list model.
          */
-        int mSelected;
+        int mSelected = -1;
 
         /**
          * True if wrapping is enabled, false otherwise.
          */
-        bool mWrappingEnabled;
+        bool mWrappingEnabled = false;
 
-        /**
-         * Typedef.
-         */ 
         typedef std::list<SelectionListener*> SelectionListenerList;
-        
+
         /**
          * The selection listeners of the list box.
          */
         SelectionListenerList mSelectionListeners;
 
-        /**
-         * Typedef.
-         */
         typedef SelectionListenerList::iterator SelectionListenerIterator;
     };
 }

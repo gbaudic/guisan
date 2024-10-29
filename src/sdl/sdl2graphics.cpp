@@ -75,14 +75,9 @@
 namespace gcn
 {
 
-    SDL2Graphics::SDL2Graphics()
-    {
-        mAlpha = false;
-    }
-    
     SDL2Graphics::~SDL2Graphics()
     {
-        if(mRenderTarget != NULL)
+        if(mRenderTarget != nullptr)
         {
             SDL_DestroyTexture(mTexture);
             SDL_FreeSurface(mTarget);
@@ -109,7 +104,7 @@ namespace gcn
         mRenderTarget = renderer;
         // An internal surface is still required to be able to handle surfaces and colorkeys
         mTarget = SDL_CreateRGBSurface(0, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-        SDL_FillRect(mTarget, NULL, SDL_MapRGB(mTarget->format, 0xff, 0, 0xff));
+        SDL_FillRect(mTarget, nullptr, SDL_MapRGB(mTarget->format, 0xff, 0, 0xff));
         SDL_SetColorKey(mTarget, SDL_TRUE, SDL_MapRGB(mTarget->format, 0xff, 0, 0xff)); // magenta, Guisan default
         SDL_SetSurfaceBlendMode(mTarget, SDL_BLENDMODE_NONE); // needed to cleanup temp data properly
         mTexture = SDL_CreateTextureFromSurface(mRenderTarget, mTarget);
@@ -126,8 +121,10 @@ namespace gcn
         rect.y = carea.y;
         rect.w = carea.width;
         rect.h = carea.height;
-
-        SDL_RenderSetClipRect(mRenderTarget, &rect);
+        if (result)
+        {
+            SDL_RenderSetClipRect(mRenderTarget, &rect);
+        }
 
         return result;
     }
@@ -184,12 +181,12 @@ namespace gcn
 
         const SDLImage* srcImage = dynamic_cast<const SDLImage*>(image);
 
-        if (srcImage == NULL)
+        if (srcImage == nullptr)
         {
             throw GCN_EXCEPTION("Trying to draw an image of unknown format, must be an SDLImage.");
         }
         
-        if(srcImage->getTexture() == NULL)
+        if (srcImage->getTexture() == nullptr)
         {
             SDL_FillRect(mTarget, &temp, SDL_MapRGBA(mTarget->format, 0xff, 0, 0xff, 0));
             SDL_BlitSurface(srcImage->getSurface(), &src, mTarget, &temp);
@@ -199,14 +196,13 @@ namespace gcn
         else 
         {
             SDL_RenderCopy(mRenderTarget, srcImage->getTexture(), &src, &dst);
-        }
-        
+        }    
     }
 
     void SDL2Graphics::fillRectangle(const Rectangle& rectangle)
     {
-    if (mClipStack.empty()) {
-        throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
+        if (mClipStack.empty()) {
+            throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
             "called a draw function outside of _beginDraw() and _endDraw()?");
     }
 
@@ -216,18 +212,18 @@ namespace gcn
         area.x += top.xOffset;
         area.y += top.yOffset;
 
-        if(!area.intersect(top))
+        if(!area.isIntersecting(top))
         {
             return;
         }
 
         if (mAlpha)
         {
-            int x1 = area.x > top.x ? area.x : top.x;
-            int y1 = area.y > top.y ? area.y : top.y;
-            int x2 = area.x + area.width < top.x + top.width ? area.x + area.width : top.x + top.width;
-            int y2 = area.y + area.height < top.y + top.height ? area.y + area.height : top.y + top.height;
-            int x, y;
+            const int x1 = area.x > top.x ? area.x : top.x;
+            const int y1 = area.y > top.y ? area.y : top.y;
+            const int x2 = area.x + area.width < top.x + top.width ? area.x + area.width : top.x + top.width;
+            const int y2 = area.y + area.height < top.y + top.height ? area.y + area.height : top.y + top.height;
+
             SDL_Rect rect;
             rect.x = x1;
             rect.y = y1;
@@ -238,7 +234,6 @@ namespace gcn
             SDL_SetRenderDrawColor(mRenderTarget, mColor.r, mColor.g, mColor.b, mColor.a);
             SDL_RenderFillRect(mRenderTarget, &rect);
             restoreRenderColor();
-
         }
         else
         {
@@ -248,12 +243,10 @@ namespace gcn
             rect.w = area.width;
             rect.h = area.height;
 
-            Uint32 color = SDL_MapRGBA(mTarget->format, mColor.r, mColor.g, mColor.b, mColor.a);
             saveRenderColor();
             SDL_SetRenderDrawColor(mRenderTarget, mColor.r, mColor.g, mColor.b, mColor.a);
             SDL_RenderFillRect(mRenderTarget, &rect);
             restoreRenderColor();
-            
         }
     }
 
@@ -269,7 +262,7 @@ namespace gcn
         x += top.xOffset;
         y += top.yOffset;
 
-        if(!top.isPointInRect(x,y))
+        if(!top.isContaining(x,y))
             return;
 
         saveRenderColor();
@@ -381,10 +374,10 @@ namespace gcn
         
     void SDL2Graphics::drawRectangle(const Rectangle& rectangle)
     {
-        int x1 = rectangle.x;
-        int x2 = rectangle.x + rectangle.width - 1;
-        int y1 = rectangle.y;
-        int y2 = rectangle.y + rectangle.height - 1;
+        const int x1 = rectangle.x;
+        const int x2 = rectangle.x + rectangle.width - 1;
+        const int y1 = rectangle.y;
+        const int y2 = rectangle.y + rectangle.height - 1;
 
         drawHLine(x1, y1, x2);
         drawHLine(x1, y2, x2);
@@ -395,7 +388,6 @@ namespace gcn
 
     void SDL2Graphics::drawLine(int x1, int y1, int x2, int y2)
     {
-        
         if (mClipStack.empty()) {
             throw GCN_EXCEPTION("Clip stack is empty, perhaps you"
                 "called a draw function outside of _beginDraw() and _endDraw()?");

@@ -198,7 +198,7 @@ namespace gcn
     {
 	const OpenGLImage* srcImage = dynamic_cast<const OpenGLImage*>(image);
 
-        if (srcImage == NULL)
+        if (srcImage == nullptr)
         {
             throw GCN_EXCEPTION("Trying to draw an image of unknown format, must be an OpenGLImage.");
         }
@@ -349,5 +349,15 @@ namespace gcn
     const Color& OpenGLGraphics::getColor()
     {
         return mColor;
+    }
+
+    int OpenGLGraphics::getTargetPlaneWidth() const
+    {
+        return mWidth;
+    }
+
+    int OpenGLGraphics::getTargetPlaneHeight() const
+    {
+        return mHeight;
     }
 }

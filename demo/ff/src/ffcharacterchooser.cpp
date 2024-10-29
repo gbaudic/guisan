@@ -43,32 +43,24 @@
 
 #include "ffcharacterchooser.hpp"
 
-FFCharacterChooser::FFCharacterChooser()
+FFCharacterChooser::FFCharacterChooser() : mHand(gcn::Image::load("images/hand.png"))
 {
     setWidth(20);
     setHeight(240);
-    mSelected = 0;
-    mDistance = 76;
-    mHand = gcn::Image::load("images/hand.png");
     setFocusable(true);
     addKeyListener(this);
-    setBorderSize(0);
-}
-
-FFCharacterChooser::~FFCharacterChooser()
-{
-    delete mHand;
+    setFrameSize(0);
 }
 
 void FFCharacterChooser::draw(gcn::Graphics* graphics)
 {
     if (isFocused())
     {
-        graphics->drawImage(mHand, 0, mDistance*mSelected);
+        graphics->drawImage(mHand.get(), 0, mDistance * mSelected);
     }
 }
 
-int FFCharacterChooser::getSelected()
+int FFCharacterChooser::getSelected() const
 {
     return mSelected;
 }
@@ -85,7 +77,7 @@ void FFCharacterChooser::setDistance(int distance)
 
 void FFCharacterChooser::keyPressed(gcn::KeyEvent& keyEvent)
 {
-    if (keyEvent.getKey().getValue() == gcn::Key::UP)
+    if (keyEvent.getKey().getValue() == gcn::Key::Up)
     {
         mSelected--;
         if (mSelected < 0)
@@ -93,7 +85,7 @@ void FFCharacterChooser::keyPressed(gcn::KeyEvent& keyEvent)
             mSelected = 0;
         }
     }
-    else if (keyEvent.getKey().getValue() == gcn::Key::DOWN)
+    else if (keyEvent.getKey().getValue() == gcn::Key::Down)
     {
         mSelected++;
         if (mSelected > 2)
@@ -101,7 +93,7 @@ void FFCharacterChooser::keyPressed(gcn::KeyEvent& keyEvent)
             mSelected = 2;
         }
     }
-    else if (keyEvent.getKey().getValue() == gcn::Key::ENTER)
+    else if (keyEvent.getKey().getValue() == gcn::Key::Enter)
     {
 		// TODO: fix this
         //distributeActionEvent();

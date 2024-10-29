@@ -57,23 +57,27 @@
 #ifndef GCN_TAB_HPP
 #define GCN_TAB_HPP
 
-#include <map>
-#include <string>
-
-#include "guisan/basiccontainer.hpp"
 #include "guisan/mouselistener.hpp"
 #include "guisan/platform.hpp"
+#include "guisan/widget.hpp"
+
+#include <map>
+#include <memory>
+#include <string>
 
 namespace gcn
 {
     class Label;
     class TabbedArea;
-    
+
     /**
-     * A simple tab widget used as the default tab in the TabbedArea widget.
+     * An implementation of a simple tab to be used in a tabbed area.
+     *
+     * @see TabbedArea
+     * @since 0.8.0
      */
-    class GCN_CORE_DECLSPEC Tab:
-        public BasicContainer,
+    class GCN_CORE_DECLSPEC Tab :
+        public Widget,
         public MouseListener
     {
     public:
@@ -86,10 +90,11 @@ namespace gcn
         /**
          * Destructor.
          */
-        virtual ~Tab();
+        ~Tab() override;
 
         /**
-         * Adjusts the tab size to fit the label.
+         * Adjusts the size of the tab to fit the caption. If this tab was
+         * added to a TabbedArea, it will also adjust the tab positions.
          */
         void adjustSize();
 
@@ -97,6 +102,7 @@ namespace gcn
          * Sets the tabbed area the tab should be a part of.
          *
          * @param tabbedArea The tabbed area the tab should be a part of.
+         * @see getTabbedArea
          */
         void setTabbedArea(TabbedArea* tabbedArea);
 
@@ -104,13 +110,17 @@ namespace gcn
          * Gets the tabbed are the tab is a part of.
          *
          * @return The tabbed are the tab is a part of.
+         * @see setTabbedArea
          */
         TabbedArea* getTabbedArea();
 
         /**
-         * Sets the caption of the tab.
+         * Sets the caption of the tab. It's advisable to call
+         * adjustSize after setting the caption to make the tab
+         * fit the caption.
          *
-         * @param caption The caption of the tab.         
+         * @param caption The caption of the tab.
+         * @see getCaption, adjustSize
          */
         void setCaption(const std::string& caption);
 
@@ -118,28 +128,34 @@ namespace gcn
          * Gets the caption of the tab.
          *
          * @return The caption of the tab.
+         * @see setCaption
          */
         const std::string& getCaption() const;
 
-                
         // Inherited from Widget
 
-        virtual void draw(Graphics *graphics);
-
-        virtual void drawBorder(Graphics* graphics);
-                
+        void draw(Graphics* graphics) override;
 
         // Inherited from MouseListener
 
-        virtual void mouseEntered(MouseEvent& mouseEvent);
+        void mouseEntered(MouseEvent& mouseEvent) override;
+        void mouseExited(MouseEvent& mouseEvent) override;
 
-        virtual void mouseExited(MouseEvent& mouseEvent);
-        
     protected:
-        Label* mLabel;
-        TabbedArea* mTabbedArea;
-        std::string mCaption;
-        bool mHasMouse;
+        /**
+         * Holds the label of the tab.
+         */
+        std::unique_ptr<Label> mLabel;
+
+        /**
+         * Holds the tabbed area the tab is a part of.
+         */
+        TabbedArea* mTabbedArea = nullptr;
+
+        /**
+         * True if the tab has the mouse, false otherwise.
+         */
+        bool mHasMouse = false;
     };
 }
 

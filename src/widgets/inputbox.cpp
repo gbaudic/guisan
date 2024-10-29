@@ -68,31 +68,32 @@
 namespace gcn
 {
 
-    InputBox::InputBox(const std::string& caption, const std::string& message, const std::string &ok, const std::string &cancel)
-            :Window(caption),mMessage(message),mClickedButton(-1)
+    InputBox::InputBox(const std::string& caption,
+                       const std::string& message,
+                       const std::string& ok,
+                       const std::string& cancel) :
+        Window(caption)
     {
-        setCaption(caption);
-        addMouseListener(this);
         setMovable(false);
-        
-        mLabel = new Label(message);
-        mLabel->setAlignment(Graphics::LEFT);
+
+        mLabel = std::make_unique<Label>(message);
+        mLabel->setAlignment(Graphics::Left);
         mLabel->adjustSize();
 
-        mText = new TextField();
-        
-        mButtonOK = new Button(ok);
-        mButtonOK->setAlignment(Graphics::CENTER);
-        mButtonOK->addMouseListener(this);
+        mText = std::make_unique<TextField>();
+
+        mButtonOK = std::make_unique<Button>(ok);
+        mButtonOK->setAlignment(Graphics::Center);
+        mButtonOK->addActionListener(this);
         mButtonOK->adjustSize();
 
-        mButtonCancel = new Button(cancel);
-        mButtonCancel->setAlignment(Graphics::CENTER);
-        mButtonCancel->addMouseListener(this);
+        mButtonCancel = std::make_unique<Button>(cancel);
+        mButtonCancel->setAlignment(Graphics::Center);
+        mButtonCancel->addActionListener(this);
         mButtonCancel->adjustSize();
-        
+
         // Look-and-feel: make both buttons the same width
-        if(mButtonCancel->getWidth() > mButtonOK->getWidth())
+        if (mButtonCancel->getWidth() > mButtonOK->getWidth())
         {
             mButtonOK->setWidth(mButtonCancel->getWidth());
         }
@@ -100,26 +101,30 @@ namespace gcn
         {
             mButtonCancel->setWidth(mButtonOK->getWidth());
         }
-        
-        setHeight((int)getTitleBarHeight() + mLabel->getHeight() + mText->getHeight() + 6 * mPadding + mButtonOK->getHeight() + 2 * getBorderSize());
-        setWidth(mLabel->getWidth() + 2 * mPadding + 2 * getBorderSize());
-        if(2 * mButtonOK->getWidth() + 4 * mPadding + 2 * getBorderSize() > getWidth()) 
+
+        setHeight((int) getTitleBarHeight() + mLabel->getHeight() + mText->getHeight()
+                  + 6 * mPadding + mButtonOK->getHeight() + 2 * getFrameSize());
+        setWidth(mLabel->getWidth() + 2 * mPadding + 2 * getFrameSize());
+        if (2 * mButtonOK->getWidth() + 4 * mPadding + 2 * getFrameSize() > getWidth())
         {
-            setWidth(2 * mButtonOK->getWidth() + 4*mPadding + 2 * getBorderSize());
+            setWidth(2 * mButtonOK->getWidth() + 4 * mPadding + 2 * getFrameSize());
         }
-        mText->setWidth(getWidth() - 2 * getBorderSize() - 5 * mPadding);
-        
-        this->add(mLabel, (getWidth() - mLabel->getWidth())/2 - mPadding, mPadding);
-        this->add(mText, 2*mPadding, 2 * mPadding + mLabel->getHeight());
-        int yButtons = getHeight() - (int)getTitleBarHeight() - getBorderSize() - 2*mPadding - mButtonOK->getHeight();
-        this->add(mButtonOK, (getWidth() - 2 * mButtonOK->getWidth())/4, yButtons);
-        this->add(mButtonCancel, getWidth() - 2*getBorderSize() - mButtonOK->getWidth() - mPadding, yButtons);
-        
+        mText->setWidth(getWidth() - 2 * getFrameSize() - 5 * mPadding);
+
+        this->add(mLabel.get(), (getWidth() - mLabel->getWidth()) / 2 - mPadding, mPadding);
+        this->add(mText.get(), 2 * mPadding, 2 * mPadding + mLabel->getHeight());
+        int yButtons = getHeight() - (int) getTitleBarHeight() - getFrameSize() - 2 * mPadding
+                     - mButtonOK->getHeight();
+        this->add(mButtonOK.get(), (getWidth() - 2 * mButtonOK->getWidth()) / 4, yButtons);
+        this->add(mButtonCancel.get(),
+                  getWidth() - 2 * getFrameSize() - mButtonOK->getWidth() - mPadding,
+                  yButtons);
+
         try
         {
             requestModalFocus();
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             // Not having modal focus is not critical
         }
@@ -128,205 +133,37 @@ namespace gcn
     InputBox::~InputBox()
     {
         releaseModalFocus();
-        
-        delete mLabel;
-        delete mButtonOK;
-        delete mButtonCancel;
-        delete mText;
     }
 
-    void InputBox::draw(Graphics* graphics)
+    void InputBox::action(const ActionEvent& actionEvent)
     {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        //int width = getWidth() + getBorderSize() * 2 - 1;
-        //int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        Rectangle d = getChildrenArea();
-
-        // Fill the background around the content
-        graphics->setColor(faceColor);
-        // Fill top
-        graphics->fillRectangle(Rectangle(0,0,getWidth(),d.y - 1));
-        // Fill left
-        graphics->fillRectangle(Rectangle(0,d.y - 1, d.x - 1, getHeight() - d.y + 1));
-        // Fill right
-        graphics->fillRectangle(Rectangle(d.x + d.width + 1,
-                                          d.y - 1,
-                                          getWidth() - d.x - d.width - 1,
-                                          getHeight() - d.y + 1));
-        // Fill bottom
-        graphics->fillRectangle(Rectangle(d.x - 1,
-                                          d.y + d.height + 1,
-                                          d.width + 2,
-                                          getHeight() - d.height - d.y - 1));
-
-        if (isOpaque())
+        if (actionEvent.getSource() == mButtonOK.get())
         {
-            graphics->fillRectangle(d);
+            mClickedButton = 0;
+            distributeActionEvent();
         }
-
-        // Construct a rectangle one pixel bigger than the content
-        d.x -= 1;
-        d.y -= 1;
-        d.width += 2;
-        d.height += 2;
-
-        // Draw a border around the content
-        graphics->setColor(shadowColor);
-        // Top line
-        graphics->drawLine(d.x,
-                           d.y,
-                           d.x + d.width - 2,
-                           d.y);
-
-        // Left line
-        graphics->drawLine(d.x,
-                           d.y + 1,
-                           d.x,
-                           d.y + d.height - 1);
-
-        graphics->setColor(highlightColor);
-        // Right line
-        graphics->drawLine(d.x + d.width - 1,
-                           d.y,
-                           d.x + d.width - 1,
-                           d.y + d.height - 2);
-        // Bottom line
-        graphics->drawLine(d.x + 1,
-                           d.y + d.height - 1,
-                           d.x + d.width - 1,
-                           d.y + d.height - 1);
-
-        drawChildren(graphics);
-
-        int textX;
-        int textY;
-
-        textY = ((int)getTitleBarHeight() - getFont()->getHeight()) / 2;
-
-        switch (getAlignment())
+        else if (actionEvent.getSource() == mButtonCancel.get())
         {
-          case Graphics::LEFT:
-              textX = 4;
-              break;
-          case Graphics::CENTER:
-              textX = getWidth() / 2;
-              break;
-          case Graphics::RIGHT:
-              textX = getWidth() - 4;
-              break;
-          default:
-              throw GCN_EXCEPTION("Unknown alignment.");
-        }
-
-        graphics->setColor(getForegroundColor());
-        graphics->setFont(getFont());
-        graphics->pushClipArea(Rectangle(0, 0, getWidth(), getTitleBarHeight() - 1));
-        graphics->drawText(getCaption(), textX, textY, getAlignment());
-        graphics->popClipArea();
-    }
-
-    void InputBox::drawBorder(Graphics* graphics)
-    {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
-        {
-            graphics->setColor(highlightColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
-            graphics->setColor(shadowColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
+            mClickedButton = 1;
+            setVisible(false);
+            distributeActionEvent();
         }
     }
 
-    void InputBox::mousePressed(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.getSource() != this)
-        {
-            return;
-        }
-        
-        if (getParent() != NULL)
-        {
-            getParent()->moveToTop(this);
-        }
-
-        mDragOffsetX = mouseEvent.getX();
-        mDragOffsetY = mouseEvent.getY();
-        
-        mIsMoving = mouseEvent.getY() <= (int)mTitleBarHeight;
-    }
-
-    void InputBox::mouseReleased(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.getSource() != this)
-        {           
-            if(mouseEvent.getSource() == mButtonOK)
-            {
-                mClickedButton = 0;
-                generateAction();
-            }
-            if(mouseEvent.getSource() == mButtonCancel)
-            {
-                mClickedButton = 1;
-                setVisible(false);
-                generateAction();
-            }
-         
-        }
-        else
-        {
-            mIsMoving = false;
-        }
-    }
-
-    void InputBox::mouseDragged(MouseEvent& mouseEvent)
-    {
-        if (mouseEvent.isConsumed() || mouseEvent.getSource() != this)
-        {
-            return;
-        }
-        
-        if (isMovable() && mIsMoving)
-        {
-            setPosition(mouseEvent.getX() - mDragOffsetX + getX(),
-                        mouseEvent.getY() - mDragOffsetY + getY());
-        }
-
-        mouseEvent.consume();
-    }
-    
     int InputBox::getClickedButton() const
     {
         return mClickedButton;
     }
-    
+
     std::string InputBox::getText() const
     {
         return mText->getText();
     }
-    
+
     void InputBox::addToContainer(Container* container)
     {
         int x = container->getWidth() - getWidth();
         int y = container->getHeight() - getHeight();
-        container->add(this, x/2, y/2);
+        container->add(this, x / 2, y / 2);
     }
-}
+} // namespace gcn

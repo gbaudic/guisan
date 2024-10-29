@@ -50,31 +50,24 @@ class FFContainer : public gcn::Container
 {
 public:
     FFContainer();
-    ~FFContainer();
-    void logic();
-    void draw(gcn::Graphics* graphics);
+    ~FFContainer() override;
+    void logic() override;
+    void draw(gcn::Graphics* graphics) override;
+    gcn::Rectangle getChildrenArea() override;
+
     void setVisible(bool visible);
     void setWidth(int width);
     void setHeight(int width);
     void setDimension(const gcn::Rectangle &dimension);
     void slideContentTo(int y);
-    gcn::Rectangle getChildrenArea();
 
 private:
-    int mRealWidth;
-    int mRealHeight;
-    int mSlideTarget;
-    int mCurrentSlide;
-    int mTime;
-    bool mShow;
-
-    static int mInstances;
-    static gcn::Image *mCornerUL;
-    static gcn::Image *mCornerUR;
-    static gcn::Image *mCornerDL;
-    static gcn::Image *mCornerDR;
-    static gcn::Image *mHorizontal;
-    static gcn::Image *mVertical;
+    int mRealWidth = 0;
+    int mRealHeight = 0;
+    int mSlideTarget = 0;
+    int mCurrentSlide = 0;
+    int mTime = -1;
+    bool mShow = true;
 };
 
 #endif

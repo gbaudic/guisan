@@ -65,26 +65,30 @@
 
 namespace gcn
 {
-    ImageButton::ImageButton(const std::string& filename)
+    ImageButton::ImageButton()
     {
-        mImage = Image::load(filename);
-        mInternalImage = true;
-        setWidth(mImage->getWidth() + mImage->getWidth() / 2);
-        setHeight(mImage->getHeight() + mImage->getHeight() / 2);
+        setWidth(0);
+        setHeight(0);
     }
 
-    ImageButton::ImageButton(Image* image)
-    {
-        mImage = image;
-        mInternalImage = false;
-        setWidth(mImage->getWidth() + mImage->getWidth() / 2);
-        setHeight(mImage->getHeight() + mImage->getHeight() / 2);
-    }
+    ImageButton::ImageButton(const std::string& filename) :
+        ImageButton({Image::load(filename), std::default_delete<const Image>{}})
+    {}
 
-    ImageButton::~ImageButton()
+    ImageButton::ImageButton(const Image* image) : ImageButton({image, [](const auto*) {}})
+    {}
+
+    ImageButton::ImageButton(std::shared_ptr<const Image> image) : mImage(std::move(image))
     {
-        if (mInternalImage)
-            delete mImage;
+        if (mImage)
+        {
+            setWidth(mImage->getWidth() + mImage->getWidth() / 2);
+            setHeight(mImage->getHeight() + mImage->getHeight() / 2);
+        }
+        else
+        {
+            setSize(0, 0);
+        }
     }
 
     void ImageButton::adjustSize()
@@ -93,24 +97,26 @@ namespace gcn
         setHeight(mImage->getHeight());
     }
 
-    void ImageButton::setImage(Image* image)
+    void ImageButton::setImage(const Image* image)
     {
-        if (mInternalImage)
-            delete mImage;
-        mImage = image;
-        mInternalImage = false;
+        setImage({image, [](const auto*) {}});
     }
 
-    Image* ImageButton::getImage()
+    void ImageButton::setImage(std::shared_ptr<const Image> image)
     {
-        return mImage;
+        mImage = std::move(image);
+    }
+
+    const Image* ImageButton::getImage() const
+    {
+        return mImage.get();
     }
 
     void ImageButton::draw(Graphics* graphics)
     {
         gcn::Color faceColor = getBaseColor();
         gcn::Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
+        const int alpha = getBaseColor().a;
 
         if (isPressed())
         {
@@ -130,7 +136,7 @@ namespace gcn
         }
 
         graphics->setColor(faceColor);
-        graphics->fillRectangle(Rectangle(1, 1, getDimension().width-1, getHeight() - 1));
+        graphics->fillRectangle(Rectangle(1, 1, getDimension().width - 1, getHeight() - 1));
 
         graphics->setColor(highlightColor);
         graphics->drawLine(0, 0, getWidth() - 1, 0);
@@ -140,25 +146,31 @@ namespace gcn
         graphics->drawLine(getWidth() - 1, 1, getWidth() - 1, getHeight() - 1);
         graphics->drawLine(1, getHeight() - 1, getWidth() - 1, getHeight() - 1);
 
-        graphics->setColor(getForegroundColor());
+        if (isEnabled())
+            graphics->setColor(getForegroundColor());
+        else
+            graphics->setColor(Color(128, 128, 128));
 
-        int textX = getWidth() / 2 - mImage->getWidth() / 2;
-        int textY = getHeight() / 2 - mImage->getHeight() / 2;
+        const int textX = getWidth() / 2 - (mImage ? mImage->getWidth() : 0) / 2;
+        const int textY = getHeight() / 2 - (mImage ? mImage->getHeight() : 0) / 2;
 
         if (isPressed())
         {
-            graphics->drawImage(mImage, textX + 1, textY + 1);
+            if (mImage)
+            {
+                graphics->drawImage(mImage.get(), textX + 1, textY + 1);
+            }
         }
         else
         {
-            graphics->drawImage(mImage, textX, textY);
-           
+            if (mImage)
+            {
+                graphics->drawImage(mImage.get(), textX, textY);
+            }
+
             if (isFocused())
             {
-                graphics->drawRectangle(Rectangle(2, 
-                                                  2, 
-                                                  getWidth() - 4,
-                                                  getHeight() - 4));
+                graphics->drawRectangle(Rectangle(2, 2,  getWidth() - 4, getHeight() - 4));
             }
         }
     }

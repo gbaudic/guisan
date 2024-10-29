@@ -61,6 +61,8 @@
 #include <guisan/actionlistener.hpp>
 #include <guisan/cliprectangle.hpp>
 #include <guisan/color.hpp>
+#include <guisan/containerevent.hpp>
+#include <guisan/containerlistener.hpp>
 #include <guisan/deathlistener.hpp>
 #include <guisan/event.hpp>
 #include <guisan/exception.hpp>
@@ -115,13 +117,11 @@
 
 #include "guisan/platform.hpp"
 
-class Widget;
-
 extern "C"
 {
     /**
      * Gets the the version of Guisan. As it is a C function
-     * it can be used to check for Guichan with autotools.
+     * it can be used to check for Guisan with autotools.
      *
      * @return the version of Guisan.
      */

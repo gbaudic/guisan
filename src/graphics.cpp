@@ -67,13 +67,16 @@
 namespace gcn
 {
 
-    Graphics::Graphics()
-    {
-        mFont = NULL;
-    }
-
     bool Graphics::pushClipArea(Rectangle area)
     {
+        // Ignore area with a negative width or height
+        // by simple pushing an empty clip area to the stack.
+        if (area.isEmpty())
+        {
+            ClipRectangle carea;
+            mClipStack.push(carea);
+            return true;
+        }
         if (mClipStack.empty())
         {
             ClipRectangle carea;
@@ -81,11 +84,13 @@ namespace gcn
             carea.y = area.y;
             carea.width = area.width;
             carea.height = area.height;
+            carea.xOffset = area.x;
+            carea.yOffset = area.y;
             mClipStack.push(carea);
             return true;
         }
 
-        ClipRectangle top = mClipStack.top();
+        const ClipRectangle& top = mClipStack.top();
         ClipRectangle carea;
         carea = area;
         carea.xOffset = top.xOffset + carea.x;
@@ -93,37 +98,15 @@ namespace gcn
         carea.x += top.xOffset;
         carea.y += top.yOffset;
 
-        // Clamp the pushed clip rectangle.
-        if (carea.x < top.x)
-        {
-            carea.x = top.x; 
-        }
-        
-        if (carea.y < top.y)
-        {
-            carea.y = top.y;            
-        }
-                
-        if (carea.width > top.width)
-        {
-            carea.width = top.width;                
-        }
-        
-        if (carea.height > top.height)
-        {
-            carea.height = top.height;             
-        }
-
-        bool result = carea.intersect(top);
+        carea = top.intersection(carea);
 
         mClipStack.push(carea);
 
-        return result;
+        return !carea.isEmpty();
     }
 
     void Graphics::popClipArea()
     {
-
         if (mClipStack.empty())
         {
             throw GCN_EXCEPTION("Tried to pop clip area from empty stack.");
@@ -153,26 +136,26 @@ namespace gcn
     }
 
     void Graphics::drawText(const std::string& text, int x, int y,
-                            unsigned int alignment)
+                            Alignment alignment, bool enabled)
     {
-        if (mFont == NULL)
+        if (mFont == nullptr)
         {
             throw GCN_EXCEPTION("No font set.");
         }
 
         switch (alignment)
         {
-          case LEFT:
-              mFont->drawString(this, text, x, y);
-              break;
-          case CENTER:
-              mFont->drawString(this, text, x - mFont->getWidth(text) / 2, y);
-              break;
-          case RIGHT:
-              mFont->drawString(this, text, x - mFont->getWidth(text), y);
-              break;
-          default:
-              throw GCN_EXCEPTION("Unknown alignment.");
+        case Left:
+            mFont->drawString(this, text, x, y, enabled);
+            break;
+        case Center:
+            mFont->drawString(this, text, x - mFont->getWidth(text) / 2, y, enabled);
+            break;
+        case Right:
+            mFont->drawString(this, text, x - mFont->getWidth(text), y, enabled);
+            break;
+        default:
+            throw GCN_EXCEPTION("Unknown alignment.");
         }
     }
 }

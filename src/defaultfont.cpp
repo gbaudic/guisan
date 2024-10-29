@@ -79,12 +79,12 @@ namespace gcn
 
     int DefaultFont::drawGlyph(Graphics* graphics, unsigned char glyph, int x, int y)
     {
-        graphics->drawRectangle( Rectangle(x, y, 8, 8));
+        graphics->drawRectangle(Rectangle(x, y, 8, 8));
 
         return 8;
     }
 
-    void DefaultFont::drawString(Graphics* graphics, const std::string& text, int x, int y)
+    void DefaultFont::drawString(Graphics* graphics, const std::string& text, int x, int y, bool enabled)
     {
         unsigned int i;
 
@@ -95,7 +95,7 @@ namespace gcn
         }
     }
 
-    int DefaultFont::getStringIndexAt(const std::string& text, int x)
+    int DefaultFont::getStringIndexAt(const std::string& text, int x) const
     {
         if (x > (int)text.size() * 8)
         {

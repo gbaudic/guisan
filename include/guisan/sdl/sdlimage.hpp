@@ -83,12 +83,12 @@ namespace gcn
          * @param autoFree true if the surface should automatically be deleted.
          * @param renderer renderer object to create the texture (last parameter to avoid breaking stuff)
          */
-        SDLImage(SDL_Surface* surface, bool autoFree, SDL_Renderer* renderer = NULL);
+        SDLImage(SDL_Surface* surface, bool autoFree, SDL_Renderer* renderer = nullptr);
 
         /**
          * Destructor.
          */
-        virtual ~SDLImage();
+        ~SDLImage() override;
 
         /**
          * Gets the SDL surface for the image.
@@ -96,33 +96,31 @@ namespace gcn
          * @return the SDL surface for the image.
          */
         virtual SDL_Surface* getSurface() const;
-		
-		/**
-		 * Gets the SDL texture for the image.
+
+        /**
+         * Gets the SDL texture for the image.
          *
          * @return the SDL texture for the image.
-		 */
-		virtual SDL_Texture* getTexture() const;
+         */
+        virtual SDL_Texture* getTexture() const;
 
         // Inherited from Image
 
-        virtual void free();
+        void free() override;
 
-        virtual int getWidth() const;
+        int getWidth() const override;
+        int getHeight() const override;
 
-        virtual int getHeight() const;
+        Color getPixel(int x, int y) override;
+        void putPixel(int x, int y, const Color& color) override;
 
-        virtual Color getPixel(int x, int y);
-
-        virtual void putPixel(int x, int y, const Color& color);
-
-        virtual void convertToDisplayFormat();
+        void convertToDisplayFormat() override;
 
     protected:
-        SDL_Surface* mSurface;
-        SDL_Texture* mTexture = NULL;
-        SDL_Renderer* mRenderer = NULL;
-        bool mAutoFree;
+        SDL_Surface* mSurface = nullptr;
+        SDL_Texture* mTexture = nullptr;
+        SDL_Renderer* mRenderer = nullptr;
+        bool mAutoFree = false;
     };
 }
 

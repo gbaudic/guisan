@@ -6,11 +6,11 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
+ * Copyright (c) 2004, 2005, 2006, 2007 Olof NaessÃ©n and Per Larsson
  *
  *                                                         Js_./
  * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
+ * Olof NaessÃ©n a.k.a jansem/yakslem                _asww7!uY`>  )\a//
  *                                                 _Qhm`] _f "'c  1!5m
  * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
  *                                               .)j(] .d_/ '-(  P .   S
@@ -58,39 +58,41 @@
 #define GCN_DROPDOWN_HPP
 
 #include "guisan/actionlistener.hpp"
-#include "guisan/basiccontainer.hpp"
-#include "guisan/deathlistener.hpp"
 #include "guisan/focushandler.hpp"
 #include "guisan/focuslistener.hpp"
 #include "guisan/keylistener.hpp"
-#include "guisan/listmodel.hpp"
 #include "guisan/mouselistener.hpp"
 #include "guisan/platform.hpp"
 #include "guisan/selectionlistener.hpp"
-#include "guisan/widgets/listbox.hpp"
-#include "guisan/widgets/scrollarea.hpp"
+#include "guisan/widget.hpp"
+
+#include <memory>
 
 namespace gcn
 {
+    class ListBox;
+    class ListModel;
+    class ScrollArea;
+
     /**
-     * An implementation of a drop downable list from which an item can be selected.
-     * The drop down consists of an internal ScrollArea and an internal ListBox. 
-     * The drop down also uses an internal FocusHandler to handle the focus of the 
-     * internal ScollArea and the internal ListBox. The scroll area and the list box
-     * can be passed to the drop down if a custom scroll area and or a custom list box
-     * is preferable.
+     * An implementation of a drop downable list from which an item can be
+     * selected. The drop down consists of an internal ScrollArea and an
+     * internal ListBox. The drop down also uses an internal FocusHandler to
+     * handle the focus of the internal ScollArea and the internal ListBox.
+     * The scroll area and the list box can be passed to the drop down
+     * if a custom scroll area and/or a custom list box is preferable.
      *
-     * To be able display a list the drop down uses a user provided list model. 
-     * A list model can be any class that implements the ListModel interface. 
+     * To be able display a list the drop down uses a user provided list model.
+     * A list model can be any class that implements the ListModel interface.
      *
-     * If an item is selected in the drop down a select event will be sent to all selection 
-     * listeners of the drop down. If an item is selected by using a mouse click or by using 
-     * the enter or space key an action event will be sent to all action listeners of the 
-     * drop down.
+     * If an item is selected in the drop down a select event will be sent to
+     * all selection listeners of the drop down. If an item is selected by
+     * using a mouse click or by using the enter or space key an action event
+     * will be sent to all action listeners of the drop down.
      */
     class GCN_CORE_DECLSPEC DropDown :
+        public Widget,
         public ActionListener,
-        public BasicContainer,
         public KeyListener,
         public MouseListener,
         public FocusListener,
@@ -98,21 +100,33 @@ namespace gcn
     {
     public:
         /**
-         * Contructor.
+         * Constructor.
          *
          * @param listModel the ListModel to use.
          * @param scrollArea the ScrollArea to use.
          * @param listBox the listBox to use.
          * @see ListModel, ScrollArea, ListBox.
          */
-        DropDown(ListModel *listModel = NULL,
-                 ScrollArea *scrollArea = NULL,
-                 ListBox *listBox = NULL);
+        DropDown(ListModel* listModel,
+                 ScrollArea* scrollArea,
+                 ListBox* listBox = nullptr);
+
+        /**
+         * Constructor.
+         *
+         * @param listModel the ListModel to use.
+         * @param scrollArea the ScrollArea to use.
+         * @param listBox the listBox to use.
+         * @see ListModel, ScrollArea, ListBox.
+         */
+        DropDown(ListModel* listModel = nullptr,
+                 std::shared_ptr<ScrollArea> scrollArea = nullptr,
+                 std::shared_ptr<ListBox> listBox = nullptr);
 
         /**
          * Destructor.
          */
-        virtual ~DropDown();
+        ~DropDown() override;
 
         /**
          * Gets the selected item as an index in the list model.
@@ -129,7 +143,12 @@ namespace gcn
          * @param selected the selected item as an index from the list model.
          * @see getSelected
          */
-        void setSelected(int selected);
+        void setSelected(int selected) const;
+
+        /*
+         * Clears any selected item
+         */
+        void clearSelected() const;
 
         /**
          * Sets the list model to use when displaying the list.
@@ -150,7 +169,7 @@ namespace gcn
         /**
          * Adjusts the height of the drop down to fit the height of the
          * drop down's parent's height. It's used to not make the drop down
-         * draw itself outside of it's parent if folded down.
+         * draw itself outside of its parent if folded down.
          */
         void adjustHeight();
 
@@ -172,12 +191,20 @@ namespace gcn
          */
         void removeSelectionListener(SelectionListener* selectionListener);
 
+        /*
+         * Returns the current Dropdown status
+         */
+        bool isDroppedDown() const;
 
-        // Inherited from Widget
+        /**
+         * Sets the DropDown Widget to dropped-down mode.
+         */
+        virtual void dropDown();
 
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
+        /**
+        * Sets the DropDown Widget to folded-up mode.
+        */
+        virtual void foldUp();
 
         void setBaseColor(const Color& color);
 
@@ -189,49 +216,38 @@ namespace gcn
 
         void setSelectionColor(const Color& color);
 
+        // Inherited from Widget
 
-        // Inherited from BasicContainer
-
-        virtual Rectangle getChildrenArea();
-
+        void draw(Graphics* graphics) override;
+        Rectangle getChildrenArea() override;
 
         // Inherited from FocusListener
 
-        virtual void focusLost(const Event& event);
-
+        void focusLost(const Event& event) override;
 
         // Inherited from ActionListener
 
-        virtual void action(const ActionEvent& actionEvent);
-
+        void action(const ActionEvent& actionEvent) override;
 
         // Inherited from DeathListener
 
         virtual void death(const Event& event);
 
-
         // Inherited from KeyListener
 
-        virtual void keyPressed(KeyEvent& keyEvent);
-
+        void keyPressed(KeyEvent& keyEvent) override;
 
         // Inherited from MouseListener
 
-        virtual void mousePressed(MouseEvent& mouseEvent);
+        void mousePressed(MouseEvent& mouseEvent) override;
+        void mouseReleased(MouseEvent& mouseEvent) override;
+        void mouseWheelMovedUp(MouseEvent& mouseEvent) override;
+        void mouseWheelMovedDown(MouseEvent& mouseEvent) override;
+        void mouseDragged(MouseEvent& mouseEvent) override;
 
-        virtual void mouseReleased(MouseEvent& mouseEvent);
+        // Inherited from SelectionListener
 
-        virtual void mouseWheelMovedUp(MouseEvent& mouseEvent);
-
-        virtual void mouseWheelMovedDown(MouseEvent& mouseEvent);
-
-        virtual void mouseDragged(MouseEvent& mouseEvent);
-
-
-	// Inherited from SelectionListener
-
-        virtual void valueChanged(const SelectionEvent& event);
-
+        void valueChanged(const SelectionEvent& event) override;
 
     protected:
         /**
@@ -241,17 +257,7 @@ namespace gcn
          */
         virtual void drawButton(Graphics *graphics);
 
-        /**
-         * Sets the DropDown Widget to dropped-down mode.
-         */
-        virtual void dropDown();
-
-        /**
-         * Sets the DropDown Widget to folded-up mode.
-         */
-        virtual void foldUp();
-
-        bool mDroppedDown;
+        bool mDroppedDown = false;
 
         /**
          * Distributes a value changed event to all selection listeners
@@ -261,40 +267,58 @@ namespace gcn
          */
         void distributeValueChangedEvent();
 
-        bool mPushed;
+        /**
+         * True if the drop down has been pushed with the mouse, false
+         * otherwise.
+         */
+        bool mPushed = false;
 
         /**
-         * Holds what the height is if the drop down is folded up. Used when
-         * checking if the list of the drop down was clicked or if the upper part
-         * of the drop down was clicked on a mouse click
+         * Holds what the height is if the drop down is folded up.
+         * Used when checking if the list of the drop down was clicked
+         * or if the upper part of the drop down was clicked on a mouse click.
          */
-        int mFoldedUpHeight;
-        
+        int mFoldedUpHeight = 0;
+
         /**
          * The scroll area used.
          */
-        ScrollArea* mScrollArea;
-        ListBox* mListBox;
-        FocusHandler mInternalFocusHandler;
-        bool mInternalScrollArea;
-        bool mInternalListBox;
-        bool mIsDragged;
+        std::shared_ptr<ScrollArea> mScrollArea;
+        std::shared_ptr<ListBox> mListBox;
 
         /**
-         * Typedef.
+         * The internal focus handler used to keep track of focus for the
+         * internal list box.
          */
+        FocusHandler mInternalFocusHandler;
+
+        /**
+         * True if an internal scroll area is used, false if a scroll area
+         * has been passed to the drop down which the drop down should not
+         * deleted in it's destructor.
+         */
+        bool mInternalScrollArea = false;
+
+        /**
+         * True if an internal list box is used, false if a list box
+         * has been passed to the drop down which the drop down should not
+         * deleted in it's destructor.
+         */
+        bool mInternalListBox = false;
+
+        /**
+         * True if the drop down is dragged.
+         */
+        bool mIsDragged = false;
+
         typedef std::list<SelectionListener*> SelectionListenerList;
-        
+
         /**
          * The selection listener's of the drop down.
          */
         SelectionListenerList mSelectionListeners;
-        
-        /**
-         * Typedef.
-         */
-        typedef SelectionListenerList::iterator SelectionListenerIterator;
 
+        typedef SelectionListenerList::iterator SelectionListenerIterator;
     };
 }
 

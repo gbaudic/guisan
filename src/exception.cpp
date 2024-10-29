@@ -62,34 +62,19 @@
 
 namespace gcn
 {
-    Exception::Exception()
-        : mFunction("?"),
-          mMessage(""),
-          mFilename("?"),
-          mLine(0)
-    {
 
-    }
+    Exception::Exception(std::string message) : mMessage(std::move(message))
+    {}
 
-    Exception::Exception(const std::string& message)
-        : mFunction("?"),
-          mMessage(message),
-          mFilename("?"),
-          mLine(0)
-    {
-
-    }
-
-    Exception::Exception(const std::string& message,
-                         const std::string& function,
-                         const std::string& filename,
-                         int line)
-                         : mFunction(function),
-                           mMessage(message),
-                           mFilename(filename),
+    Exception::Exception(std::string message,
+                         std::string function,
+                         std::string filename,
+                         unsigned int line)
+                         : mFunction(std::move(function)),
+                           mMessage(std::move(message)),
+                           mFilename(std::move(filename)),
                            mLine(line)
     {
-
     }
 
     const std::string& Exception::getFunction() const
@@ -107,7 +92,7 @@ namespace gcn
         return mFilename;
     }
 
-    int Exception::getLine() const
+    unsigned int Exception::getLine() const
     {
         return mLine;
     }

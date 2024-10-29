@@ -62,12 +62,15 @@
 #include "guisan/platform.hpp"
 #include "guisan/widget.hpp"
 
+#include <memory>
 #include <string>
 
 namespace gcn
 {
+    class Text;
+
     /**
-     * A text field in which you can write or display a line of text.
+     * An implementation of a text field where a user can enter a line of text.
      */
     class GCN_CORE_DECLSPEC TextField:
         public Widget,
@@ -76,21 +79,28 @@ namespace gcn
     {
     public:
         /**
-         * Default constructor.
+         * Constructor.
          */
         TextField();
 
         /**
-         * Constructor. Initializes the textfield with a given string.
+         * Constructor. The text field will be automatically resized
+         * to fit the text.
          *
-         * @param text the initial text.
+         * @param text The default text of the text field.
          */
         TextField(const std::string& text);
 
         /**
-         * Sets the text.
+         * Destructor.
+         */
+        ~TextField() override;
+
+        /**
+         * Sets the text of the text field.
          *
-         * @param text the new text in the TextField.
+         * @param text The text of the text field.
+         * @see getText
          */
         void setText(const std::string& text);
         
@@ -100,15 +110,75 @@ namespace gcn
         void clear();
 
         /**
-         * Gets the text.
+         * Gets the text of the text field.
          *
-         * @return the text of the TextField.
+         * @return The text of the text field.
+         * @see setText
          */
-        const std::string& getText() const;
+        std::string getText() const;
 
         /**
-         * Draws the caret (the little marker in the text that shows where the
-         * letters you type will appear). Easily overloaded if you want to
+         * Adjusts the size of the text field to fit the text.
+         */
+        void adjustSize();
+
+        /**
+         * Adjusts the height of the text field to fit caption.
+         */
+        void adjustHeight();
+
+        /**
+         * Checks if the text field is editable.
+         *
+         * @return True it the text field is editable, false otherwise.
+         * @see setEditable
+         */
+        bool isEditable() const { return mEditable; }
+
+        /**
+         * Sets the text field to be editable or not. A text field is editable
+         * by default.
+         *
+         * @param editable True if the text field should be editable, false
+         *                 otherwise.
+         */
+        void setEditable(bool editable) { mEditable = editable; }
+
+        /**
+         * Sets the caret position. As there is only one line of text
+         * in a text field the position is the caret's x coordinate.
+         *
+         * @param position The caret position.
+         * @see getCaretPosition
+         */
+        void setCaretPosition(unsigned int position);
+
+        /**
+         * Gets the caret position. As there is only one line of text
+         * in a text field the position is the caret's x coordinate.
+         *
+         * @return The caret position.
+         * @see setCaretPosition
+         */
+        unsigned int getCaretPosition() const;
+
+        // Inherited from Widget
+
+        void draw(Graphics* graphics) override;
+        void fontChanged() override;
+
+        // Inherited from MouseListener
+
+        void mousePressed(MouseEvent& mouseEvent) override;
+        void mouseDragged(MouseEvent& mouseEvent) override;
+
+        // Inherited from KeyListener
+
+        void keyPressed(KeyEvent& keyEvent) override;
+
+    protected:
+        /**
+         * Draws the caret. Overloaded this method if you want to
          * change the style of the caret.
          *
          * @param graphics the Graphics object to draw with.
@@ -117,63 +187,28 @@ namespace gcn
         virtual void drawCaret(Graphics* graphics, int x);
 
         /**
-         * Adjusts the size of the TextField to fit the font size. The
-         * constructor taking a string uses this function to initialize the
-         * size of the TextField.
-         */
-        void adjustSize();
-
-        /**
-         * Adjusts the height of the text field to fit the font size. The
-         * height of the TextField is initialized with this function by the
-         * constructors.
-         */
-        void adjustHeight();
-
-        /**
-         * Sets the caret position.
-         *
-         * @param position the caret position.
-         */
-        void setCaretPosition(unsigned int position);
-
-        /**
-         * Gets the caret position.
-         *
-         * @return the caret position.
-         */
-        unsigned int getCaretPosition() const;
-
-
-        // Inherited from Widget
-
-        virtual void fontChanged();
-
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
-
-
-        // Inherited from MouseListener
-
-        virtual void mousePressed(MouseEvent& mouseEvent);
-
-        virtual void mouseDragged(MouseEvent& mouseEvent);
-        
-
-        // Inherited from KeyListener
-
-        virtual void keyPressed(KeyEvent& keyEvent);
-
-    protected:
-        /**
          * Scrolls the text horizontally so that the caret shows if needed.
+         * The method is used any time a user types in the text field so the
+         * caret always will be shown.
          */
         void fixScroll();
 
-        std::string mText;
-        unsigned int mCaretPosition;
-        int mXScroll;
+        /**
+         * True if the text field is editable, false otherwise.
+         */
+        bool mEditable = true;
+
+        /**
+         * Holds the text of the text field.
+         */
+        std::unique_ptr<Text> mText;
+
+        /**
+         * Holds the amount scrolled in x. If a user types more characters than
+         * the text field can display, due to the text field being to small, the
+         * text needs to scroll in order to show the last type character.
+         */
+        int mXScroll = 0;
     };
 }
 

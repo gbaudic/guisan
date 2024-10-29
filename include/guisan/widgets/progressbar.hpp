@@ -59,6 +59,7 @@
 
 #include <string>
 
+#include "guisan/graphics.hpp"
 #include "guisan/platform.hpp"
 #include "guisan/widget.hpp"
 #include "guisan/widgets/label.hpp"
@@ -117,20 +118,20 @@ namespace gcn
          * Sets the alignment for the caption. The alignment is relative
          * to the center of the label.
          *
-         * @param alignemnt Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
+         * @param alignemnt The alignment of the caption.
          * @see getAlignment, Graphics
          */
-        void setAlignment(unsigned int alignment);
+        void setAlignment(Graphics::Alignment alignment);
 
         /**
          * Gets the alignment for the caption. The alignment is relative to
          * the center of the label.
          *
-         * @return alignment of caption. Graphics::LEFT, Graphics::CENTER or Graphics::RIGHT.
+         * @return The alignment of the caption.
          * @see setAlignment, Graphics
          */
-        unsigned int getAlignment() const;
-        
+        Graphics::Alignment getAlignment() const;
+
         /**
          * Sets the minimum value.
          *
@@ -180,16 +181,13 @@ namespace gcn
         unsigned int getValue() const;
         
         /**
-         * Adjusts the size of the widget. 
+         * Adjusts the size of the widget.
          */
         void adjustSize();
 
-
         // Inherited from Widget
 
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
+        void draw(Graphics* graphics) override;
 
     protected:
         /**
@@ -200,11 +198,11 @@ namespace gcn
         /**
          * Holds the alignment of the caption.
          */
-        unsigned int mAlignment;
-        
-        unsigned int mStart; //! minimum value of the progressbar
-        unsigned int mEnd;   //! maximum value of the progressbar
-        unsigned int mValue; //! current value of the progressbar
+        Graphics::Alignment mAlignment = Graphics::Alignment::Center;
+
+        unsigned int mStart = 0; //! minimum value of the progressbar
+        unsigned int mEnd = 100; //! maximum value of the progressbar
+        unsigned int mValue = 0; //! current value of the progressbar
     };
 }
 

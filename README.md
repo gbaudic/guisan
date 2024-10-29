@@ -4,8 +4,9 @@
 
 ## An SDL2 GUI construction toolkit
 
-[![Build Status](https://travis-ci.org/gbaudic/guisan.svg?branch=master)](https://travis-ci.org/gbaudic/guisan)
+[![Build Status](https://github.com/kallisti5/guisan/actions/workflows/build.yaml/badge.svg)](https://github.com/kallisti5/guisan/actions)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/2qv4w2pxgc4lqtw5?svg=true)](https://ci.appveyor.com/project/gbaudic/guisan)
+[<img src="https://ko-fi.com/img/githubbutton_sm.svg" height="20px" />](https://ko-fi.com/Q5Q2QF1PE)
 
 Check out the online [Doxygen documentation](https://codedocs.xyz/gbaudic/guisan).
 
@@ -34,6 +35,10 @@ Check the wiki of this repo for a list of available widgets, some general advice
 * SDL2_ttf
 * SDL2_mixer (for the demo)
 
-## License
+## Example
+
+![openglwidget](examples/opengldemo.png)
+
+## License:
 
 Released under the BSD license. See COPYING for more details. 

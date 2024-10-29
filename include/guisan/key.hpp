@@ -71,73 +71,102 @@ namespace gcn
         /**
          * Constructor.
          *
-         * @param value the ascii or enum value for the key.
+         * @param value The ascii or enum value for the key.
          */
         Key(int value = 0);
 
         /**
-         * Checks whether a key is a character.
+         * Checks if a key is a character.
          *
-         * @return true if the key is a letter, number or whitespace.
+         * @return True if the key is a letter, number or whitespace,
+         *         false otherwise.
          */
         bool isCharacter() const;
 
         /**
-         * Checks whether a key is a number.
+         * Checks if a key is a number.
          *
-         * @return true if the key is a number (0-9).
+         * @return True if the key is a number (0-9),
+         *         false otherwise.
          */
         bool isNumber() const;
 
         /**
-         * Checks whether a key is a letter.
+         * Checks if a key is a letter.
          *
-         * @return true if the key is a letter (a-z,A-Z).
+         * @return True if the key is a letter (a-z,A-Z),
+         *         false otherwise.
          */
         bool isLetter() const;
 
         /**
-         * Gets the value of the key. If an ascii value exists it will be
-         * returned. Otherwise an enum value will be returned.
+         * Checks if a key is printable.
          *
-         * @return the value of the key.
+         * @return True if the key is a printable,
+         *         false otherwise.
+         */
+        bool isPrintable() const;
+
+        /**
+         * Gets the value of the key. If an ascii value exists it
+         * will be returned. Otherwise an enum value will be returned.
+         *
+         * @return The value of the key.
          */
         int getValue() const;
 
         /**
          *  Gets the char value of the key if available.
-         *  
-         *  @return the char value of the key, the null character otherwise
+         *
+         *  @return The char value of the key, the null character otherwise
          */
         char getChar() const;
+
+
+        /**
+         * Compares two keys.
+         * 
+         * @param key The key to compare this key with.
+         * @return True if the keys are equal, false otherwise.
+         */
+        bool operator==(const Key& key) const;
+
+        /**
+         * Compares two keys.
+         * 
+         * @param key The key to compare this key with.
+         * @return True if the keys are not equal, false otherwise.
+         */
+        bool operator!=(const Key& key) const;
 
         /**
          * An enum with key values.
          */
         enum
         {
-            SPACE              = ' ',
-            TAB                = '\t',
-            ENTER              = '\n',
-            LEFT_ALT           = 1000,
-            RIGHT_ALT,
-            LEFT_SHIFT,
-            RIGHT_SHIFT,
-            LEFT_CONTROL,
-            RIGHT_CONTROL,
-            LEFT_META,
-            RIGHT_META,
-            LEFT_SUPER,
-            RIGHT_SUPER,
-            INSERT,
-            HOME,
-            PAGE_UP,
-            DELETE,
-            END,
-            PAGE_DOWN,
-            ESCAPE,
-            CAPS_LOCK,
-            BACKSPACE,
+            Space              = ' ',
+            Tab                = '\t',
+            Enter              = '\n',
+            // Negative values, to avoid conflicts with higher character codes
+            LeftAlt           = -1000,
+            RightAlt,
+            LeftShift,
+            RightShift,
+            LeftControl,
+            RightControl,
+            LeftMeta,
+            RightMeta,
+            LeftSuper,
+            RightSuper,
+            Insert,
+            Home,
+            PageUp,
+            Delete,
+            End,
+            PageDown,
+            Escape,
+            CapsLock,
+            Backspace,
             F1,
             F2,
             F3,
@@ -153,18 +182,22 @@ namespace gcn
             F13,
             F14,
             F15,
-            PRINT_SCREEN,
-            SCROLL_LOCK,
-            PAUSE,
-            NUM_LOCK,
-            ALT_GR,
-            LEFT,
-            RIGHT,
-            UP,
-            DOWN
+            PrintScreen,
+            ScrollLock,
+            Pause,
+            NumLock,
+            AltGr,
+            Left,
+            Right,
+            Up,
+            Down
         };
 
     protected:
+        /**
+         * Holds the value of the key. It may be an ascii value
+         * or an enum value.
+         */
         int mValue;
     };
 }

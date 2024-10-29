@@ -67,28 +67,27 @@
 
 namespace gcn
 {
-    ImageTextButton::ImageTextButton(const std::string& filename, std::string& caption) : ImageButton(filename)
+    ImageTextButton::ImageTextButton(const std::string& filename, const std::string& caption) :
+        ImageButton(filename)
     {
         setCaption(caption);
         setWidth(mImage->getWidth() + mImage->getWidth() / 2);
         setHeight(mImage->getHeight() + mImage->getHeight() / 2);
-        mAlignment = ImageTextButton::BOTTOM;
     }
 
-    ImageTextButton::ImageTextButton(Image* image, std::string& caption) : ImageButton(image)
+    ImageTextButton::ImageTextButton(const Image* image, const std::string& caption) :
+        ImageTextButton({image, [](const auto*) {}}, caption)
+    {}
+
+    ImageTextButton::ImageTextButton(std::shared_ptr<const Image> image,
+                                     const std::string& caption) :
+        ImageButton(std::move(image))
     {
         setCaption(caption);
         setWidth(mImage->getWidth() + mImage->getWidth() / 2);
         setHeight(mImage->getHeight() + mImage->getHeight() / 2);
-        mAlignment = ImageTextButton::BOTTOM;
     }
 
-    ImageTextButton::~ImageTextButton()
-    {
-        if (mInternalImage)
-            delete mImage;
-    }
-    
     void ImageTextButton::adjustSize()
     {
         switch(getAlignment())
@@ -113,19 +112,6 @@ namespace gcn
             default:
               throw GCN_EXCEPTION("Unknown alignment.");
         }
-    }
-
-    void ImageTextButton::setImage(Image* image)
-    {
-        if (mInternalImage)
-            delete mImage;
-        mImage = image;
-        mInternalImage = false;
-    }
-
-    Image* ImageTextButton::getImage()
-    {
-        return mImage;
     }
 
     void ImageTextButton::draw(Graphics* graphics)
@@ -162,7 +148,10 @@ namespace gcn
         graphics->drawLine(getWidth() - 1, 1, getWidth() - 1, getHeight() - 1);
         graphics->drawLine(1, getHeight() - 1, getWidth() - 1, getHeight() - 1);
 
-        graphics->setColor(getForegroundColor());
+        if (isEnabled())
+            graphics->setColor(getForegroundColor());
+        else
+            graphics->setColor(Color(128, 128, 128));
 
         int imageX, imageY;
         int textX, textY;
@@ -199,13 +188,13 @@ namespace gcn
 
         if (isPressed())
         {
-            graphics->drawImage(mImage, imageX + 1, imageY + 1);
-            graphics->drawText(mCaption, textX + 1, textY + 1, Graphics::LEFT);
+            graphics->drawImage(mImage.get(), imageX + 1, imageY + 1);
+            graphics->drawText(mCaption, textX + 1, textY + 1, Graphics::Left, isEnabled());
         }
         else
         {
-            graphics->drawImage(mImage, imageX, imageY);
-            graphics->drawText(mCaption, textX, textY, Graphics::LEFT);
+            graphics->drawImage(mImage.get(), imageX, imageY);
+            graphics->drawText(mCaption, textX, textY, Graphics::Left, isEnabled());
            
             if (isFocused())
             {

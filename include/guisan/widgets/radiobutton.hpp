@@ -68,7 +68,7 @@
 namespace gcn
 {
     /**
-     * Implementation of a radio button where a user can select or deselect
+     * An implementation of a radio button where a user can select or deselect
      * the radio button and where the status of the radio button is displayed to the user.
      * A radio button can belong to a group and when a radio button belongs to a
      * group only one radio button can be selected in the group. A radio button is
@@ -90,7 +90,8 @@ namespace gcn
         RadioButton();
 
         /**
-         * Constructor.
+         * Constructor. The radio button will be automatically resized
+         * to fit the caption.
          *
          * @param caption The caption of the radio button.
          * @param group The group the radio button should belong to.
@@ -103,7 +104,7 @@ namespace gcn
         /**
          * Destructor.
          */
-        virtual ~RadioButton();
+        ~RadioButton() override;
 
         /**
          * Checks if the radio button is selected.
@@ -163,24 +164,18 @@ namespace gcn
          */
         void adjustSize();
 
-
         // Inherited from Widget
 
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
-
+        void draw(Graphics* graphics) override;
 
         // Inherited from KeyListener
 
-        virtual void keyPressed(KeyEvent& keyEvent);
-
+        void keyPressed(KeyEvent& keyEvent) override;
 
         // Inherited from MouseListener
 
-        virtual void mouseClicked(MouseEvent& mouseEvent);
-
-        virtual void mouseDragged(MouseEvent& mouseEvent);
+        void mouseClicked(MouseEvent& mouseEvent) override;
+        void mouseDragged(MouseEvent& mouseEvent) override;
 
     protected:
         /**
@@ -191,11 +186,6 @@ namespace gcn
         virtual void drawBox(Graphics *graphics);
 
         /**
-         * True if the radio button is selected, false otherwise.
-         */
-        bool mSelected;
-
-        /**
          * Holds the caption of the radio button.
          */ 
         std::string mCaption;
@@ -204,6 +194,11 @@ namespace gcn
          * Holds the group of the radio button.
          */
         std::string mGroup;
+
+        /**
+         * True if the radio button is selected, false otherwise.
+         */
+        bool mSelected = false;
 
         /**
          * Typdef.

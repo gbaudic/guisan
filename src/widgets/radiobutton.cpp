@@ -69,20 +69,12 @@ namespace gcn
 {
     RadioButton::GroupMap RadioButton::mGroupMap;
 
-    RadioButton::RadioButton()
-    {
-        setSelected(false);
+    RadioButton::RadioButton() : RadioButton("", "", false)
+    {}
 
-        setFocusable(true);
-        addMouseListener(this);
-        addKeyListener(this);
-    }
-
-    RadioButton::RadioButton(const std::string &caption,
-                             const std::string &group,
-                             bool selected)
+    RadioButton::RadioButton(const std::string& caption, const std::string& group, bool selected) :
+        mCaption(caption)
     {
-        setCaption(caption);
         setGroup(group);
         setSelected(selected);
 
@@ -102,71 +94,34 @@ namespace gcn
     void RadioButton::draw(Graphics* graphics)
     {
         graphics->pushClipArea(Rectangle(1,
-                                         1,
-                                         getWidth() - 1,
-                                         getHeight() - 1));
+            1,
+            getWidth() - 1,
+            getHeight() - 1));
         drawBox(graphics);
         graphics->popClipArea();
 
-        
+
         graphics->setFont(getFont());
-        graphics->setColor(getForegroundColor());
+        if (isEnabled())
+            graphics->setColor(getForegroundColor());
+        else
+            graphics->setColor(Color(128, 128, 128));
 
         if (isFocused())
         {
-            int fh;
-            
-            if (getHeight()%2 == 0)
-            {
-                fh = getHeight() - 4;
-            }
-            else
-            {
-                fh = getHeight() - 3;
-            }
-
-            int hh = (fh + 1) / 2;
-        
-            graphics->drawLine(0, hh + 1, hh + 1, 0);
-            graphics->drawLine(hh + 2, 1, fh + 2, hh + 1);
-            graphics->drawLine(fh + 1, hh + 2, hh + 1, fh + 2);
-            graphics->drawLine(hh + 1, fh + 2, 1, hh + 2);            
+            graphics->drawRectangle(Rectangle(0, 0, getWidth(), getHeight()));
         }
-        
-        int h = getHeight() + getHeight() / 2;
 
-        graphics->drawText(getCaption(), h - 2, 0);
+        const int h = getHeight() + getHeight() / 2;
+
+        graphics->drawText(getCaption(), h - 2, 0, Graphics::Left, isEnabled());
     }
 
-    void RadioButton::drawBorder(Graphics* graphics)
-    {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
-        {
-            graphics->setColor(shadowColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
-            graphics->setColor(highlightColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
-        }
-    }
-
-    void RadioButton::drawBox(Graphics *graphics)
+    void RadioButton::drawBox(Graphics* graphics)
     {
         int h;
 
-        if (getHeight()%2 == 0)
+        if (getHeight() % 2 == 0)
         {
             h = getHeight() - 4;
         }
@@ -175,7 +130,7 @@ namespace gcn
             h = getHeight() - 3;
         }
 
-        int alpha = getBaseColor().a;
+        const int alpha = getBaseColor().a;
         Color faceColor = getBaseColor();
         faceColor.a = alpha;
         Color highlightColor = faceColor + 0x303030;
@@ -183,25 +138,28 @@ namespace gcn
         Color shadowColor = faceColor - 0x303030;
         shadowColor.a = alpha;
 
-        graphics->setColor(getBackgroundColor());
+        Color backCol = getBackgroundColor();
+        if (!isEnabled())
+            backCol = backCol - 0x303030;
+        graphics->setColor(backCol);
 
         int i;
-        int hh = (h + 1) / 2;
+        const int hh = (h + 1) / 2;
 
         for (i = 1; i <= hh; ++i)
         {
             graphics->drawLine(hh - i + 1,
-                               i,
-                               hh + i - 1,
-                               i);
+                i,
+                hh + i - 1,
+                i);
         }
 
         for (i = 1; i < hh; ++i)
         {
             graphics->drawLine(hh - i + 1,
-                               h - i,
-                               hh + i - 1,
-                               h - i);
+                h - i,
+                hh + i - 1,
+                h - i);
         }
 
         graphics->setColor(shadowColor);
@@ -214,7 +172,7 @@ namespace gcn
 
         graphics->setColor(getForegroundColor());
 
-        int hhh = hh - 3;
+        const int hhh = hh - 3;
         if (mSelected)
         {
             for (i = 0; i < hhh; ++i)
@@ -223,9 +181,8 @@ namespace gcn
             }
             for (i = 0; i < hhh; ++i)
             {
-                graphics->drawLine(hh - i, h - 4 - i, hh + i, h - 4 -  i);
+                graphics->drawLine(hh - i, h - 4 - i, hh + i, h - 4 - i);
             }
-
         }
     }
 
@@ -236,14 +193,11 @@ namespace gcn
 
     void RadioButton::setSelected(bool selected)
     {
-        if (selected && mGroup != "")
+        if (selected && !mGroup.empty())
         {
-            GroupIterator iter, iterEnd;
-            iterEnd = mGroupMap.upper_bound(mGroup);
+            auto range = mGroupMap.equal_range(mGroup);
 
-            for (iter = mGroupMap.lower_bound(mGroup);
-                 iter != iterEnd;
-                 iter++)
+            for (auto iter = range.first; iter != range.second; iter++)
             {
                 if (iter->second->isSelected())
                 {
@@ -255,7 +209,7 @@ namespace gcn
         mSelected = selected;
     }
 
-    const std::string &RadioButton::getCaption() const
+    const std::string& RadioButton::getCaption() const
     {
         return mCaption;
     }
@@ -267,23 +221,23 @@ namespace gcn
 
     void RadioButton::keyPressed(KeyEvent& keyEvent)
     {
-        Key key = keyEvent.getKey();
+        const Key key = keyEvent.getKey();
 
-        if (key.getValue() == Key::ENTER ||
-            key.getValue() == Key::SPACE)
+        if (key.getValue() == Key::Enter ||
+            key.getValue() == Key::Space)
         {
             setSelected(true);
-            generateAction();
+            distributeActionEvent();
             keyEvent.consume();
         }
     }
 
     void RadioButton::mouseClicked(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT)
+        if (mouseEvent.getButton() == MouseEvent::Left)
         {
             setSelected(true);
-            generateAction();
+            distributeActionEvent();
         }
     }
 
@@ -292,16 +246,13 @@ namespace gcn
         mouseEvent.consume();
     }
 
-    void RadioButton::setGroup(const std::string &group)
+    void RadioButton::setGroup(const std::string& group)
     {
-        if (mGroup != "")
+        if (!mGroup.empty())
         {
-            GroupIterator iter, iterEnd;
-            iterEnd = mGroupMap.upper_bound(mGroup);
+            auto range = mGroupMap.equal_range(mGroup);
 
-            for (iter = mGroupMap.lower_bound(mGroup);
-                 iter != iterEnd;
-                 iter++)
+            for (auto iter = range.first; iter != range.second; iter++)
             {
                 if (iter->second == this)
                 {
@@ -311,25 +262,25 @@ namespace gcn
             }
         }
 
-        if (group != "")
+        if (!group.empty())
         {
             mGroupMap.insert(
-                std::pair<std::string, RadioButton *>(group, this));
+                std::pair<std::string, RadioButton*>(group, this));
         }
 
         mGroup = group;
     }
 
-    const std::string &RadioButton::getGroup() const
+    const std::string& RadioButton::getGroup() const
     {
         return mGroup;
     }
 
     void RadioButton::adjustSize()
     {
-        int height = getFont()->getHeight();
+        const int height = getFont()->getHeight();
 
         setHeight(height);
-        setWidth(getFont()->getWidth(getCaption()) + height + height/2);
+        setWidth(getFont()->getWidth(getCaption()) + height + height / 2);
     }
 }

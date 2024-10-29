@@ -59,9 +59,10 @@
 
 #include <list>
 
-#include "guisan/basiccontainer.hpp"
+#include "guisan/containerlistener.hpp"
 #include "guisan/graphics.hpp"
 #include "guisan/platform.hpp"
+#include "guisan/widget.hpp"
 
 namespace gcn
 {
@@ -73,31 +74,31 @@ namespace gcn
      *
      * @see Gui::setTop
      */
-    class GCN_CORE_DECLSPEC Container: public BasicContainer
+    class GCN_CORE_DECLSPEC Container: public Widget
     {
     public:
 
         /**
          * Constructor. A container is opaque as default, if you want a
-         * non opaque container call setOpaque(false).
+         * non-opaque container call setOpaque(false).
          *
          * @see setOpaque, isOpaque
          */
-        Container();
+        Container() = default;
 
         /**
          * Destructor.
          */
-        virtual ~Container();
+        ~Container() override;
 
         /**
          * Sets the container to be opaque or not. If the container
-         * is opaque its background will be drawn, if it's not opaque 
+         * is opaque its background will be drawn, if it's not opaque
          * its background will not be drawn, and thus making the container
          * completely transparent.
          *
          * NOTE: This is not the same as to set visibility. A non visible
-         *       container will not draw itself nor will it draw its content.
+         *       container will not draw itself nor will it draw its content.r
          *
          * @param opaque True if the container should be opaque, false otherwise.
          * @see isOpaque
@@ -107,7 +108,7 @@ namespace gcn
         /**
          * Checks if the container is opaque or not.
          *
-         * @return true if the container is opaque, false otherwise.
+         * @return True if the container is opaque, false otherwise.
          * @see setOpaque
          */
         bool isOpaque() const;
@@ -153,24 +154,79 @@ namespace gcn
          * Finds a widget given an id.
          *
          * @param id The id to find a widget by.
-         * @return A widget with a corresponding id, NULL if no widget 
+         * @return A widget with a corresponding id, nullptr if no widget 
          *         is found.
          * @see Widget::setId
          */
         virtual Widget* findWidgetById(const std::string &id);
 
+        /**
+         * Adds a container listener to the container. When a widget is
+         * added or removed an event will be sent to all container 
+         * listeners of the container
+         *
+         * @param containerListener The container listener to add.
+         * @since 1.1.0
+         */
+        void addContainerListener(ContainerListener* containerListener);
+
+        /**
+         * Removes a container listener from the container.
+         *
+         * @param containerListener The container listener to remove.
+         * @since 1.1.0
+         */
+        void removeContainerListener(ContainerListener* containerListener);
+
+        /**
+         * Returns the children of the container.
+         *
+         * @return The children of the container.
+         */
+        const std::list<Widget*>& getChildren() const;
+
+        /**
+         * Resizes the Container's size to fit te content exactly.
+         */
+        void resizeToContent();
 
         // Inherited from Widget
 
-        virtual void draw(Graphics* graphics);
-
-        virtual void drawBorder(Graphics* graphics);
+        void draw(Graphics* graphics) override;
+        Rectangle getChildrenArea() override;
 
     protected:
         /**
+         * Distributes a widget added container event to all container listeners
+         * of the container.
+         * 
+         * @param source The source widget of the event.
+         * @since 1.1.0
+         */
+        void distributeWidgetAddedEvent(Widget* source);
+
+        /**
+         * Distributes a widget removed container event to all container listeners
+         * of the container.
+         * 
+         * @param source The source widget of the event.
+         * @since 1.1.0
+         */
+        void distributeWidgetRemovedEvent(Widget* source);
+
+        /**
          * True if the container is opaque, false otherwise.
          */
-        bool mOpaque;
+        bool mOpaque = true;
+
+        typedef std::list<ContainerListener*> ContainerListenerList;
+
+        /**
+         * The container listeners of the container.
+         */
+        ContainerListenerList mContainerListeners;
+
+        typedef ContainerListenerList::iterator ContainerListenerIterator;
     };
 }
 

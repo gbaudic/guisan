@@ -54,9 +54,9 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * For comments regarding functions please see the header file.
- */
+ /*
+  * For comments regarding functions please see the header file.
+  */
 
 #include "guisan/widgets/window.hpp"
 
@@ -67,29 +67,14 @@
 
 namespace gcn
 {
-    Window::Window()
-            :mIsMoving(false)
-    {
-        setBorderSize(1);
-        setPadding(2);
-        setTitleBarHeight(16);
-        setAlignment(Graphics::CENTER);
-        addMouseListener(this);
-        setMovable(true);
-        setOpaque(true);
-    }
+    Window::Window() : Window("")
+    {}
 
     Window::Window(const std::string& caption)
-            :mIsMoving(false)
     {
         setCaption(caption);
-        setBorderSize(1);
-        setPadding(2);
-        setTitleBarHeight(16);
-        setAlignment(Graphics::CENTER);
+        setTitleBarHeight(getFont()->getHeight() + 2);
         addMouseListener(this);
-        setMovable(true);
-        setOpaque(true);
     }
 
     Window::~Window()
@@ -126,23 +111,21 @@ namespace gcn
         return mCaption;
     }
 
-    void Window::setAlignment(unsigned int alignment)
+    void Window::setAlignment(Graphics::Alignment alignment)
     {
         mAlignment = alignment;
     }
 
-    unsigned int Window::getAlignment() const
+    Graphics::Alignment Window::getAlignment() const
     {
         return mAlignment;
     }
 
     void Window::draw(Graphics* graphics)
     {
-        Color faceColor = getBaseColor();
+        const Color& faceColor = getBaseColor();
         Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        //int width = getWidth() + getBorderSize() * 2 - 1;
-        //int height = getHeight() + getBorderSize() * 2 - 1;
+        const int alpha = getBaseColor().a;
         highlightColor = faceColor + 0x303030;
         highlightColor.a = alpha;
         shadowColor = faceColor - 0x303030;
@@ -153,19 +136,19 @@ namespace gcn
         // Fill the background around the content
         graphics->setColor(faceColor);
         // Fill top
-        graphics->fillRectangle(Rectangle(0,0,getWidth(),d.y - 1));
+        graphics->fillRectangle(Rectangle(0, 0, getWidth(), d.y - 1));
         // Fill left
-        graphics->fillRectangle(Rectangle(0,d.y - 1, d.x - 1, getHeight() - d.y + 1));
+        graphics->fillRectangle(Rectangle(0, d.y - 1, d.x - 1, getHeight() - d.y + 1));
         // Fill right
         graphics->fillRectangle(Rectangle(d.x + d.width + 1,
-                                          d.y - 1,
-                                          getWidth() - d.x - d.width - 1,
-                                          getHeight() - d.y + 1));
+            d.y - 1,
+            getWidth() - d.x - d.width - 1,
+            getHeight() - d.y + 1));
         // Fill bottom
         graphics->fillRectangle(Rectangle(d.x - 1,
-                                          d.y + d.height + 1,
-                                          d.width + 2,
-                                          getHeight() - d.height - d.y - 1));
+            d.y + d.height + 1,
+            d.width + 2,
+            getHeight() - d.height - d.y - 1));
 
         if (isOpaque())
         {
@@ -182,29 +165,29 @@ namespace gcn
         graphics->setColor(shadowColor);
         // Top line
         graphics->drawLine(d.x,
-                           d.y,
-                           d.x + d.width - 2,
-                           d.y);
+            d.y,
+            d.x + d.width - 2,
+            d.y);
 
         // Left line
         graphics->drawLine(d.x,
-                           d.y + 1,
-                           d.x,
-                           d.y + d.height - 1);
+            d.y + 1,
+            d.x,
+            d.y + d.height - 1);
 
         graphics->setColor(highlightColor);
         // Right line
         graphics->drawLine(d.x + d.width - 1,
-                           d.y,
-                           d.x + d.width - 1,
-                           d.y + d.height - 2);
+            d.y,
+            d.x + d.width - 1,
+            d.y + d.height - 2);
         // Bottom line
         graphics->drawLine(d.x + 1,
-                           d.y + d.height - 1,
-                           d.x + d.width - 1,
-                           d.y + d.height - 1);
+            d.y + d.height - 1,
+            d.x + d.width - 1,
+            d.y + d.height - 1);
 
-        drawChildren(graphics);
+        //drawChildren(graphics);
 
         int textX;
         int textY;
@@ -213,47 +196,47 @@ namespace gcn
 
         switch (getAlignment())
         {
-          case Graphics::LEFT:
-              textX = 4;
-              break;
-          case Graphics::CENTER:
-              textX = getWidth() / 2;
-              break;
-          case Graphics::RIGHT:
-              textX = getWidth() - 4;
-              break;
-          default:
-              throw GCN_EXCEPTION("Unknown alignment.");
+        case Graphics::Left:
+            textX = 4;
+            break;
+        case Graphics::Center:
+            textX = getWidth() / 2;
+            break;
+        case Graphics::Right:
+            textX = getWidth() - 4;
+            break;
+        default:
+            throw GCN_EXCEPTION("Unknown alignment.");
         }
 
         graphics->setColor(getForegroundColor());
         graphics->setFont(getFont());
         graphics->pushClipArea(Rectangle(0, 0, getWidth(), getTitleBarHeight() - 1));
-        graphics->drawText(getCaption(), textX, textY, getAlignment());
+        graphics->drawText(getCaption(), textX, textY, getAlignment(), isEnabled());
         graphics->popClipArea();
     }
 
-    void Window::drawBorder(Graphics* graphics)
+    void Window::drawFrame(Graphics* graphics)
     {
         Color faceColor = getBaseColor();
         Color highlightColor, shadowColor;
         int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
+        int width = getWidth() + getFrameSize() * 2 - 1;
+        int height = getHeight() + getFrameSize() * 2 - 1;
         highlightColor = faceColor + 0x303030;
         highlightColor.a = alpha;
         shadowColor = faceColor - 0x303030;
         shadowColor.a = alpha;
 
         unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
+        for (i = 0; i < getFrameSize(); ++i)
         {
             graphics->setColor(highlightColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
+            graphics->drawLine(i, i, width - i, i);
+            graphics->drawLine(i, i + 1, i, height - i - 1);
             graphics->setColor(shadowColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
+            graphics->drawLine(width - i, i + 1, width - i, height - i);
+            graphics->drawLine(i, height - i, width - i - 1, height - i);
         }
     }
 
@@ -263,21 +246,21 @@ namespace gcn
         {
             return;
         }
-        
-        if (getParent() != NULL)
+
+        if (getParent() != nullptr)
         {
             getParent()->moveToTop(this);
         }
 
         mDragOffsetX = mouseEvent.getX();
         mDragOffsetY = mouseEvent.getY();
-        
-        mIsMoving = mouseEvent.getY() <= (int)mTitleBarHeight;
+
+        mMoved = mouseEvent.getY() <= (int)mTitleBarHeight;
     }
 
     void Window::mouseReleased(MouseEvent& mouseEvent)
     {
-        mIsMoving = false;
+        mMoved = false;
     }
 
     void Window::mouseDragged(MouseEvent& mouseEvent)
@@ -286,11 +269,11 @@ namespace gcn
         {
             return;
         }
-        
-        if (isMovable() && mIsMoving)
+
+        if (isMovable() && mMoved)
         {
             setPosition(mouseEvent.getX() - mDragOffsetX + getX(),
-                        mouseEvent.getY() - mDragOffsetY + getY());
+                mouseEvent.getY() - mDragOffsetY + getY());
         }
 
         mouseEvent.consume();
@@ -299,9 +282,9 @@ namespace gcn
     Rectangle Window::getChildrenArea()
     {
         return Rectangle(getPadding(),
-                         getTitleBarHeight(),
-                         getWidth() - getPadding() * 2,
-                         getHeight() - getPadding() - getTitleBarHeight());
+            getTitleBarHeight(),
+            getWidth() - getPadding() * 2,
+            getHeight() - getPadding() - getTitleBarHeight());
     }
 
     void Window::setMovable(bool movable)
@@ -326,22 +309,7 @@ namespace gcn
 
     void Window::resizeToContent()
     {
-        WidgetListIterator it;
-
-        int w = 0, h = 0;
-        for (it = mWidgets.begin(); it != mWidgets.end(); it++)
-        {
-            if ((*it)->getX() + (*it)->getWidth() > w)
-            {
-                w = (*it)->getX() + (*it)->getWidth();
-            }
-
-            if ((*it)->getY() + (*it)->getHeight() > h)
-            {
-                h = (*it)->getY() + (*it)->getHeight();
-            }
-        }
-
-        setSize(w + 2* getPadding(), h + getPadding() + getTitleBarHeight());
+        Container::resizeToContent();
+        setSize(getWidth() + 2 * getPadding(), getHeight() + getPadding() + getTitleBarHeight());
     }
 }

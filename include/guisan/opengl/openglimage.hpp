@@ -57,12 +57,9 @@
 #ifndef GCN_OPENGLIMAGE_HPP
 #define GCN_OPENGLIMAGE_HPP
 
-#if defined (_WIN32)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#if defined (DELETE)
-#undef DELETE
-#endif
+#if defined(_WIN32)
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
 #endif
 
 #if defined (__APPLE__)
@@ -99,7 +96,7 @@ namespace gcn
          * @param convertToDisplayFormat true if the image should be converted
          *                               to display, false otherwise.
          */
-        OpenGLImage(unsigned int* pixels, int width, int height, bool convertToDisplayFormat = true);
+        OpenGLImage(const unsigned int* pixels, int width, int height, bool convertToDisplayFormat = true);
 
         /**
          * Constructor. Load an image from an OpenGL texture handle. The width
@@ -117,7 +114,7 @@ namespace gcn
         /**
          * Destructor.
          */
-        virtual ~OpenGLImage();
+        ~OpenGLImage() override;
 
         /**
          * Gets the OpenGL texture handle for the image.
@@ -141,30 +138,26 @@ namespace gcn
          */
         virtual int getTextureHeight() const;
 
-
         // Inherited from Image
 
-        virtual void free();
+        void free() override;
 
-        virtual int getWidth() const;
+        int getWidth() const override;
+        int getHeight() const override;
 
-        virtual int getHeight() const;
+        Color getPixel(int x, int y) override;
+        void putPixel(int x, int y, const Color& color) override;
 
-        virtual Color getPixel(int x, int y);
-
-        virtual void putPixel(int x, int y, const Color& color);
-
-        virtual void convertToDisplayFormat();
+        void convertToDisplayFormat() override;
 
     protected:
-        GLuint mTextureHandle;
-        unsigned int* mPixels;
-        bool mAutoFree;
-        int mWidth;
-        int mHeight;
-		int mTextureWidth;
-		int mTextureHeight;
-
+        GLuint mTextureHandle = 0;
+        unsigned int* mPixels = nullptr;
+        bool mAutoFree = false;
+        int mWidth = 0;
+        int mHeight = 0;
+        int mTextureWidth = 0;
+        int mTextureHeight = 0;
     };
 }
 

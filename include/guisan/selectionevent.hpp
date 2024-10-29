@@ -77,14 +77,14 @@ namespace gcn
         /**
          * Constructor.
          *
-         * @param source the source widget of the event.
+         * @param source The widget of the selection event.
          */
         SelectionEvent(Widget* source);
 
         /**
          * Destructor.
          */
-        virtual ~SelectionEvent();
+        ~SelectionEvent() override;
     };
 }
 

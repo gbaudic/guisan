@@ -69,23 +69,15 @@
 
 namespace gcn
 {
-    ToggleButton::ToggleButton()
-        : Button(), mSelected(false)
-    {
-    
-    }
 
-    ToggleButton::ToggleButton(const std::string& caption)
-            : Button(caption), mSelected(false)
-    {
-    
-    }
+    ToggleButton::ToggleButton(const std::string& caption) : Button(caption)
+    {}
 
     void ToggleButton::draw(Graphics* graphics)
     {
         Color faceColor = getBaseColor();
         Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
+        const int alpha = getBaseColor().a;
 
         if (isPressed() || isSelected())
         {
@@ -115,20 +107,23 @@ namespace gcn
         graphics->drawLine(getWidth() - 1, 1, getWidth() - 1, getHeight() - 1);
         graphics->drawLine(1, getHeight() - 1, getWidth() - 1, getHeight() - 1);
 
-        graphics->setColor(getForegroundColor());
+        if (isEnabled())
+            graphics->setColor(getForegroundColor());
+        else
+            graphics->setColor(Color(128, 128, 128));
 
         int textX;
-        int textY = getHeight() / 2 - getFont()->getHeight() / 2;
+        const int textY = getHeight() / 2 - getFont()->getHeight() / 2;
 
         switch (getAlignment())
         {
-          case Graphics::LEFT:
+          case Graphics::Left:
               textX = mSpacing;
               break;
-          case Graphics::CENTER:
+          case Graphics::Center:
               textX = getWidth() / 2;
               break;
-          case Graphics::RIGHT:
+          case Graphics::Right:
               textX = getWidth() - mSpacing;
               break;
           default:
@@ -139,11 +134,11 @@ namespace gcn
 
         if (isPressed() || isSelected())
         {
-            graphics->drawText(getCaption(), textX + 1, textY + 1, getAlignment());
+            graphics->drawText(getCaption(), textX + 1, textY + 1, getAlignment(), isEnabled());
         }
         else
         {
-            graphics->drawText(getCaption(), textX, textY, getAlignment());
+            graphics->drawText(getCaption(), textX, textY, getAlignment(), isEnabled());
 
             if (isFocused())
             {
@@ -163,35 +158,27 @@ namespace gcn
         mSelected = selected;
     }
 
-    void ToggleButton::mouseReleased(MouseEvent& mouseEvent)
+    void ToggleButton::mouseClicked(MouseEvent& mouseEvent)
     {
-        if (mouseEvent.getButton() == MouseEvent::LEFT
-            && mMousePressed
-            && mHasMouse)
+        if (mouseEvent.getButton() == MouseEvent::Left)
         {
-            mMousePressed = false;
             toggleSelected();
-            generateAction();
-            mouseEvent.consume();
-        }
-        else if (mouseEvent.getButton() == MouseEvent::LEFT)
-        {
-            mMousePressed = false;
+            distributeActionEvent();
             mouseEvent.consume();
         }
     }
 
     void ToggleButton::keyReleased(KeyEvent& keyEvent)
     {
-        Key key = keyEvent.getKey();
+        const Key key = keyEvent.getKey();
 
-        if ((key.getValue() == Key::ENTER
-             || key.getValue() == Key::SPACE)
+        if ((key.getValue() == Key::Enter
+             || key.getValue() == Key::Space)
             && mKeyPressed)
         {
             mKeyPressed = false;
             toggleSelected();
-            generateAction();
+            distributeActionEvent();
             keyEvent.consume();
         }
     }

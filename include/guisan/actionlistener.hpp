@@ -57,19 +57,16 @@
 #ifndef GCN_ACTIONLISTENER_HPP
 #define GCN_ACTIONLISTENER_HPP
 
-#include <string>
-
 #include "guisan/actionevent.hpp"
 #include "guisan/platform.hpp"
 
 namespace gcn
 {
     /**
-     * Listener of action events from Widgets. To be able to
-     * listen for actions you must make a class which inherits
-     * from this class and implements the action function.
+     * Interface for listening for action events from widgets.
      *
-     * @see Widget::addActionListener
+     * @see Widget::addActionListener, Widget::removeActionListener,
+     *      ActionEvent
      * @author Olof Naessén
      * @author Per Larsson
      */
@@ -83,15 +80,23 @@ namespace gcn
         virtual ~ActionListener() { }
 
         /**
-         * Called when an action is received from a Widget. It is used
-         * to be able to receive a notification that an action has
-         * occurred.
+         * Called when an action is recieved from a widget. It is used
+         * to be able to recieve a notification that an action has
+         * occured.
          *
-         * @param actionEvent the event of the action.
+         * @param actionEvent The event of the action.
          * @since 0.6.0
          */
         virtual void action(const ActionEvent& actionEvent) = 0;
 
+    protected:
+        /**
+         * Constructor.
+         *
+         * You should not be able to make an instance of ActionListener,
+         * therefore its constructor is protected.
+         */
+        ActionListener() {}
     };
 }
 

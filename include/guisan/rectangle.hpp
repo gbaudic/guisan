@@ -59,59 +59,138 @@
 
 #include "guisan/platform.hpp"
 
+#include <iostream>
+
 namespace gcn
 {
     /**
      * Represents a rectangle.
+     *
+     * @since 0.1.0
      */
     class GCN_CORE_DECLSPEC Rectangle
     {
     public:
 
         /**
-         * Constructor. Resets member variables.
+         * Constructor. The default rectangle is an empty rectangle.
          */
-        Rectangle();
+        Rectangle() = default;
 
         /**
          * Constructor.
          *
-         * @param x the Rectangle x coordinate.
-         * @param y the Rectangle y coordinate.
-         * @param width the Rectangle width.
-         * @param height the Rectangle height.
+         * @param x The x coordinate of the rectangle.
+         * @param y The y coordinate of the rectangle.
+         * @param width The width of the rectangle.
+         * @param height The height of the rectangle.
+         * @since 0.1.0
          */
         Rectangle(int x, int y, int width, int height);
 
         /**
          * Sets the dimension of a rectangle.
          *
-         * @param x the Rectangle x coordinate.
-         * @param y the Rectangle y coordinate.
-         * @param width the Rectangle width.
-         * @param height the Rectangle height.
+         * @param x The x coordinate of the rectangle.
+         * @param y The y coordinate of the rectangle.
+         * @param width The width of the rectangle.
+         * @param height The height of the rectangle.
+         * @since 0.1.0
          */
         void setAll(int x, int y, int width, int height);
 
         /**
-         * Checks if another Rectangle intersects with the Rectangle.
+         * Checks if another rectangle intersects with the rectangle.
          *
-         * @param rectangle another Rectangle.
+         * @param rectangle Another rectangle to check for intersection.
+         * @return True if the rectangles intersect, false otherwise.
+         * @since 1.1.0
          */
-        bool intersect(const Rectangle& rectangle);
+        bool isIntersecting(const Rectangle& rectangle) const;
 
         /**
-         * Checks if a point is inside the Rectangle.
+         * Checks the rectangle contains a point.
          *
-         * @param x the point x coordinate.
-         * @param y the point y coordinate.
+         * @param x The x coordinate of the point.
+         * @param y The y coordinate of the point.
+         * @return True if the rectangle contains the point,
+         *         false otherwise.
+         * @since 1.1.0
          */
-        bool isPointInRect(int x, int y) const;
+        bool isContaining(int x, int y) const;
 
-        int x;
-        int y;
-        int width;
-        int height;
+        /**
+         * Checks if the rectangle contains a rectangle.
+         *
+         * @param other The rectangle to check.
+         * @return True if the rectangle contains the rectangle,
+         *         false otherwise.
+         * @since 1.1.0
+         */
+        bool isContaining(const Rectangle& other) const;
+
+        /**
+         * Checks whether the rectangle is empty or not. A rectangle
+         * is considered empty when it's width or height is either
+         * zero or negative.
+         *
+         * @return True if the rectangle is empty, false otherwise.
+         */
+        bool isEmpty() const;
+
+        /**
+         * Adds a rectangle to this rectangle. The resulting rectangle
+         * is the union of the two rectangles.
+         *
+         * @param rh The rectangle to add.
+         * @return The union of the two rectangles.
+         */
+        Rectangle operator+(const Rectangle& rh) const;
+
+        /**
+         * Adds a rectangle to this rectangle. This rectangle will be
+         * the union of the two rectangles.
+         *
+         * @param rh The rectangle to add.
+         * @return A reference to this rectangle.
+         */
+        const Rectangle& operator+=(const Rectangle& rh);
+
+        /**
+         * Gets the intersection between two rectangles.
+         *
+         * @param rh The rectangle to calculate the intersection with.
+         * @return The intersection between two rectangles.
+         */
+        Rectangle intersection(const Rectangle& rh) const;
+
+        /**
+         * Output operator for output.
+         *
+         * @param out The stream to output to.
+         * @param rectangle The rectangle to output.
+         */
+        friend std::ostream& operator<<(std::ostream& out, const Rectangle& rectangle);
+
+        /**
+         * Holds the x coordinate of the rectangle.
+         */
+        int x = 0;
+
+        /**
+         * Holds the x coordinate of the rectangle.
+         */
+        int y = 0;
+
+        /**
+         * Holds the width of the rectangle.
+         */
+        int width = 0;
+
+        /**
+         * Holds the height of the rectangle.
+         */
+        int height = 0;
     };
 }
 

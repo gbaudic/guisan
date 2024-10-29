@@ -6,7 +6,7 @@ env["CC"] = os.getenv("CC") or env["CC"]
 env["CXX"] = os.getenv("CXX") or env["CXX"]
 env["ENV"].update(x for x in os.environ.items() if x[0].startswith("CCC_"))
 
-env["LIBVER"] = "0.10.0"
+env["LIBVER"] = "1.1.0"
 
 env["PREFIX_PATH"] = ARGUMENTS.get('prefix', "/usr/local")
 env["INCLUDE_PATH"] = ARGUMENTS.get('include', env['PREFIX_PATH'] + "/include")
@@ -32,14 +32,15 @@ if not conf.CheckPKGConfig('0.15.0'):
 
 env['HAVE_OPENGL'] = conf.CheckPKG('gl')
 env['HAVE_SDL2'] = conf.CheckPKG('sdl2')
+env['HAVE_SDL2_TTF'] = conf.CheckPKG('SDL2_ttf')
 
 if env['HAVE_SDL2']:
 	if not conf.CheckPKG('SDL2_image'):
 		print('SDL2_image not found. Disabling SDL2 support.')
 		env['HAVE_SDL2'] = 0
-	if not conf.CheckPKG('SDL2_ttf'):
-		print('SDL2_ttf not found. Disabling SDL2 support.')
-		env['HAVE_SDL2'] = 0
+
+if env['HAVE_SDL2_TTF']:
+	env.Append(CPPDEFINES = ['USE_SDL2_TTF'])
 
 env = conf.Finish()
 
@@ -60,9 +61,10 @@ SConscript('examples/SConscript')
 common_headers = [
     'include/guisan/actionevent.hpp',
     'include/guisan/actionlistener.hpp',
-    'include/guisan/basiccontainer.hpp',
     'include/guisan/cliprectangle.hpp',
     'include/guisan/color.hpp',
+    'include/guisan/containerevent.hpp',
+    'include/guisan/containerlistener.hpp',
     'include/guisan/deathlistener.hpp',
     'include/guisan/defaultfont.hpp',
     'include/guisan/event.hpp',
@@ -93,6 +95,7 @@ common_headers = [
     'include/guisan/sdl.hpp',
     'include/guisan/selectionevent.hpp',
     'include/guisan/selectionlistener.hpp',
+    'include/guisan/text.hpp',
     'include/guisan/widget.hpp',
     'include/guisan/widgetlistener.hpp',
     'include/guisan/x.hpp'

@@ -78,7 +78,7 @@ namespace gcn
          * @param filename The filename of the image to display.
          * @param caption The text to display. 
          */
-        ImageTextButton(const std::string& filename, std::string& caption);
+        ImageTextButton(const std::string& filename, const std::string& caption);
 
         /**
          * Constructor.
@@ -86,37 +86,30 @@ namespace gcn
          * @param image The image to display.
          * @param caption The text to display.
          */
-        ImageTextButton(Image* image, std::string& caption);
+        ImageTextButton(const Image* image, const std::string& caption);
+
+        /**
+         * Constructor.
+         *
+         * @param image The image to display.
+         * @param caption The text to display.
+         */
+        ImageTextButton(std::shared_ptr<const Image> image, const std::string& caption);
 
         /**
          * Destructor.
          */
-        virtual ~ImageTextButton();
+        ~ImageTextButton() override = default;
 
         /**
          * Adjusts the size of the image button to fit the image.
          */
         void adjustSize();
 
-        /**
-         * Sets the image to display.
-         *
-         * @param image The image to display.
-         */
-        void setImage(Image* image);
-
-        /**
-         * Gets the image of the image button.
-         *
-         * @return The image of the image button.
-         */
-        Image* getImage();
-
-
         // Inherited from Widget
 
-        void draw(gcn::Graphics* graphics);
-        
+        void draw(gcn::Graphics* graphics) override;
+
         /**
          * Sets the alignment for the caption. The alignment is relative
          * to the center of the button.
@@ -132,7 +125,7 @@ namespace gcn
          * @return alignment of caption. ImageTextButton::TOP, ImageTextButton::RIGHT, ImageTextButton::BOTTOM or ImageTextButton::LEFT.
          */
         unsigned int getAlignment() const;
-        
+
         enum
         {
             TOP,
@@ -142,15 +135,7 @@ namespace gcn
         };
 
     protected:
-        gcn::Image* mImage;
-
-        /**
-         * True if the image has been loaded internally, false otherwise.
-         * An image not loaded internally should not be deleted in the
-         * destructor.
-         */
-        bool mInternalImage;
-        unsigned int mAlignment;
+        unsigned int mAlignment = ImageTextButton::BOTTOM;
     };
 }
 #endif

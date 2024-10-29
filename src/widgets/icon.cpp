@@ -66,56 +66,61 @@
 
 namespace gcn
 {
-    Icon::Icon(const std::string& filename)
+    Icon::Icon()
     {
-        mImage = Image::load(filename);
-        mInternalImage = true;
-        setHeight(mImage->getHeight());
-        setWidth(mImage->getWidth());
+        setSize(0, 0);
     }
 
-    Icon::Icon(Image* image)
-    {
-        mImage = image;
-        mInternalImage = false;
-        setHeight(mImage->getHeight());
-        setWidth(mImage->getWidth());
-    }
+    Icon::Icon(const std::string& filename) :
+        Icon({Image::load(filename), std::default_delete<const Image>{}})
+    {}
 
-    Icon::~Icon()
+    Icon::Icon(const Image* image) : Icon({image, [](const Image*) {}})
+    {}
+
+    Icon::Icon(std::shared_ptr<const Image> image) : mImage(std::move(image))
     {
-        if (mInternalImage)
+        if (mImage)
         {
-            delete mImage;
+            setSize(mImage->getWidth(), mImage->getHeight());
         }
+        else
+        {
+            setSize(0, 0);
+        }
+    }
+
+    void Icon::setImage(const Image* image)
+    {
+        setImage({image, [](const Image*) {}});
+    }
+
+    void Icon::setImage(std::shared_ptr<const Image> image)
+    {
+        mImage = std::move(image);
+        if (mImage)
+        {
+            setSize(mImage->getWidth(), mImage->getHeight());
+        }
+        else
+        {
+            setSize(0, 0);
+        }
+    }
+
+    const Image* Icon::getImage() const
+    {
+        return mImage.get();
     }
 
     void Icon::draw(Graphics* graphics)
     {
-        graphics->drawImage(mImage, 0, 0);
-    }
-
-    void Icon::drawBorder(Graphics* graphics)
-    {
-        Color faceColor = getBaseColor();
-        Color highlightColor, shadowColor;
-        int alpha = getBaseColor().a;
-        int width = getWidth() + getBorderSize() * 2 - 1;
-        int height = getHeight() + getBorderSize() * 2 - 1;
-        highlightColor = faceColor + 0x303030;
-        highlightColor.a = alpha;
-        shadowColor = faceColor - 0x303030;
-        shadowColor.a = alpha;
-
-        unsigned int i;
-        for (i = 0; i < getBorderSize(); ++i)
+        if (mImage != nullptr)
         {
-            graphics->setColor(shadowColor);
-            graphics->drawLine(i,i, width - i, i);
-            graphics->drawLine(i,i + 1, i, height - i - 1);
-            graphics->setColor(highlightColor);
-            graphics->drawLine(width - i,i + 1, width - i, height - i);
-            graphics->drawLine(i,height - i, width - i - 1, height - i);
+            const int x = (getWidth() - mImage->getWidth()) / 2;
+            const int y = (getHeight() - mImage->getHeight()) / 2;
+            graphics->drawImage(mImage.get(), x, y);
         }
     }
-}
+
+} // namespace gcn
